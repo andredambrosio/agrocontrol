@@ -15,87 +15,135 @@
       --yellow:#f59e0b;
       --red:#ef4444;
       --blue:#3b82f6;
-      --shadow:0 10px 30px rgba(0,0,0,.06);
-      --radius:22px;
+      --shadow:0 12px 30px rgba(0,0,0,.06);
+      --radius:24px;
     }
+
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    html,body{
+      margin:0;padding:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:var(--bg);color:var(--text)
+    }
     button,input,select,textarea{font:inherit}
-    .hidden{display:none!important}
+    .hidden{display:none !important}
+    .danger-text{color:#b91c1c}
+    .success-text{color:#15803d}
+    .muted{color:var(--muted)}
+
     .topbar{
-      position:sticky;top:0;z-index:20;
-      backdrop-filter: blur(12px);
-      background:rgba(245,245,247,.85);
-      border-bottom:1px solid rgba(0,0,0,.06)
+      position:sticky;top:0;z-index:30;
+      backdrop-filter:blur(12px);
+      background:rgba(245,245,247,.84);
+      border-bottom:1px solid rgba(0,0,0,.06);
     }
     .topbar-inner{
-      max-width:1280px;margin:0 auto;padding:16px 20px;
-      display:flex;align-items:center;justify-content:space-between;gap:16px
+      max-width:1320px;margin:0 auto;padding:16px 20px;
+      display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap
     }
     .brand{display:flex;align-items:center;gap:12px}
     .brand-badge{
-      width:40px;height:40px;border-radius:14px;background:#111;color:#fff;
+      width:42px;height:42px;border-radius:14px;background:#111;color:#fff;
       display:grid;place-items:center;font-weight:700;box-shadow:var(--shadow)
     }
-    .brand-text h1{margin:0;font-size:18px;line-height:1.1;letter-spacing:-.02em}
-    .brand-text p{margin:3px 0 0;color:var(--muted);font-size:12px}
+    .brand-text h1{margin:0;font-size:20px;letter-spacing:-.03em}
+    .brand-text p{margin:3px 0 0;font-size:12px;color:var(--muted)}
+
     .pill{
-      padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);
+      padding:9px 13px;border-radius:999px;background:#fff;border:1px solid var(--line);
       color:var(--muted);font-size:13px
     }
-    .logout-btn{
-      border:none;background:#111;color:#fff;border-radius:999px;padding:10px 14px;cursor:pointer
+    .logout-btn,.primary-btn,.secondary-btn,.small-btn{
+      border:none;cursor:pointer;transition:.18s ease;
     }
-    .container{max-width:1280px;margin:0 auto;padding:24px 20px 40px}
-    .login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .logout-btn{
+      background:#111;color:#fff;border-radius:999px;padding:11px 15px
+    }
+    .primary-btn{
+      background:#111;color:#fff;border-radius:16px;padding:14px 18px;font-weight:600
+    }
+    .secondary-btn{
+      background:#fff;color:#111;border:1px solid var(--line);border-radius:16px;padding:14px 18px
+    }
+    .small-btn{
+      padding:10px 12px;border-radius:14px;background:#111;color:#fff;font-size:13px
+    }
+    .small-btn.light{
+      background:#fff;color:#111;border:1px solid var(--line)
+    }
+
+    .login-wrap{
+      min-height:100vh;display:grid;place-items:center;padding:24px
+    }
     .login-card{
-      width:100%;max-width:430px;background:var(--card);border:1px solid var(--line);
+      width:100%;max-width:440px;background:var(--card);border:1px solid var(--line);
       border-radius:32px;box-shadow:var(--shadow);padding:30px
     }
-    .login-card h2{margin:0;font-size:30px;letter-spacing:-.03em}
-    .login-card p{color:var(--muted);margin:10px 0 24px;line-height:1.5}
+    .login-card h2{margin:0;font-size:31px;letter-spacing:-.04em}
+    .login-card p{margin:10px 0 22px;color:var(--muted);line-height:1.5}
+
     .field{margin-bottom:14px}
     .field label{display:block;margin-bottom:8px;font-size:13px;color:var(--muted)}
     .field input,.field select,.field textarea{
       width:100%;background:#fafafa;border:1px solid var(--line);border-radius:16px;
       padding:14px 16px;outline:none
     }
-    .field textarea{min-height:90px;resize:vertical}
-    .primary-btn,.secondary-btn,.small-btn{
-      border:none;border-radius:16px;padding:14px 18px;cursor:pointer;transition:.2s ease
+    .field textarea{min-height:92px;resize:vertical}
+    .field input:focus,.field select:focus,.field textarea:focus{
+      background:#fff;border-color:#c7c7cc
     }
-    .primary-btn{background:#111;color:#fff;width:100%;font-weight:600}
-    .secondary-btn{background:#fff;color:#111;border:1px solid var(--line)}
-    .small-btn{padding:10px 12px;background:#111;color:#fff;border-radius:14px;font-size:13px}
-    .small-btn.light{background:#fff;color:#111;border:1px solid var(--line)}
-    .main-layout{display:grid;grid-template-columns:260px 1fr;gap:22px}
+
+    .container{
+      max-width:1320px;margin:0 auto;padding:24px 20px 40px
+    }
+
+    .main-layout{
+      display:grid;grid-template-columns:270px 1fr;gap:22px
+    }
+
     .sidebar{
       background:var(--card);border:1px solid var(--line);border-radius:28px;padding:16px;
-      box-shadow:var(--shadow);height:calc(100vh - 114px);position:sticky;top:90px
+      box-shadow:var(--shadow);height:calc(100vh - 110px);position:sticky;top:88px
     }
     .nav-group{display:flex;flex-direction:column;gap:8px;margin-top:10px}
     .nav-btn{
       border:none;text-align:left;background:#fafafa;border:1px solid transparent;color:#1d1d1f;
-      border-radius:18px;padding:14px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between
+      border-radius:18px;padding:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between
     }
     .nav-btn.active{background:#111;color:#fff}
+
+    .mobile-nav{
+      display:none;gap:10px;overflow:auto;padding-bottom:8px;margin-bottom:12px
+    }
+
     .content{display:flex;flex-direction:column;gap:20px}
-    .page-title{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
-    .page-title h2{margin:0;font-size:34px;letter-spacing:-.04em}
+
+    .page-title{
+      display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap
+    }
+    .page-title h2{margin:0;font-size:36px;letter-spacing:-.04em}
     .page-title p{margin:6px 0 0;color:var(--muted)}
+
     .grid{display:grid;gap:18px}
     .cards-4{grid-template-columns:repeat(4,1fr)}
     .cards-3{grid-template-columns:repeat(3,1fr)}
     .cards-2{grid-template-columns:repeat(2,1fr)}
+
     .card{
-      background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:20px
+      background:var(--card);border:1px solid var(--line);border-radius:28px;
+      box-shadow:var(--shadow);padding:20px
     }
-    .stat-card .label{color:var(--muted);font-size:13px}
-    .stat-card .value{margin-top:10px;font-size:28px;font-weight:700;letter-spacing:-.03em}
-    .stat-card .sub{margin-top:6px;color:var(--muted);font-size:13px}
-    .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+
+    .section-head{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap
+    }
     .section-head h3{margin:0;font-size:20px;letter-spacing:-.02em}
     .section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+    .stat-card .label{color:var(--muted);font-size:13px}
+    .stat-card .value{margin-top:10px;font-size:30px;font-weight:700;letter-spacing:-.04em}
+    .stat-card .sub{margin-top:6px;color:var(--muted);font-size:13px}
+
     .status{
       display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
       font-size:12px;font-weight:600
@@ -105,31 +153,47 @@
     .status.red{background:rgba(239,68,68,.12);color:#b91c1c}
     .status.blue{background:rgba(59,130,246,.12);color:#1d4ed8}
     .status.gray{background:#f3f4f6;color:#4b5563}
+
     .list{display:flex;flex-direction:column;gap:12px}
     .list-item{
       background:#fafafa;border:1px solid var(--line);border-radius:20px;padding:16px;
       display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap
     }
     .list-main h4{margin:0;font-size:16px}
-    .list-main p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+    .list-main p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
     .action-row{display:flex;gap:10px;flex-wrap:wrap}
+
     .table{width:100%;border-collapse:collapse}
-    .table th,.table td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);font-size:14px}
-    .table th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
-    .alert-box{padding:16px;border-radius:20px;margin-bottom:12px;font-size:14px;line-height:1.45}
+    .table th,.table td{
+      text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top
+    }
+    .table th{
+      color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em
+    }
+
+    .alert-box{
+      padding:16px;border-radius:20px;margin-bottom:12px;font-size:14px;line-height:1.5
+    }
     .alert-box.green{background:rgba(34,197,94,.10);color:#166534}
     .alert-box.yellow{background:rgba(245,158,11,.12);color:#92400e}
     .alert-box.red{background:rgba(239,68,68,.10);color:#991b1b}
-    .weather-panel{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    .alert-box.blue{background:rgba(59,130,246,.10);color:#1d4ed8}
+
     .metric-row{
       display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);gap:10px;font-size:14px
     }
     .metric-row:last-child{border-bottom:none}
+
     .footer-note{color:var(--muted);font-size:12px;margin-top:14px}
-    .mobile-nav{display:none;gap:10px;overflow:auto;padding-bottom:6px}
-    .danger{color:var(--red)}
+    .weather-panel{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+    .weather-big{
+      font-size:34px;font-weight:700;letter-spacing:-.04em;margin-top:10px
+    }
+    .badge-row{display:flex;gap:10px;flex-wrap:wrap}
+
     @media (max-width:1080px){
       .cards-4{grid-template-columns:repeat(2,1fr)}
+      .cards-3{grid-template-columns:repeat(2,1fr)}
       .weather-panel{grid-template-columns:1fr}
     }
     @media (max-width:860px){
@@ -147,755 +211,1443 @@
   </style>
 </head>
 <body>
-<div id="loginScreen" class="login-wrap">
-  <div class="login-card">
-    <div class="brand" style="margin-bottom:18px;">
-      <div class="brand-badge">A</div>
-      <div class="brand-text">
-        <h1>AgroControl</h1>
-        <p>Farm System</p>
-      </div>
-    </div>
-    <h2>Entrar no sistema</h2>
-    <p>Agora com tarefas e estoque salvos no navegador.</p>
-
-    <div class="field">
-      <label>Nome</label>
-      <input id="loginName" value="André" />
-    </div>
-
-    <div class="field">
-      <label>Perfil</label>
-      <select id="loginRole">
-        <option value="dono">Dono</option>
-        <option value="gerente">Gerente</option>
-        <option value="funcionario">Funcionário</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Senha</label>
-      <input id="loginPassword" type="password" value="123456" />
-    </div>
-
-    <button class="primary-btn" onclick="login()">Entrar</button>
-  </div>
-</div>
-
-<div id="appScreen" class="hidden">
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
+  <div id="loginScreen" class="login-wrap">
+    <div class="login-card">
+      <div class="brand" style="margin-bottom:18px;">
         <div class="brand-badge">A</div>
         <div class="brand-text">
           <h1>AgroControl</h1>
-          <p>Sistema operacional da fazenda</p>
+          <p>Farm System</p>
         </div>
       </div>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-        <div class="pill" id="currentUser"></div>
-        <button class="logout-btn" onclick="logout()">Sair</button>
+
+      <h2>Entrar no sistema</h2>
+      <p>Versão funcional local com tarefas, estoque, máquinas, funcionários e clima online.</p>
+
+      <div class="field">
+        <label>Nome</label>
+        <input id="loginName" placeholder="Ex.: André ou João" value="André">
+      </div>
+
+      <div class="field">
+        <label>Perfil</label>
+        <select id="loginRole">
+          <option value="dono">Dono</option>
+          <option value="gerente">Gerente</option>
+          <option value="funcionario">Funcionário</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Senha</label>
+        <input id="loginPassword" type="password" value="123456">
+      </div>
+
+      <button class="primary-btn" onclick="login()">Entrar</button>
+    </div>
+  </div>
+
+  <div id="appScreen" class="hidden">
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="brand-badge">A</div>
+          <div class="brand-text">
+            <h1>AgroControl</h1>
+            <p>Sistema operacional da fazenda</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div class="pill" id="currentUser"></div>
+          <button class="logout-btn" onclick="logout()">Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="mobile-nav" id="mobileNav"></div>
+
+      <div class="main-layout">
+        <aside class="sidebar">
+          <div class="section-head" style="margin-bottom:10px;">
+            <div>
+              <h3>Navegação</h3>
+              <p id="sidebarProfile"></p>
+            </div>
+          </div>
+          <div class="nav-group" id="sidebarNav"></div>
+        </aside>
+
+        <main class="content">
+          <section id="page-dashboard" class="page">
+            <div class="page-title">
+              <div>
+                <h2>Dashboard</h2>
+                <p>Resumo real com base nos dados salvos no navegador.</p>
+              </div>
+              <span class="status blue">V1 funcional</span>
+            </div>
+
+            <div class="grid cards-4">
+              <div class="card stat-card">
+                <div class="label">Total de tarefas</div>
+                <div class="value" id="dashTotalTasks">0</div>
+                <div class="sub">Criadas no sistema</div>
+              </div>
+              <div class="card stat-card">
+                <div class="label">Em andamento</div>
+                <div class="value" id="dashInProgress">0</div>
+                <div class="sub">Operações em execução</div>
+              </div>
+              <div class="card stat-card">
+                <div class="label">Itens em estoque</div>
+                <div class="value" id="dashStockCount">0</div>
+                <div class="sub">Produtos cadastrados</div>
+              </div>
+              <div class="card stat-card">
+                <div class="label">Funcionários</div>
+                <div class="value" id="dashEmployeeCount">0</div>
+                <div class="sub">Equipe cadastrada</div>
+              </div>
+            </div>
+
+            <div class="grid cards-2">
+              <div class="card">
+                <div class="section-head">
+                  <div>
+                    <h3>Centro de decisão</h3>
+                    <p>Alertas simples e objetivos.</p>
+                  </div>
+                </div>
+                <div id="decisionArea"></div>
+              </div>
+
+              <div class="card">
+                <div class="section-head">
+                  <div>
+                    <h3>Últimas tarefas</h3>
+                    <p>O que entrou ou mudou por último.</p>
+                  </div>
+                </div>
+                <div class="list" id="latestTasks"></div>
+              </div>
+            </div>
+          </section>
+
+          <section id="page-tarefas" class="page hidden">
+            <div class="page-title">
+              <div>
+                <h2>Tarefas</h2>
+                <p id="taskPageSubtitle">Criação e execução de tarefas.</p>
+              </div>
+            </div>
+
+            <div class="grid cards-2" id="taskGrid">
+              <div class="card" id="newTaskCard">
+                <div class="section-head">
+                  <div>
+                    <h3>Nova tarefa</h3>
+                    <p>Cadastro simples da operação.</p>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Operação</label>
+                  <input id="taskOperacao" placeholder="Ex.: Pulverização">
+                </div>
+
+                <div class="field">
+                  <label>Talhão</label>
+                  <input id="taskTalhao" placeholder="Ex.: Talhão 3">
+                </div>
+
+                <div class="field">
+                  <label>Funcionário</label>
+                  <select id="taskFuncionarioSelect"></select>
+                </div>
+
+                <div class="field">
+                  <label>Detalhes</label>
+                  <textarea id="taskDetalhes" placeholder="Produto, dose, área, observações..."></textarea>
+                </div>
+
+                <button class="primary-btn" onclick="addTask()">Salvar tarefa</button>
+              </div>
+
+              <div class="card" id="taskListCard">
+                <div class="section-head">
+                  <div>
+                    <h3 id="taskListTitle">Lista de tarefas</h3>
+                    <p id="taskListSub">Visualização por perfil.</p>
+                  </div>
+                </div>
+                <div class="list" id="taskList"></div>
+              </div>
+            </div>
+          </section>
+
+          <section id="page-estoque" class="page hidden">
+            <div class="page-title">
+              <div>
+                <h2>Estoque</h2>
+                <p>Cadastro de produtos, quantidade e custo.</p>
+              </div>
+            </div>
+
+            <div class="grid cards-2">
+              <div class="card" id="newStockCard">
+                <div class="section-head">
+                  <div>
+                    <h3>Novo item</h3>
+                    <p>Controle simples e funcional.</p>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Produto</label>
+                  <input id="stockNome" placeholder="Ex.: Herbicida X">
+                </div>
+                <div class="field">
+                  <label>Quantidade</label>
+                  <input id="stockQtd" type="number" placeholder="Ex.: 60">
+                </div>
+                <div class="field">
+                  <label>Unidade</label>
+                  <input id="stockUnidade" placeholder="Ex.: L, bags, sacas">
+                </div>
+                <div class="field">
+                  <label>Custo unitário</label>
+                  <input id="stockCusto" type="number" step="0.01" placeholder="Ex.: 48">
+                </div>
+
+                <button class="primary-btn" onclick="addStock()">Salvar item</button>
+              </div>
+
+              <div class="card">
+                <div class="section-head">
+                  <div>
+                    <h3>Itens cadastrados</h3>
+                    <p>Soma automática no dashboard.</p>
+                  </div>
+                </div>
+                <div id="stockTableWrap"></div>
+              </div>
+            </div>
+          </section>
+
+          <section id="page-clima" class="page hidden">
+            <div class="page-title">
+              <div>
+                <h2>Clima para aplicação</h2>
+                <p>Consulta online por cidade ou localização atual.</p>
+              </div>
+              <span id="weatherHeaderStatus" class="status gray">Sem consulta</span>
+            </div>
+
+            <div class="weather-panel">
+              <div class="card">
+                <div class="section-head">
+                  <div>
+                    <h3>Buscar clima</h3>
+                    <p>Pesquisa online em tempo real.</p>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Cidade</label>
+                  <input id="weatherCity" placeholder="Ex.: Dom Pedrito, RS">
+                </div>
+
+                <div class="action-row" style="margin-bottom:14px;">
+                  <button class="small-btn" onclick="searchWeatherByCity()">Buscar cidade</button>
+                  <button class="small-btn light" onclick="searchWeatherByLocation()">Usar minha localização</button>
+                </div>
+
+                <div id="weatherSearchFeedback" class="footer-note">
+                  Digita uma cidade ou usa tua localização.
+                </div>
+
+                <div class="weather-big" id="weatherMainText">Aguardando consulta</div>
+                <div class="muted" id="weatherLocationText" style="margin-top:8px;">Sem local carregado</div>
+
+                <div class="metric-row">
+                  <span>Temperatura</span>
+                  <strong id="weatherTemp">—</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Umidade</span>
+                  <strong id="weatherHumidity">—</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Vento</span>
+                  <strong id="weatherWind">—</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Rajadas</span>
+                  <strong id="weatherGust">—</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Chance de chuva</span>
+                  <strong id="weatherRain">—</strong>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="section-head">
+                  <div>
+                    <h3>Leitura para aplicação</h3>
+                    <p>Regra simples para operação.</p>
+                  </div>
+                </div>
+
+                <div id="weatherRecommendation">
+                  <div class="alert-box blue">
+                    Faz a consulta para o sistema avaliar vento, umidade e chance de chuva.
+                  </div>
+                </div>
+
+                <div class="footer-note">
+                  Regra usada nesta V1: vento moderado, umidade razoável e baixa chance de chuva favorecem aplicação.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="page-funcionarios" class="page hidden">
+            <div class="page-title">
+              <div>
+                <h2>Funcionários</h2>
+                <p>Cadastro, edição e exclusão da equipe.</p>
+              </div>
+            </div>
+
+            <div class="grid cards-2">
+              <div class="card" id="employeeFormCard">
+                <div class="section-head">
+                  <div>
+                    <h3 id="employeeFormTitle">Novo funcionário</h3>
+                    <p>Cria ou edita um cadastro.</p>
+                  </div>
+                </div>
+
+                <input type="hidden" id="employeeEditId">
+
+                <div class="field">
+                  <label>Nome</label>
+                  <input id="employeeNome" placeholder="Ex.: João">
+                </div>
+
+                <div class="field">
+                  <label>Função</label>
+                  <input id="employeeFuncao" placeholder="Ex.: Pulverizador">
+                </div>
+
+                <div class="field">
+                  <label>Status</label>
+                  <select id="employeeStatus">
+                    <option value="ativo">Ativo</option>
+                    <option value="pausado">Pausado</option>
+                    <option value="pendente">Pendente</option>
+                  </select>
+                </div>
+
+                <div class="action-row">
+                  <button class="primary-btn" onclick="saveEmployee()" style="width:auto;">Salvar funcionário</button>
+                  <button class="secondary-btn hidden" id="cancelEmployeeEditBtn" onclick="cancelEmployeeEdit()">Cancelar edição</button>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="section-head">
+                  <div>
+                    <h3>Equipe cadastrada</h3>
+                    <p>Usada também na criação de tarefas.</p>
+                  </div>
+                </div>
+                <div class="list" id="employeeList"></div>
+              </div>
+            </div>
+          </section>
+
+          <section id="page-maquinas" class="page hidden">
+            <div class="page-title">
+              <div>
+                <h2>Máquinas</h2>
+                <p>Cadastro e edição de máquinas da propriedade.</p>
+              </div>
+            </div>
+
+            <div class="grid cards-2">
+              <div class="card" id="machineFormCard">
+                <div class="section-head">
+                  <div>
+                    <h3 id="machineFormTitle">Nova máquina</h3>
+                    <p>Cria ou edita um cadastro.</p>
+                  </div>
+                </div>
+
+                <input type="hidden" id="machineEditId">
+
+                <div class="field">
+                  <label>Nome</label>
+                  <input id="machineNome" placeholder="Ex.: JD 6110">
+                </div>
+
+                <div class="field">
+                  <label>Tipo</label>
+                  <input id="machineTipo" placeholder="Ex.: Trator">
+                </div>
+
+                <div class="field">
+                  <label>Horímetro</label>
+                  <input id="machineHoras" type="number" placeholder="Ex.: 2392">
+                </div>
+
+                <div class="field">
+                  <label>Status</label>
+                  <select id="machineStatus">
+                    <option value="ok">Ok</option>
+                    <option value="operando">Operando</option>
+                    <option value="atencao">Atenção</option>
+                  </select>
+                </div>
+
+                <div class="action-row">
+                  <button class="primary-btn" onclick="saveMachine()" style="width:auto;">Salvar máquina</button>
+                  <button class="secondary-btn hidden" id="cancelMachineEditBtn" onclick="cancelMachineEdit()">Cancelar edição</button>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="section-head">
+                  <div>
+                    <h3>Máquinas cadastradas</h3>
+                    <p>Lista editável.</p>
+                  </div>
+                </div>
+                <div class="list" id="machineList"></div>
+              </div>
+            </div>
+          </section>
+
+          <section id="page-operacao" class="page hidden">
+            <div class="page-title">
+              <div>
+                <h2>Minha operação</h2>
+                <p>Tela simples para o funcionário executar.</p>
+              </div>
+              <span class="status green">Execução</span>
+            </div>
+
+            <div class="grid cards-2">
+              <div class="card">
+                <div class="section-head">
+                  <div>
+                    <h3>Minhas tarefas</h3>
+                    <p>Só aparecem tarefas do usuário logado.</p>
+                  </div>
+                </div>
+                <div class="list" id="operationTaskList"></div>
+              </div>
+
+              <div class="card">
+                <div class="section-head">
+                  <div>
+                    <h3>Ações rápidas</h3>
+                    <p>Base da futura operação real.</p>
+                  </div>
+                </div>
+
+                <div class="action-row">
+                  <button class="small-btn light">Foto inicial</button>
+                  <button class="small-btn light">Foto final</button>
+                  <button class="small-btn light">Áudio</button>
+                  <button class="small-btn light">Abastecimento</button>
+                </div>
+
+                <div class="footer-note">
+                  Nesta fase, a parte funcional principal está em tarefas, estoque, funcionários, máquinas e clima online.
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
       </div>
     </div>
   </div>
 
-  <div class="container">
-    <div class="mobile-nav" id="mobileNav"></div>
+  <script>
+    const STORAGE_KEY = "agrocontrol_v2_data";
 
-    <div class="main-layout">
-      <aside class="sidebar">
-        <div class="section-head" style="margin-bottom:10px;">
-          <div>
-            <h3>Navegação</h3>
-            <p id="sidebarProfile"></p>
-          </div>
-        </div>
-        <div class="nav-group" id="sidebarNav"></div>
-      </aside>
-
-      <main class="content">
-        <section id="page-dashboard" class="page">
-          <div class="page-title">
-            <div>
-              <h2>Dashboard</h2>
-              <p>Resumo automático com base nas tarefas e no estoque salvos.</p>
-            </div>
-            <div class="status blue">V1 funcional local</div>
-          </div>
-
-          <div class="grid cards-4">
-            <div class="card stat-card">
-              <div class="label">Total de tarefas</div>
-              <div class="value" id="dashTotalTasks">0</div>
-              <div class="sub">Registradas no sistema</div>
-            </div>
-            <div class="card stat-card">
-              <div class="label">Em andamento</div>
-              <div class="value" id="dashInProgress">0</div>
-              <div class="sub">Operações em execução</div>
-            </div>
-            <div class="card stat-card">
-              <div class="label">Concluídas</div>
-              <div class="value" id="dashDone">0</div>
-              <div class="sub">Tarefas finalizadas</div>
-            </div>
-            <div class="card stat-card">
-              <div class="label">Itens em estoque</div>
-              <div class="value" id="dashStockCount">0</div>
-              <div class="sub">Produtos cadastrados</div>
-            </div>
-          </div>
-
-          <div class="grid cards-2">
-            <div class="card">
-              <div class="section-head">
-                <div>
-                  <h3>Centro de decisão</h3>
-                  <p>Leitura rápida do que precisa atenção.</p>
-                </div>
-              </div>
-              <div id="decisionArea"></div>
-            </div>
-
-            <div class="card">
-              <div class="section-head">
-                <div>
-                  <h3>Últimas tarefas</h3>
-                  <p>Atualiza conforme tu cria e muda status.</p>
-                </div>
-              </div>
-              <div class="list" id="latestTasks"></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="page-tarefas" class="page hidden">
-          <div class="page-title">
-            <div>
-              <h2>Tarefas</h2>
-              <p>Agora tu consegue cadastrar e alterar status.</p>
-            </div>
-          </div>
-
-          <div class="grid cards-2">
-            <div class="card">
-              <div class="section-head">
-                <div>
-                  <h3>Nova tarefa</h3>
-                  <p>Cadastro simples da operação.</p>
-                </div>
-              </div>
-
-              <div class="field">
-                <label>Operação</label>
-                <input id="taskOperacao" placeholder="Ex.: Pulverização" />
-              </div>
-              <div class="field">
-                <label>Talhão</label>
-                <input id="taskTalhao" placeholder="Ex.: Talhão 3" />
-              </div>
-              <div class="field">
-                <label>Funcionário</label>
-                <input id="taskFuncionario" placeholder="Ex.: João" />
-              </div>
-              <div class="field">
-                <label>Detalhes</label>
-                <textarea id="taskDetalhes" placeholder="Produto, dose, área, observações..."></textarea>
-              </div>
-
-              <button class="primary-btn" onclick="addTask()">Salvar tarefa</button>
-            </div>
-
-            <div class="card">
-              <div class="section-head">
-                <div>
-                  <h3>Lista de tarefas</h3>
-                  <p>Muda status e remove quando quiser.</p>
-                </div>
-              </div>
-              <div class="list" id="taskList"></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="page-estoque" class="page hidden">
-          <div class="page-title">
-            <div>
-              <h2>Estoque</h2>
-              <p>Cadastra itens, quantidade e custo.</p>
-            </div>
-          </div>
-
-          <div class="grid cards-2">
-            <div class="card">
-              <div class="section-head">
-                <div>
-                  <h3>Novo item</h3>
-                  <p>Controle simples e funcional.</p>
-                </div>
-              </div>
-
-              <div class="field">
-                <label>Produto</label>
-                <input id="stockNome" placeholder="Ex.: Herbicida X" />
-              </div>
-              <div class="field">
-                <label>Quantidade</label>
-                <input id="stockQtd" type="number" placeholder="Ex.: 60" />
-              </div>
-              <div class="field">
-                <label>Unidade</label>
-                <input id="stockUnidade" placeholder="Ex.: L, bags, sacas" />
-              </div>
-              <div class="field">
-                <label>Custo unitário</label>
-                <input id="stockCusto" type="number" step="0.01" placeholder="Ex.: 48" />
-              </div>
-
-              <button class="primary-btn" onclick="addStock()">Salvar item</button>
-            </div>
-
-            <div class="card">
-              <div class="section-head">
-                <div>
-                  <h3>Itens cadastrados</h3>
-                  <p>Soma automática no dashboard.</p>
-                </div>
-              </div>
-              <div id="stockTableWrap"></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="page-clima" class="page hidden">
-          <div class="page-title">
-            <div>
-              <h2>Clima para aplicação</h2>
-              <p>Visual fixo por enquanto. Depois ligamos API real.</p>
-            </div>
-            <span class="status green">Pode aplicar</span>
-          </div>
-
-          <div class="weather-panel">
-            <div class="card">
-              <div class="section-head"><div><h3>Condição atual</h3><p>Leitura simples para campo.</p></div></div>
-              <div class="metric-row"><span>Vento</span><strong>5,8 km/h</strong></div>
-              <div class="metric-row"><span>Rajadas</span><strong>9,4 km/h</strong></div>
-              <div class="metric-row"><span>Umidade</span><strong>61%</strong></div>
-              <div class="metric-row"><span>Temperatura</span><strong>27°C</strong></div>
-              <div class="metric-row"><span>Janela ideal</span><strong>18h–21h</strong></div>
-            </div>
-
-            <div class="card">
-              <div class="alert-box green"><strong>Status:</strong><br>Pode aplicar</div>
-              <div class="alert-box yellow"><strong>Atenção:</strong><br>Evitar borda leste se houver cultura sensível.</div>
-              <div class="alert-box green"><strong>Calda exemplo:</strong><br>2 L/ha • 18 ha • 2.160 L total</div>
-            </div>
-          </div>
-        </section>
-
-        <section id="page-funcionarios" class="page hidden">
-          <div class="page-title">
-            <div>
-              <h2>Funcionários</h2>
-              <p>Lista simples por enquanto.</p>
-            </div>
-          </div>
-          <div class="list">
-            <div class="list-item"><div class="list-main"><h4>João</h4><p>Pulverizador</p></div><span class="status green">Ativo</span></div>
-            <div class="list-item"><div class="list-main"><h4>Carlos</h4><p>Plantio</p></div><span class="status yellow">Pausado</span></div>
-            <div class="list-item"><div class="list-main"><h4>Pedro</h4><p>Adubação</p></div><span class="status gray">Pendente</span></div>
-          </div>
-        </section>
-
-        <section id="page-maquinas" class="page hidden">
-          <div class="page-title">
-            <div>
-              <h2>Máquinas</h2>
-              <p>Base visual da área de máquinas.</p>
-            </div>
-          </div>
-          <div class="grid cards-3">
-            <div class="card">
-              <div class="section-head"><div><h3>JD 6110</h3><p>Trator</p></div><span class="status blue">Operando</span></div>
-              <div class="metric-row"><span>Horímetro</span><strong>2.392 h</strong></div>
-              <div class="metric-row"><span>Consumo médio</span><strong>8 L/h</strong></div>
-            </div>
-            <div class="card">
-              <div class="section-head"><div><h3>Pulverizador Jacto</h3><p>Pulverização</p></div><span class="status yellow">Atenção</span></div>
-              <div class="metric-row"><span>Horímetro</span><strong>981 h</strong></div>
-              <div class="metric-row"><span>Próxima revisão</span><strong>19 h</strong></div>
-            </div>
-            <div class="card">
-              <div class="section-head"><div><h3>Plantadeira 01</h3><p>Plantio</p></div><span class="status green">Ok</span></div>
-              <div class="metric-row"><span>Área recente</span><strong>87 ha</strong></div>
-              <div class="metric-row"><span>Observação</span><strong>Sem alertas</strong></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="page-operacao" class="page hidden">
-          <div class="page-title">
-            <div>
-              <h2>Minha operação</h2>
-              <p>Versão simplificada para funcionário.</p>
-            </div>
-            <span class="status green">Pronto</span>
-          </div>
-
-          <div class="grid cards-2">
-            <div class="card">
-              <div class="section-head"><div><h3>Tarefa atual</h3><p>Exemplo visual</p></div></div>
-              <div class="list-item">
-                <div class="list-main">
-                  <h4>Aplicação • Talhão 3</h4>
-                  <p>Produto: Herbicida X • Área: 18 ha</p>
-                </div>
-              </div>
-              <div class="action-row">
-                <button class="small-btn">Iniciar</button>
-                <button class="small-btn light">Pausar</button>
-                <button class="small-btn light">Finalizar</button>
-              </div>
-            </div>
-            <div class="card">
-              <div class="section-head"><div><h3>Registros rápidos</h3><p>Base da futura operação real</p></div></div>
-              <div class="action-row">
-                <button class="small-btn light">Foto inicial</button>
-                <button class="small-btn light">Foto final</button>
-                <button class="small-btn light">Áudio</button>
-                <button class="small-btn light">Abastecimento</button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-  </div>
-</div>
-
-<script>
-const STORAGE_KEY = "agrocontrol_v1_data";
-
-const defaultData = {
-  tasks: [
-    {
-      id: cryptoRandom(),
-      operacao: "Pulverização",
-      talhao: "Talhão 3",
-      funcionario: "João",
-      detalhes: "Herbicida X • Dose 2 L/ha • Área 18 ha",
-      status: "em_andamento",
-      createdAt: new Date().toLocaleString("pt-BR")
-    },
-    {
-      id: cryptoRandom(),
-      operacao: "Adubação",
-      talhao: "Talhão 6",
-      funcionario: "Pedro",
-      detalhes: "Ureia • Área 25 ha",
-      status: "pendente",
-      createdAt: new Date().toLocaleString("pt-BR")
+    function makeId(){
+      return Math.random().toString(36).slice(2) + Date.now().toString(36);
     }
-  ],
-  stock: [
-    { id: cryptoRandom(), nome: "Herbicida X", qtd: 60, unidade: "L", custo: 48 },
-    { id: cryptoRandom(), nome: "Soja variedade Y", qtd: 40, unidade: "bags", custo: 280 }
-  ]
-};
 
-const state = {
-  userName: "André",
-  role: "dono",
-  page: "dashboard",
-  data: loadData()
-};
-
-const roleConfig = {
-  dono: {
-    label: "Dono",
-    pages: [
-      ["dashboard","Dashboard"],
-      ["tarefas","Tarefas"],
-      ["estoque","Estoque"],
-      ["clima","Clima"],
-      ["funcionarios","Funcionários"],
-      ["maquinas","Máquinas"]
-    ]
-  },
-  gerente: {
-    label: "Gerente",
-    pages: [
-      ["dashboard","Dashboard"],
-      ["tarefas","Tarefas"],
-      ["estoque","Estoque"],
-      ["clima","Clima"],
-      ["funcionarios","Funcionários"],
-      ["maquinas","Máquinas"]
-    ]
-  },
-  funcionario: {
-    label: "Funcionário",
-    pages: [
-      ["operacao","Minha operação"],
-      ["clima","Clima"],
-      ["tarefas","Tarefas"]
-    ]
-  }
-};
-
-function cryptoRandom(){
-  return Math.random().toString(36).slice(2) + Date.now().toString(36);
-}
-
-function loadData(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if(!raw){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
-    return structuredClone(defaultData);
-  }
-  try{
-    return JSON.parse(raw);
-  }catch{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
-    return structuredClone(defaultData);
-  }
-}
-
-function saveData(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
-}
-
-function login(){
-  const name = document.getElementById("loginName").value.trim() || "Usuário";
-  const role = document.getElementById("loginRole").value;
-  state.userName = name;
-  state.role = role;
-  state.page = role === "funcionario" ? "operacao" : "dashboard";
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("appScreen").classList.remove("hidden");
-  renderUI();
-}
-
-function logout(){
-  document.getElementById("appScreen").classList.add("hidden");
-  document.getElementById("loginScreen").classList.remove("hidden");
-}
-
-function renderUI(){
-  document.getElementById("currentUser").textContent = state.userName + " • " + roleConfig[state.role].label;
-  document.getElementById("sidebarProfile").textContent = "Perfil ativo: " + roleConfig[state.role].label;
-
-  const nav = roleConfig[state.role].pages;
-  const sidebarNav = document.getElementById("sidebarNav");
-  const mobileNav = document.getElementById("mobileNav");
-  sidebarNav.innerHTML = "";
-  mobileNav.innerHTML = "";
-
-  nav.forEach(([key,label]) => {
-    const btn = document.createElement("button");
-    btn.className = "nav-btn" + (state.page === key ? " active" : "");
-    btn.innerHTML = "<span>" + label + "</span>";
-    btn.onclick = () => goToPage(key);
-    sidebarNav.appendChild(btn);
-
-    const mBtn = document.createElement("button");
-    mBtn.className = "nav-btn" + (state.page === key ? " active" : "");
-    mBtn.style.minWidth = "auto";
-    mBtn.innerHTML = "<span>" + label + "</span>";
-    mBtn.onclick = () => goToPage(key);
-    mobileNav.appendChild(mBtn);
-  });
-
-  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-  const current = document.getElementById("page-" + state.page);
-  if(current) current.classList.remove("hidden");
-
-  const newTaskCard = document.getElementById("newTaskCard");
-  if(newTaskCard){
-    if(state.role === "funcionario"){
-      newTaskCard.style.display = "none";
-    } else {
-      newTaskCard.style.display = "";
+    function nowBr(){
+      return new Date().toLocaleString("pt-BR");
     }
-  }
 
-  renderTasks();
-  renderStock();
-  renderDashboard();
-}
-function goToPage(key){
-  state.page = key;
-  renderUI();
-  window.scrollTo({top:0, behavior:"smooth"});
-}
+    const defaultData = {
+      tasks: [
+        {
+          id: makeId(),
+          operacao: "Pulverização",
+          talhao: "Talhão 3",
+          funcionario: "João",
+          detalhes: "Herbicida X • Dose 2 L/ha • Área 18 ha",
+          status: "em_andamento",
+          createdAt: nowBr()
+        },
+        {
+          id: makeId(),
+          operacao: "Adubação",
+          talhao: "Talhão 6",
+          funcionario: "Pedro",
+          detalhes: "Ureia • Área 25 ha",
+          status: "pendente",
+          createdAt: nowBr()
+        }
+      ],
+      stock: [
+        { id: makeId(), nome: "Herbicida X", qtd: 60, unidade: "L", custo: 48 },
+        { id: makeId(), nome: "Soja variedade Y", qtd: 40, unidade: "bags", custo: 280 }
+      ],
+      employees: [
+        { id: makeId(), nome: "João", funcao: "Pulverizador", status: "ativo" },
+        { id: makeId(), nome: "Pedro", funcao: "Adubação", status: "pendente" },
+        { id: makeId(), nome: "Carlos", funcao: "Plantio", status: "pausado" }
+      ],
+      machines: [
+        { id: makeId(), nome: "JD 6110", tipo: "Trator", horas: 2392, status: "operando" },
+        { id: makeId(), nome: "Pulverizador Jacto", tipo: "Pulverização", horas: 981, status: "atencao" }
+      ],
+      weather: null
+    };
 
-function statusLabel(status){
-  if(status === "pendente") return ["Pendente","gray"];
-  if(status === "em_andamento") return ["Em andamento","green"];
-  if(status === "pausada") return ["Pausada","yellow"];
-  if(status === "concluida") return ["Concluída","blue"];
-  return ["Pendente","gray"];
-}
+    function deepClone(obj){
+      return JSON.parse(JSON.stringify(obj));
+    }
 
-function addTask(){
-  const operacao = document.getElementById("taskOperacao").value.trim();
-  const talhao = document.getElementById("taskTalhao").value.trim();
-  const funcionario = document.getElementById("taskFuncionario").value.trim();
-  const detalhes = document.getElementById("taskDetalhes").value.trim();
+    function loadData(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw){
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+        return deepClone(defaultData);
+      }
+      try{
+        const parsed = JSON.parse(raw);
+        return {
+          tasks: parsed.tasks || [],
+          stock: parsed.stock || [],
+          employees: parsed.employees || [],
+          machines: parsed.machines || [],
+          weather: parsed.weather || null
+        };
+      }catch{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+        return deepClone(defaultData);
+      }
+    }
 
-  if(!operacao || !talhao || !funcionario){
-    alert("Preenche operação, talhão e funcionário.");
-    return;
-  }
+    const state = {
+      userName: "André",
+      role: "dono",
+      page: "dashboard",
+      data: loadData()
+    };
 
-  state.data.tasks.unshift({
-    id: cryptoRandom(),
-    operacao,
-    talhao,
-    funcionario,
-    detalhes,
-    status: "pendente",
-    createdAt: new Date().toLocaleString("pt-BR")
-  });
+    const roleConfig = {
+      dono: {
+        label: "Dono",
+        pages: [
+          ["dashboard","Dashboard"],
+          ["tarefas","Tarefas"],
+          ["estoque","Estoque"],
+          ["clima","Clima"],
+          ["funcionarios","Funcionários"],
+          ["maquinas","Máquinas"]
+        ]
+      },
+      gerente: {
+        label: "Gerente",
+        pages: [
+          ["dashboard","Dashboard"],
+          ["tarefas","Tarefas"],
+          ["estoque","Estoque"],
+          ["clima","Clima"],
+          ["funcionarios","Funcionários"],
+          ["maquinas","Máquinas"]
+        ]
+      },
+      funcionario: {
+        label: "Funcionário",
+        pages: [
+          ["operacao","Minha operação"],
+          ["tarefas","Tarefas"],
+          ["clima","Clima"]
+        ]
+      }
+    };
 
-  saveData();
+    function saveData(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+    }
 
-  document.getElementById("taskOperacao").value = "";
-  document.getElementById("taskTalhao").value = "";
-  document.getElementById("taskFuncionario").value = "";
-  document.getElementById("taskDetalhes").value = "";
+    function escapeHtml(text){
+      return String(text ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
 
-  renderUI();
-}
+    function login(){
+      const name = document.getElementById("loginName").value.trim() || "Usuário";
+      const role = document.getElementById("loginRole").value;
+      state.userName = name;
+      state.role = role;
+      state.page = role === "funcionario" ? "operacao" : "dashboard";
 
-function setTaskStatus(id, status){
-  const task = state.data.tasks.find(t => t.id === id);
-  if(!task) return;
-  task.status = status;
-  saveData();
-  renderUI();
-}
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("appScreen").classList.remove("hidden");
 
-function deleteTask(id){
-  if(!confirm("Excluir essa tarefa?")) return;
-  state.data.tasks = state.data.tasks.filter(t => t.id !== id);
-  saveData();
-  renderUI();
-}
+      renderUI();
+    }
 
-function renderTasks(){
-  const list = document.getElementById("taskList");
-  list.innerHTML = "";
+    function logout(){
+      document.getElementById("appScreen").classList.add("hidden");
+      document.getElementById("loginScreen").classList.remove("hidden");
+    }
 
-  let tasksToShow = state.data.tasks;
+    function goToPage(key){
+      state.page = key;
+      renderUI();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-  if(state.role === "funcionario"){
-    tasksToShow = state.data.tasks.filter(t =>
-      t.funcionario.toLowerCase() === state.userName.toLowerCase()
-    );
-  }
+    function isManager(){
+      return state.role === "dono" || state.role === "gerente";
+    }
 
-  if(tasksToShow.length === 0){
-    list.innerHTML = '<div class="alert-box yellow">Nenhuma tarefa cadastrada para este usuário.</div>';
-    return;
-  }
+    function statusLabel(status){
+      if(status === "pendente") return ["Pendente","gray"];
+      if(status === "em_andamento") return ["Em andamento","green"];
+      if(status === "pausada") return ["Pausada","yellow"];
+      if(status === "concluida") return ["Concluída","blue"];
+      return ["Pendente","gray"];
+    }
 
-  tasksToShow.forEach(task => {
-    const [label, css] = statusLabel(task.status);
-    const item = document.createElement("div");
-    item.className = "list-item";
+    function employeeStatusLabel(status){
+      if(status === "ativo") return ["Ativo","green"];
+      if(status === "pausado") return ["Pausado","yellow"];
+      return ["Pendente","gray"];
+    }
 
-    if(state.role === "funcionario"){
-      item.innerHTML = `
-        <div class="list-main">
-          <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
-          <p>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
-        </div>
-        <div class="action-row">
-          <span class="status ${css}">${label}</span>
-          <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
-          <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
-          <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
-        </div>
-      `;
-    } else {
-      item.innerHTML = `
-        <div class="list-main">
-          <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
-          <p>Funcionário: ${escapeHtml(task.funcionario)}<br>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
-        </div>
-        <div class="action-row">
-          <span class="status ${css}">${label}</span>
-          <button class="small-btn light" onclick="setTaskStatus('${task.id}','pendente')">Pendente</button>
-          <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
-          <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
-          <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
-          <button class="small-btn light danger" onclick="deleteTask('${task.id}')">Excluir</button>
-        </div>
+    function machineStatusLabel(status){
+      if(status === "ok") return ["Ok","green"];
+      if(status === "operando") return ["Operando","blue"];
+      return ["Atenção","yellow"];
+    }
+
+    function renderUI(){
+      document.getElementById("currentUser").textContent =
+        state.userName + " • " + roleConfig[state.role].label;
+      document.getElementById("sidebarProfile").textContent =
+        "Perfil ativo: " + roleConfig[state.role].label;
+
+      const nav = roleConfig[state.role].pages;
+      const sidebarNav = document.getElementById("sidebarNav");
+      const mobileNav = document.getElementById("mobileNav");
+      sidebarNav.innerHTML = "";
+      mobileNav.innerHTML = "";
+
+      nav.forEach(([key,label]) => {
+        const btn = document.createElement("button");
+        btn.className = "nav-btn" + (state.page === key ? " active" : "");
+        btn.innerHTML = "<span>" + label + "</span>";
+        btn.onclick = () => goToPage(key);
+        sidebarNav.appendChild(btn);
+
+        const mobileBtn = document.createElement("button");
+        mobileBtn.className = "nav-btn" + (state.page === key ? " active" : "");
+        mobileBtn.innerHTML = "<span>" + label + "</span>";
+        mobileBtn.onclick = () => goToPage(key);
+        mobileNav.appendChild(mobileBtn);
+      });
+
+      document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+      const current = document.getElementById("page-" + state.page);
+      if(current) current.classList.remove("hidden");
+
+      const newTaskCard = document.getElementById("newTaskCard");
+      if(newTaskCard){
+        newTaskCard.classList.toggle("hidden", !isManager());
+      }
+
+      const newStockCard = document.getElementById("newStockCard");
+      if(newStockCard){
+        newStockCard.classList.toggle("hidden", !isManager());
+      }
+
+      const employeeFormCard = document.getElementById("employeeFormCard");
+      if(employeeFormCard){
+        employeeFormCard.classList.toggle("hidden", !isManager());
+      }
+
+      const machineFormCard = document.getElementById("machineFormCard");
+      if(machineFormCard){
+        machineFormCard.classList.toggle("hidden", !isManager());
+      }
+
+      document.getElementById("taskPageSubtitle").textContent =
+        isManager()
+          ? "Criação e execução de tarefas."
+          : "Tu vê somente as tuas tarefas.";
+
+      document.getElementById("taskListTitle").textContent =
+        isManager() ? "Lista de tarefas" : "Minhas tarefas";
+
+      document.getElementById("taskListSub").textContent =
+        isManager()
+          ? "Visualização por perfil."
+          : "Somente tarefas vinculadas ao teu nome.";
+
+      populateEmployeeSelect();
+      renderTasks();
+      renderStock();
+      renderEmployees();
+      renderMachines();
+      renderOperationTasks();
+      renderDashboard();
+      renderWeather();
+    }
+
+    function populateEmployeeSelect(){
+      const select = document.getElementById("taskFuncionarioSelect");
+      if(!select) return;
+
+      select.innerHTML = "";
+      const employees = state.data.employees.slice().sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"));
+
+      if(!employees.length){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "Nenhum funcionário cadastrado";
+        select.appendChild(opt);
+        return;
+      }
+
+      employees.forEach(emp => {
+        const opt = document.createElement("option");
+        opt.value = emp.nome;
+        opt.textContent = emp.nome + " • " + emp.funcao;
+        select.appendChild(opt);
+      });
+    }
+
+    function getVisibleTasks(){
+      if(isManager()) return state.data.tasks;
+      return state.data.tasks.filter(t =>
+        t.funcionario.trim().toLowerCase() === state.userName.trim().toLowerCase()
+      );
+    }
+
+    function addTask(){
+      if(!isManager()) return;
+
+      const operacao = document.getElementById("taskOperacao").value.trim();
+      const talhao = document.getElementById("taskTalhao").value.trim();
+      const funcionario = document.getElementById("taskFuncionarioSelect").value.trim();
+      const detalhes = document.getElementById("taskDetalhes").value.trim();
+
+      if(!operacao || !talhao || !funcionario){
+        alert("Preenche operação, talhão e funcionário.");
+        return;
+      }
+
+      state.data.tasks.unshift({
+        id: makeId(),
+        operacao,
+        talhao,
+        funcionario,
+        detalhes,
+        status: "pendente",
+        createdAt: nowBr()
+      });
+
+      saveData();
+
+      document.getElementById("taskOperacao").value = "";
+      document.getElementById("taskTalhao").value = "";
+      document.getElementById("taskDetalhes").value = "";
+
+      renderUI();
+    }
+
+    function setTaskStatus(id, status){
+      const task = state.data.tasks.find(t => t.id === id);
+      if(!task) return;
+
+      if(!isManager()){
+        const mine = task.funcionario.trim().toLowerCase() === state.userName.trim().toLowerCase();
+        if(!mine) return;
+        if(status === "pendente") return;
+      }
+
+      task.status = status;
+      saveData();
+      renderUI();
+    }
+
+    function deleteTask(id){
+      if(!isManager()) return;
+      if(!confirm("Excluir essa tarefa?")) return;
+      state.data.tasks = state.data.tasks.filter(t => t.id !== id);
+      saveData();
+      renderUI();
+    }
+
+    function renderTasks(){
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+      const tasksToShow = getVisibleTasks();
+
+      if(!tasksToShow.length){
+        list.innerHTML = '<div class="alert-box yellow">Nenhuma tarefa cadastrada para este usuário.</div>';
+        return;
+      }
+
+      tasksToShow.forEach(task => {
+        const [label, css] = statusLabel(task.status);
+        const item = document.createElement("div");
+        item.className = "list-item";
+
+        if(isManager()){
+          item.innerHTML = `
+            <div class="list-main">
+              <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
+              <p>Funcionário: ${escapeHtml(task.funcionario)}<br>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
+            </div>
+            <div class="action-row">
+              <span class="status ${css}">${label}</span>
+              <button class="small-btn light" onclick="setTaskStatus('${task.id}','pendente')">Pendente</button>
+              <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
+              <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
+              <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
+              <button class="small-btn light" onclick="deleteTask('${task.id}')">Excluir</button>
+            </div>
+          `;
+        } else {
+          item.innerHTML = `
+            <div class="list-main">
+              <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
+              <p>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
+            </div>
+            <div class="action-row">
+              <span class="status ${css}">${label}</span>
+              <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
+              <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
+              <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
+            </div>
+          `;
+        }
+
+        list.appendChild(item);
+      });
+    }
+
+    function addStock(){
+      if(!isManager()) return;
+
+      const nome = document.getElementById("stockNome").value.trim();
+      const qtd = Number(document.getElementById("stockQtd").value);
+      const unidade = document.getElementById("stockUnidade").value.trim();
+      const custo = Number(document.getElementById("stockCusto").value);
+
+      if(!nome || !unidade || isNaN(qtd)){
+        alert("Preenche produto, quantidade e unidade.");
+        return;
+      }
+
+      state.data.stock.unshift({
+        id: makeId(),
+        nome,
+        qtd,
+        unidade,
+        custo: isNaN(custo) ? 0 : custo
+      });
+
+      saveData();
+
+      document.getElementById("stockNome").value = "";
+      document.getElementById("stockQtd").value = "";
+      document.getElementById("stockUnidade").value = "";
+      document.getElementById("stockCusto").value = "";
+
+      renderUI();
+    }
+
+    function updateStock(id, delta){
+      if(!isManager()) return;
+      const item = state.data.stock.find(s => s.id === id);
+      if(!item) return;
+      item.qtd = Math.max(0, Number(item.qtd) + delta);
+      saveData();
+      renderUI();
+    }
+
+    function deleteStock(id){
+      if(!isManager()) return;
+      if(!confirm("Excluir esse item do estoque?")) return;
+      state.data.stock = state.data.stock.filter(s => s.id !== id);
+      saveData();
+      renderUI();
+    }
+
+    function renderStock(){
+      const wrap = document.getElementById("stockTableWrap");
+
+      if(!state.data.stock.length){
+        wrap.innerHTML = '<div class="alert-box yellow">Nenhum item cadastrado no estoque.</div>';
+        return;
+      }
+
+      const rows = state.data.stock.map(item => {
+        const status =
+          Number(item.qtd) <= 10 ? ["Crítico","red"] :
+          Number(item.qtd) <= 25 ? ["Atenção","yellow"] :
+          ["Normal","green"];
+
+        return `
+          <tr>
+            <td>${escapeHtml(item.nome)}</td>
+            <td>${Number(item.qtd)} ${escapeHtml(item.unidade)}</td>
+            <td>R$ ${Number(item.custo).toFixed(2)}</td>
+            <td><span class="status ${status[1]}">${status[0]}</span></td>
+            <td>
+              ${
+                isManager()
+                  ? `
+                  <div class="action-row">
+                    <button class="small-btn light" onclick="updateStock('${item.id}',1)">+1</button>
+                    <button class="small-btn light" onclick="updateStock('${item.id}',-1)">-1</button>
+                    <button class="small-btn light" onclick="deleteStock('${item.id}')">Excluir</button>
+                  </div>
+                  `
+                  : '<span class="muted">Somente leitura</span>'
+              }
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      wrap.innerHTML = `
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Custo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
       `;
     }
 
-    list.appendChild(item);
-  });
-}
+    function saveEmployee(){
+      if(!isManager()) return;
 
-function addStock(){
-  const nome = document.getElementById("stockNome").value.trim();
-  const qtd = Number(document.getElementById("stockQtd").value);
-  const unidade = document.getElementById("stockUnidade").value.trim();
-  const custo = Number(document.getElementById("stockCusto").value);
+      const editId = document.getElementById("employeeEditId").value;
+      const nome = document.getElementById("employeeNome").value.trim();
+      const funcao = document.getElementById("employeeFuncao").value.trim();
+      const status = document.getElementById("employeeStatus").value;
 
-  if(!nome || !qtd || !unidade){
-    alert("Preenche produto, quantidade e unidade.");
-    return;
-  }
+      if(!nome || !funcao){
+        alert("Preenche nome e função.");
+        return;
+      }
 
-  state.data.stock.unshift({
-    id: cryptoRandom(),
-    nome,
-    qtd,
-    unidade,
-    custo: isNaN(custo) ? 0 : custo
-  });
+      const duplicated = state.data.employees.some(emp =>
+        emp.nome.trim().toLowerCase() === nome.trim().toLowerCase() && emp.id !== editId
+      );
 
-  saveData();
+      if(duplicated){
+        alert("Já existe funcionário com esse nome.");
+        return;
+      }
 
-  document.getElementById("stockNome").value = "";
-  document.getElementById("stockQtd").value = "";
-  document.getElementById("stockUnidade").value = "";
-  document.getElementById("stockCusto").value = "";
+      if(editId){
+        const emp = state.data.employees.find(e => e.id === editId);
+        if(emp){
+          emp.nome = nome;
+          emp.funcao = funcao;
+          emp.status = status;
 
-  renderUI();
-}
+          state.data.tasks.forEach(task => {
+            if(task.funcionario.trim().toLowerCase() === task.funcionario.trim().toLowerCase() && task.funcionario === emp.nome){
+              // no-op
+            }
+          });
+        }
+      } else {
+        state.data.employees.unshift({
+          id: makeId(),
+          nome,
+          funcao,
+          status
+        });
+      }
 
-function updateStock(id, delta){
-  const item = state.data.stock.find(s => s.id === id);
-  if(!item) return;
-  item.qtd = Math.max(0, Number(item.qtd) + delta);
-  saveData();
-  renderUI();
-}
+      if(editId){
+        const original = state.data.employees.find(e => e.id === editId);
+      }
 
-function deleteStock(id){
-  if(!confirm("Excluir esse item do estoque?")) return;
-  state.data.stock = state.data.stock.filter(s => s.id !== id);
-  saveData();
-  renderUI();
-}
+      saveData();
+      cancelEmployeeEdit();
+      renderUI();
+    }
 
-function renderStock(){
-  const wrap = document.getElementById("stockTableWrap");
+    function editEmployee(id){
+      if(!isManager()) return;
+      const emp = state.data.employees.find(e => e.id === id);
+      if(!emp) return;
 
-  if(state.data.stock.length === 0){
-    wrap.innerHTML = '<div class="alert-box yellow">Nenhum item cadastrado no estoque.</div>';
-    return;
-  }
+      document.getElementById("employeeEditId").value = emp.id;
+      document.getElementById("employeeNome").value = emp.nome;
+      document.getElementById("employeeFuncao").value = emp.funcao;
+      document.getElementById("employeeStatus").value = emp.status;
+      document.getElementById("employeeFormTitle").textContent = "Editar funcionário";
+      document.getElementById("cancelEmployeeEditBtn").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-  let rows = state.data.stock.map(item => {
-    const status = item.qtd <= 10 ? ["Crítico","red"] : item.qtd <= 25 ? ["Atenção","yellow"] : ["Normal","green"];
-    return `
-      <tr>
-        <td>${escapeHtml(item.nome)}</td>
-        <td>${item.qtd} ${escapeHtml(item.unidade)}</td>
-        <td>R$ ${Number(item.custo).toFixed(2)}</td>
-        <td><span class="status ${status[1]}">${status[0]}</span></td>
-        <td>
+    function cancelEmployeeEdit(){
+      document.getElementById("employeeEditId").value = "";
+      document.getElementById("employeeNome").value = "";
+      document.getElementById("employeeFuncao").value = "";
+      document.getElementById("employeeStatus").value = "ativo";
+      document.getElementById("employeeFormTitle").textContent = "Novo funcionário";
+      document.getElementById("cancelEmployeeEditBtn").classList.add("hidden");
+    }
+
+    function deleteEmployee(id){
+      if(!isManager()) return;
+      const emp = state.data.employees.find(e => e.id === id);
+      if(!emp) return;
+      const hasTask = state.data.tasks.some(t => t.funcionario.trim().toLowerCase() === emp.nome.trim().toLowerCase());
+      if(hasTask){
+        alert("Esse funcionário ainda tem tarefa vinculada. Exclui ou altera as tarefas antes.");
+        return;
+      }
+      if(!confirm("Excluir esse funcionário?")) return;
+      state.data.employees = state.data.employees.filter(e => e.id !== id);
+      saveData();
+      renderUI();
+    }
+
+    function renderEmployees(){
+      const list = document.getElementById("employeeList");
+      list.innerHTML = "";
+
+      if(!state.data.employees.length){
+        list.innerHTML = '<div class="alert-box yellow">Nenhum funcionário cadastrado.</div>';
+        return;
+      }
+
+      state.data.employees
+        .slice()
+        .sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"))
+        .forEach(emp => {
+          const [label, css] = employeeStatusLabel(emp.status);
+          const item = document.createElement("div");
+          item.className = "list-item";
+          item.innerHTML = `
+            <div class="list-main">
+              <h4>${escapeHtml(emp.nome)}</h4>
+              <p>${escapeHtml(emp.funcao)}</p>
+            </div>
+            <div class="action-row">
+              <span class="status ${css}">${label}</span>
+              ${
+                isManager()
+                  ? `
+                  <button class="small-btn light" onclick="editEmployee('${emp.id}')">Editar</button>
+                  <button class="small-btn light" onclick="deleteEmployee('${emp.id}')">Excluir</button>
+                  `
+                  : ''
+              }
+            </div>
+          `;
+          list.appendChild(item);
+        });
+    }
+
+    function saveMachine(){
+      if(!isManager()) return;
+
+      const editId = document.getElementById("machineEditId").value;
+      const nome = document.getElementById("machineNome").value.trim();
+      const tipo = document.getElementById("machineTipo").value.trim();
+      const horas = Number(document.getElementById("machineHoras").value);
+      const status = document.getElementById("machineStatus").value;
+
+      if(!nome || !tipo){
+        alert("Preenche nome e tipo.");
+        return;
+      }
+
+      if(editId){
+        const machine = state.data.machines.find(m => m.id === editId);
+        if(machine){
+          machine.nome = nome;
+          machine.tipo = tipo;
+          machine.horas = isNaN(horas) ? 0 : horas;
+          machine.status = status;
+        }
+      } else {
+        state.data.machines.unshift({
+          id: makeId(),
+          nome,
+          tipo,
+          horas: isNaN(horas) ? 0 : horas,
+          status
+        });
+      }
+
+      saveData();
+      cancelMachineEdit();
+      renderUI();
+    }
+
+    function editMachine(id){
+      if(!isManager()) return;
+      const machine = state.data.machines.find(m => m.id === id);
+      if(!machine) return;
+
+      document.getElementById("machineEditId").value = machine.id;
+      document.getElementById("machineNome").value = machine.nome;
+      document.getElementById("machineTipo").value = machine.tipo;
+      document.getElementById("machineHoras").value = machine.horas;
+      document.getElementById("machineStatus").value = machine.status;
+      document.getElementById("machineFormTitle").textContent = "Editar máquina";
+      document.getElementById("cancelMachineEditBtn").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function cancelMachineEdit(){
+      document.getElementById("machineEditId").value = "";
+      document.getElementById("machineNome").value = "";
+      document.getElementById("machineTipo").value = "";
+      document.getElementById("machineHoras").value = "";
+      document.getElementById("machineStatus").value = "ok";
+      document.getElementById("machineFormTitle").textContent = "Nova máquina";
+      document.getElementById("cancelMachineEditBtn").classList.add("hidden");
+    }
+
+    function deleteMachine(id){
+      if(!isManager()) return;
+      if(!confirm("Excluir essa máquina?")) return;
+      state.data.machines = state.data.machines.filter(m => m.id !== id);
+      saveData();
+      renderUI();
+    }
+
+    function renderMachines(){
+      const list = document.getElementById("machineList");
+      list.innerHTML = "";
+
+      if(!state.data.machines.length){
+        list.innerHTML = '<div class="alert-box yellow">Nenhuma máquina cadastrada.</div>';
+        return;
+      }
+
+      state.data.machines.forEach(machine => {
+        const [label, css] = machineStatusLabel(machine.status);
+        const item = document.createElement("div");
+        item.className = "list-item";
+        item.innerHTML = `
+          <div class="list-main">
+            <h4>${escapeHtml(machine.nome)}</h4>
+            <p>${escapeHtml(machine.tipo)} • Horímetro: ${Number(machine.horas)}</p>
+          </div>
           <div class="action-row">
-            <button class="small-btn light" onclick="updateStock('${item.id}',1)">+1</button>
-            <button class="small-btn light" onclick="updateStock('${item.id}',-1)">-1</button>
-            <button class="small-btn light danger" onclick="deleteStock('${item.id}')">Excluir</button>
+            <span class="status ${css}">${label}</span>
+            ${
+              isManager()
+                ? `
+                <button class="small-btn light" onclick="editMachine('${machine.id}')">Editar</button>
+                <button class="small-btn light" onclick="deleteMachine('${machine.id}')">Excluir</button>
+                `
+                : ''
+            }
           </div>
-        </td>
-      </tr>
-    `;
-  }).join("");
+        `;
+        list.appendChild(item);
+      });
+    }
 
-  wrap.innerHTML = `
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Produto</th>
-          <th>Quantidade</th>
-          <th>Custo</th>
-          <th>Status</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
-}
+    function renderOperationTasks(){
+      const wrap = document.getElementById("operationTaskList");
+      wrap.innerHTML = "";
+      const tasks = state.data.tasks.filter(t =>
+        t.funcionario.trim().toLowerCase() === state.userName.trim().toLowerCase()
+      );
 
-function renderDashboard(){
-  const tasks = state.data.tasks;
-  const stock = state.data.stock;
+      if(!tasks.length){
+        wrap.innerHTML = '<div class="alert-box yellow">Nenhuma tarefa atribuída a ti.</div>';
+        return;
+      }
 
-  const total = tasks.length;
-  const inProgress = tasks.filter(t => t.status === "em_andamento").length;
-  const done = tasks.filter(t => t.status === "concluida").length;
+      tasks.forEach(task => {
+        const [label, css] = statusLabel(task.status);
+        const item = document.createElement("div");
+        item.className = "list-item";
+        item.innerHTML = `
+          <div class="list-main">
+            <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
+            <p>${escapeHtml(task.detalhes || "Sem detalhes")}</p>
+          </div>
+          <div class="action-row">
+            <span class="status ${css}">${label}</span>
+            <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
+            <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
+            <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
+          </div>
+        `;
+        wrap.appendChild(item);
+      });
+    }
 
-  document.getElementById("dashTotalTasks").textContent = total;
-  document.getElementById("dashInProgress").textContent = inProgress;
-  document.getElementById("dashDone").textContent = done;
-  document.getElementById("dashStockCount").textContent = stock.length;
+    function renderDashboard(){
+      const tasks = state.data.tasks;
+      const stock = state.data.stock;
+      const employees = state.data.employees;
 
-  const decision = document.getElementById("decisionArea");
-  const lowItems = stock.filter(s => Number(s.qtd) <= 10);
-  let html = "";
+      document.getElementById("dashTotalTasks").textContent = tasks.length;
+      document.getElementById("dashInProgress").textContent = tasks.filter(t => t.status === "em_andamento").length;
+      document.getElementById("dashStockCount").textContent = stock.length;
+      document.getElementById("dashEmployeeCount").textContent = employees.length;
 
-  if(lowItems.length){
-    html += `<div class="alert-box red"><strong>Estoque crítico:</strong><br>${lowItems.map(i => escapeHtml(i.nome)).join(", ")}</div>`;
-  } else {
-    html += `<div class="alert-box green"><strong>Estoque sob controle.</strong><br>Nenhum item crítico no momento.</div>`;
-  }
+      const lowItems = stock.filter(s => Number(s.qtd) <= 10);
+      const paused = tasks.filter(t => t.status === "pausada").length;
+      const inProgress = tasks.filter(t => t.status === "em_andamento").length;
 
-  if(inProgress > 0){
-    html += `<div class="alert-box green"><strong>${inProgress} tarefa(s) em andamento.</strong><br>Operação ativa no campo.</div>`;
-  } else {
-    html += `<div class="alert-box yellow"><strong>Nenhuma tarefa em andamento.</strong><br>Verificar programação do dia.</div>`;
-  }
+      let html = "";
+      html += lowItems.length
+        ? `<div class="alert-box red"><strong>Estoque crítico:</strong><br>${lowItems.map(i => escapeHtml(i.nome)).join(", ")}</div>`
+        : `<div class="alert-box green"><strong>Estoque sem itens críticos.</strong><br>Nenhum produto em zona vermelha.</div>`;
 
-  const paused = tasks.filter(t => t.status === "pausada").length;
-  if(paused > 0){
-    html += `<div class="alert-box yellow"><strong>${paused} tarefa(s) pausada(s).</strong><br>Vale revisar o motivo e retomar quando possível.</div>`;
-  }
+      html += inProgress
+        ? `<div class="alert-box green"><strong>${inProgress} tarefa(s) em andamento.</strong><br>Operação ativa no campo.</div>`
+        : `<div class="alert-box yellow"><strong>Nenhuma tarefa em andamento.</strong><br>Verificar programação do dia.</div>`;
 
-  decision.innerHTML = html;
+      if(paused){
+        html += `<div class="alert-box yellow"><strong>${paused} tarefa(s) pausada(s).</strong><br>Vale revisar e decidir retomada.</div>`;
+      }
 
-  const latest = document.getElementById("latestTasks");
-  latest.innerHTML = "";
+      if(state.data.weather && state.data.weather.recommendation){
+        html += `<div class="alert-box blue"><strong>Clima:</strong><br>${escapeHtml(state.data.weather.recommendation.summary)}</div>`;
+      }
 
-  if(!tasks.length){
-    latest.innerHTML = '<div class="alert-box yellow">Sem tarefas cadastradas.</div>';
-    return;
-  }
+      document.getElementById("decisionArea").innerHTML = html;
 
-  tasks.slice(0,4).forEach(task => {
-    const [label, css] = statusLabel(task.status);
-    const item = document.createElement("div");
-    item.className = "list-item";
-    item.innerHTML = `
-      <div class="list-main">
-        <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
-        <p>${escapeHtml(task.funcionario)} • ${escapeHtml(task.createdAt)}</p>
-      </div>
-      <span class="status ${css}">${label}</span>
-    `;
-    latest.appendChild(item);
-  });
-}
+      const latest = document.getElementById("latestTasks");
+      latest.innerHTML = "";
 
-function escapeHtml(text){
-  return String(text)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-</script>
+      if(!tasks.length){
+        latest.innerHTML = '<div class="alert-box yellow">Sem tarefas cadastradas.</div>';
+        return;
+      }
+
+      tasks.slice(0,4).forEach(task => {
+        const [label, css] = statusLabel(task.status);
+        const item = document.createElement("div");
+        item.className = "list-item";
+        item.innerHTML = `
+          <div class="list-main">
+            <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
+            <p>${escapeHtml(task.funcionario)} • ${escapeHtml(task.createdAt)}</p>
+          </div>
+          <span class="status ${css}">${label}</span>
+        `;
+        latest.appendChild(item);
+      });
+    }
+
+    function renderWeather(){
+      const weather = state.data.weather;
+
+      if(!weather){
+        document.getElementById("weatherMainText").textContent = "Aguardando consulta";
+        document.getElementById("weatherLocationText").textContent = "Sem local carregado";
+        document.getElementById("weatherTemp").textContent = "—";
+        document.getElementById("weatherHumidity").textContent = "—";
+        document.getElementById("weatherWind").textContent = "—";
+        document.getElementById("weatherGust").textContent = "—";
+        document.getElementById("weatherRain").textContent = "—";
+        document.getElementById("weatherRecommendation").innerHTML =
+          '<div class="alert-box blue">Faz a consulta para o sistema avaliar vento, umidade e chuva.</div>';
+        document.getElementById("weatherHeaderStatus").className = "status gray";
+        document.getElementById("weatherHeaderStatus").textContent = "Sem consulta";
+        return;
+      }
+
+      document.getElementById("weatherMainText").textContent = weather.recommendation.title;
+      document.getElementById("weatherLocationText").textContent = weather.locationLabel;
+      document.getElementById("weatherTemp").textContent = weather.current.temperature + " °C";
+      document.getElementById("weatherHumidity").textContent = weather.current.humidity + " %";
+      document.getElementById("weatherWind").textContent = weather.current.wind + " km/h";
+      document.getElementById("weatherGust").textContent = weather.current.gust + " km/h";
+      document.getElementById("weatherRain").textContent = weather.current.rainChance + " %";
+
+      document.getElementById("weatherHeaderStatus").className =
+        "status " + weather.recommendation.css;
+      document.getElementById("weatherHeaderStatus").textContent =
+        weather.recommendation.title;
+
+      document.getElementById("weatherRecommendation").innerHTML = `
+        <div class="alert-box ${weather.recommendation.css}">
+          <strong>${escapeHtml(weather.recommendation.title)}</strong><br>
+          ${escapeHtml(weather.recommendation.summary)}
+        </div>
+        <div class="alert-box blue">
+          <strong>Janela avaliada:</strong><br>
+          Dados atuais carregados online para ${escapeHtml(weather.locationLabel)}.
+        </div>
+      `;
+    }
+
+    function evaluateWeather(current){
+      const wind = Number(current.wind);
+      const humidity = Number(current.humidity);
+      const rainChance = Number(current.rainChance);
+
+      if(rainChance >= 50 || wind > 20 || humidity < 40){
+        return {
+          title: "Não aplicar",
+          css: "red",
+          summary: "Risco alto por chuva provável, vento elevado ou umidade inadequada."
+        };
+      }
+
+      if(rainChance >= 25 || wind > 12 || humidity < 50){
+        return {
+          title: "Atenção",
+          css: "yellow",
+          summary: "Condição intermediária. Avaliar rajadas, borda sensível e estabilidade antes de aplicar."
+        };
+      }
+
+      return {
+        title: "Pode aplicar",
+        css: "green",
+        summary: "Condição favorável para aplicação, com vento e umidade dentro de faixa mais confortável."
+      };
+    }
+
+    async function searchWeatherByCity(){
+      const city = document.getElementById("weatherCity").value.trim();
+      if(!city){
+        alert("Digita uma cidade.");
+        return;
+      }
+
+      setWeatherFeedback("Buscando cidade...");
+      try{
+        const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=pt&format=json`;
+        const geoResp = await fetch(geoUrl);
+        const geoData = await geoResp.json();
+
+        if(!geoData.results || !geoData.results.length){
+          setWeatherFeedback("Cidade não encontrada.");
+          return;
+        }
+
+        const place = geoData.results[0];
+        const label = [place.name, place.admin1, place.country].filter(Boolean).join(", ");
+        await loadWeather(place.latitude, place.longitude, label);
+      }catch(err){
+        console.error(err);
+        setWeatherFeedback("Erro ao buscar cidade.");
+      }
+    }
+
+    function searchWeatherByLocation(){
+      if(!navigator.geolocation){
+        setWeatherFeedback("Geolocalização não disponível neste navegador.");
+        return;
+      }
+
+      setWeatherFeedback("Buscando tua localização...");
+
+      navigator.geolocation.getCurrentPosition(
+        async position => {
+          const { latitude, longitude } = position.coords;
+          await loadWeather(latitude, longitude, "Minha localização");
+        },
+        error => {
+          console.error(error);
+          setWeatherFeedback("Não foi possível obter tua localização.");
+        },
+        { enableHighAccuracy:true, timeout:10000, maximumAge:0 }
+      );
+    }
+
+    async function loadWeather(lat, lon, label){
+      try{
+        setWeatherFeedback("Carregando previsão online...");
+
+        const url =
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+          `&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_gusts_10m` +
+          `&hourly=precipitation_probability` +
+          `&forecast_days=1&timezone=auto&wind_speed_unit=kmh`;
+
+        const resp = await fetch(url);
+        const data = await resp.json();
+
+        const rainChance = Array.isArray(data.hourly?.precipitation_probability)
+          ? Number(data.hourly.precipitation_probability[0] ?? 0)
+          : 0;
+
+        const current = {
+          temperature: Math.round(Number(data.current?.temperature_2m ?? 0)),
+          humidity: Math.round(Number(data.current?.relative_humidity_2m ?? 0)),
+          wind: Math.round(Number(data.current?.wind_speed_10m ?? 0)),
+          gust: Math.round(Number(data.current?.wind_gusts_10m ?? 0)),
+          rainChance: Math.round(rainChance)
+        };
+
+        const recommendation = evaluateWeather(current);
+
+        state.data.weather = {
+          locationLabel: label,
+          latitude: lat,
+          longitude: lon,
+          current,
+          recommendation,
+          updatedAt: nowBr()
+        };
+
+        saveData();
+        renderUI();
+        setWeatherFeedback("Clima atualizado com sucesso.");
+      }catch(err){
+        console.error(err);
+        setWeatherFeedback("Erro ao carregar previsão.");
+      }
+    }
+
+    function setWeatherFeedback(text){
+      document.getElementById("weatherSearchFeedback").textContent = text;
+    }
+
+    renderUI();
+  </script>
 </body>
 </html>
-
-
