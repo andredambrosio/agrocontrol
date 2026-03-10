@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgroControl Farm System</title>
+  <title>AgroControl</title>
   <style>
     :root{
       --bg:#f5f5f7;
@@ -18,473 +18,127 @@
       --shadow:0 10px 30px rgba(0,0,0,.06);
       --radius:22px;
     }
-
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    a{text-decoration:none;color:inherit}
-    button,input,select{font:inherit}
-
-    .app-shell{
-      min-height:100vh;
-    }
-
+    button,input,select,textarea{font:inherit}
     .hidden{display:none!important}
-
     .topbar{
-      position:sticky;
-      top:0;
-      z-index:20;
+      position:sticky;top:0;z-index:20;
       backdrop-filter: blur(12px);
-      background:rgba(245,245,247,.82);
-      border-bottom:1px solid rgba(0,0,0,.06);
+      background:rgba(245,245,247,.85);
+      border-bottom:1px solid rgba(0,0,0,.06)
     }
-
     .topbar-inner{
-      max-width:1280px;
-      margin:0 auto;
-      padding:16px 20px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
+      max-width:1280px;margin:0 auto;padding:16px 20px;
+      display:flex;align-items:center;justify-content:space-between;gap:16px
     }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-
+    .brand{display:flex;align-items:center;gap:12px}
     .brand-badge{
-      width:40px;
-      height:40px;
-      border-radius:14px;
-      background:#111;
-      color:#fff;
-      display:grid;
-      place-items:center;
-      font-weight:700;
-      box-shadow:var(--shadow);
+      width:40px;height:40px;border-radius:14px;background:#111;color:#fff;
+      display:grid;place-items:center;font-weight:700;box-shadow:var(--shadow)
     }
-
-    .brand-text h1{
-      margin:0;
-      font-size:18px;
-      line-height:1.1;
-      letter-spacing:-.02em;
-    }
-
-    .brand-text p{
-      margin:3px 0 0;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .user-box{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
+    .brand-text h1{margin:0;font-size:18px;line-height:1.1;letter-spacing:-.02em}
+    .brand-text p{margin:3px 0 0;color:var(--muted);font-size:12px}
     .pill{
-      padding:8px 12px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid var(--line);
-      color:var(--muted);
-      font-size:13px;
+      padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);
+      color:var(--muted);font-size:13px
     }
-
     .logout-btn{
-      border:none;
-      background:#111;
-      color:#fff;
-      border-radius:999px;
-      padding:10px 14px;
-      cursor:pointer;
+      border:none;background:#111;color:#fff;border-radius:999px;padding:10px 14px;cursor:pointer
     }
-
-    .container{
-      max-width:1280px;
-      margin:0 auto;
-      padding:24px 20px 40px;
-    }
-
-    .login-wrap{
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      padding:24px;
-    }
-
+    .container{max-width:1280px;margin:0 auto;padding:24px 20px 40px}
+    .login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
     .login-card{
-      width:100%;
-      max-width:430px;
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:32px;
-      box-shadow:var(--shadow);
-      padding:30px;
+      width:100%;max-width:430px;background:var(--card);border:1px solid var(--line);
+      border-radius:32px;box-shadow:var(--shadow);padding:30px
     }
-
-    .login-card h2{
-      margin:0;
-      font-size:30px;
-      letter-spacing:-.03em;
+    .login-card h2{margin:0;font-size:30px;letter-spacing:-.03em}
+    .login-card p{color:var(--muted);margin:10px 0 24px;line-height:1.5}
+    .field{margin-bottom:14px}
+    .field label{display:block;margin-bottom:8px;font-size:13px;color:var(--muted)}
+    .field input,.field select,.field textarea{
+      width:100%;background:#fafafa;border:1px solid var(--line);border-radius:16px;
+      padding:14px 16px;outline:none
     }
-
-    .login-card p{
-      color:var(--muted);
-      margin:10px 0 24px;
-      line-height:1.5;
+    .field textarea{min-height:90px;resize:vertical}
+    .primary-btn,.secondary-btn,.small-btn{
+      border:none;border-radius:16px;padding:14px 18px;cursor:pointer;transition:.2s ease
     }
-
-    .field{
-      margin-bottom:14px;
-    }
-
-    .field label{
-      display:block;
-      margin-bottom:8px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .field input, .field select{
-      width:100%;
-      background:#fafafa;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:14px 16px;
-      outline:none;
-    }
-
-    .field input:focus, .field select:focus{
-      border-color:#c7c7cc;
-      background:#fff;
-    }
-
-    .primary-btn, .secondary-btn{
-      border:none;
-      border-radius:16px;
-      padding:14px 18px;
-      cursor:pointer;
-      transition:.2s ease;
-    }
-
-    .primary-btn{
-      background:#111;
-      color:#fff;
-      width:100%;
-      font-weight:600;
-    }
-
-    .primary-btn:hover{opacity:.92}
-    .secondary-btn{
-      background:#fff;
-      color:#111;
-      border:1px solid var(--line);
-    }
-
-    .main-layout{
-      display:grid;
-      grid-template-columns:260px 1fr;
-      gap:22px;
-    }
-
+    .primary-btn{background:#111;color:#fff;width:100%;font-weight:600}
+    .secondary-btn{background:#fff;color:#111;border:1px solid var(--line)}
+    .small-btn{padding:10px 12px;background:#111;color:#fff;border-radius:14px;font-size:13px}
+    .small-btn.light{background:#fff;color:#111;border:1px solid var(--line)}
+    .main-layout{display:grid;grid-template-columns:260px 1fr;gap:22px}
     .sidebar{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:28px;
-      padding:16px;
-      box-shadow:var(--shadow);
-      height:calc(100vh - 114px);
-      position:sticky;
-      top:90px;
+      background:var(--card);border:1px solid var(--line);border-radius:28px;padding:16px;
+      box-shadow:var(--shadow);height:calc(100vh - 114px);position:sticky;top:90px
     }
-
-    .nav-group{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      margin-top:10px;
-    }
-
+    .nav-group{display:flex;flex-direction:column;gap:8px;margin-top:10px}
     .nav-btn{
-      border:none;
-      text-align:left;
-      background:#fafafa;
-      border:1px solid transparent;
-      color:#1d1d1f;
-      border-radius:18px;
-      padding:14px 14px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      border:none;text-align:left;background:#fafafa;border:1px solid transparent;color:#1d1d1f;
+      border-radius:18px;padding:14px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between
     }
-
-    .nav-btn.active{
-      background:#111;
-      color:#fff;
-    }
-
-    .nav-btn small{
-      color:inherit;
-      opacity:.7;
-      font-size:11px;
-    }
-
-    .content{
-      display:flex;
-      flex-direction:column;
-      gap:20px;
-    }
-
-    .page-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap:16px;
-      flex-wrap:wrap;
-    }
-
-    .page-title h2{
-      margin:0;
-      font-size:34px;
-      letter-spacing:-.04em;
-    }
-
-    .page-title p{
-      margin:6px 0 0;
-      color:var(--muted);
-    }
-
-    .grid{
-      display:grid;
-      gap:18px;
-    }
-
-    .grid.cards-4{
-      grid-template-columns:repeat(4,1fr);
-    }
-
-    .grid.cards-3{
-      grid-template-columns:repeat(3,1fr);
-    }
-
-    .grid.cards-2{
-      grid-template-columns:repeat(2,1fr);
-    }
-
+    .nav-btn.active{background:#111;color:#fff}
+    .content{display:flex;flex-direction:column;gap:20px}
+    .page-title{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+    .page-title h2{margin:0;font-size:34px;letter-spacing:-.04em}
+    .page-title p{margin:6px 0 0;color:var(--muted)}
+    .grid{display:grid;gap:18px}
+    .cards-4{grid-template-columns:repeat(4,1fr)}
+    .cards-3{grid-template-columns:repeat(3,1fr)}
+    .cards-2{grid-template-columns:repeat(2,1fr)}
     .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:28px;
-      box-shadow:var(--shadow);
-      padding:20px;
+      background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:20px
     }
-
-    .stat-card .label{
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .stat-card .value{
-      margin-top:10px;
-      font-size:28px;
-      font-weight:700;
-      letter-spacing:-.03em;
-    }
-
-    .stat-card .sub{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .section-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:16px;
-    }
-
-    .section-head h3{
-      margin:0;
-      font-size:20px;
-      letter-spacing:-.02em;
-    }
-
-    .section-head p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:13px;
-    }
-
+    .stat-card .label{color:var(--muted);font-size:13px}
+    .stat-card .value{margin-top:10px;font-size:28px;font-weight:700;letter-spacing:-.03em}
+    .stat-card .sub{margin-top:6px;color:var(--muted);font-size:13px}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+    .section-head h3{margin:0;font-size:20px;letter-spacing:-.02em}
+    .section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
     .status{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:600;
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
+      font-size:12px;font-weight:600
     }
-
     .status.green{background:rgba(34,197,94,.12);color:#15803d}
     .status.yellow{background:rgba(245,158,11,.12);color:#b45309}
     .status.red{background:rgba(239,68,68,.12);color:#b91c1c}
     .status.blue{background:rgba(59,130,246,.12);color:#1d4ed8}
     .status.gray{background:#f3f4f6;color:#4b5563}
-
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-
+    .list{display:flex;flex-direction:column;gap:12px}
     .list-item{
-      background:#fafafa;
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
+      background:#fafafa;border:1px solid var(--line);border-radius:20px;padding:16px;
+      display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap
     }
-
-    .list-main h4{
-      margin:0;
-      font-size:16px;
-    }
-
-    .list-main p{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.45;
-    }
-
-    .action-row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .small-btn{
-      border:none;
-      border-radius:14px;
-      padding:10px 12px;
-      background:#111;
-      color:#fff;
-      cursor:pointer;
-      font-size:13px;
-    }
-
-    .small-btn.light{
-      background:#fff;
-      color:#111;
-      border:1px solid var(--line);
-    }
-
-    .table{
-      width:100%;
-      border-collapse:collapse;
-      overflow:hidden;
-    }
-
-    .table th, .table td{
-      text-align:left;
-      padding:14px 12px;
-      border-bottom:1px solid var(--line);
-      font-size:14px;
-    }
-
-    .table th{
-      color:var(--muted);
-      font-weight:600;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.04em;
-    }
-
-    .alert-box{
-      padding:16px;
-      border-radius:20px;
-      margin-bottom:12px;
-      font-size:14px;
-      line-height:1.45;
-    }
-
+    .list-main h4{margin:0;font-size:16px}
+    .list-main p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+    .action-row{display:flex;gap:10px;flex-wrap:wrap}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);font-size:14px}
+    .table th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    .alert-box{padding:16px;border-radius:20px;margin-bottom:12px;font-size:14px;line-height:1.45}
     .alert-box.green{background:rgba(34,197,94,.10);color:#166534}
     .alert-box.yellow{background:rgba(245,158,11,.12);color:#92400e}
     .alert-box.red{background:rgba(239,68,68,.10);color:#991b1b}
-
-    .weather-panel{
-      display:grid;
-      grid-template-columns:1.2fr .8fr;
-      gap:18px;
-    }
-
-    .big-status{
-      font-size:34px;
-      font-weight:700;
-      letter-spacing:-.04em;
-      margin-top:14px;
-    }
-
-    .big-sub{
-      margin-top:8px;
-      color:var(--muted);
-      line-height:1.5;
-    }
-
+    .weather-panel{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
     .metric-row{
-      display:flex;
-      justify-content:space-between;
-      padding:14px 0;
-      border-bottom:1px solid var(--line);
-      gap:10px;
-      font-size:14px;
+      display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);gap:10px;font-size:14px
     }
-
     .metric-row:last-child{border-bottom:none}
-
-    .footer-note{
-      color:var(--muted);
-      font-size:12px;
-      margin-top:14px;
-    }
-
-    .mobile-nav{
-      display:none;
-      gap:10px;
-      overflow:auto;
-      padding-bottom:6px;
-    }
-
-    .mobile-nav button{
-      white-space:nowrap;
-    }
-
-    @media (max-width: 1080px){
-      .grid.cards-4{grid-template-columns:repeat(2,1fr)}
+    .footer-note{color:var(--muted);font-size:12px;margin-top:14px}
+    .mobile-nav{display:none;gap:10px;overflow:auto;padding-bottom:6px}
+    .danger{color:var(--red)}
+    @media (max-width:1080px){
+      .cards-4{grid-template-columns:repeat(2,1fr)}
       .weather-panel{grid-template-columns:1fr}
     }
-
-    @media (max-width: 860px){
+    @media (max-width:860px){
       .main-layout{grid-template-columns:1fr}
       .sidebar{display:none}
       .mobile-nav{display:flex}
     }
-
-    @media (max-width: 640px){
-      .grid.cards-4,.grid.cards-3,.grid.cards-2{grid-template-columns:1fr}
+    @media (max-width:640px){
+      .cards-4,.cards-3,.cards-2{grid-template-columns:1fr}
       .page-title h2{font-size:28px}
       .topbar-inner{padding:14px 16px}
       .container{padding:18px 16px 28px}
@@ -493,643 +147,720 @@
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <div id="loginScreen" class="login-wrap">
-      <div class="login-card">
-        <div class="brand" style="margin-bottom:18px;">
-          <div class="brand-badge">A</div>
-          <div class="brand-text">
-            <h1>AgroControl</h1>
-            <p>Farm System</p>
-          </div>
-        </div>
-
-        <h2>Entrar no sistema</h2>
-        <p>Interface simples, robusta e funcional para dono, gerente e operação no campo.</p>
-
-        <div class="field">
-          <label>Nome</label>
-          <input id="loginName" placeholder="Ex.: André" value="André" />
-        </div>
-
-        <div class="field">
-          <label>Perfil</label>
-          <select id="loginRole">
-            <option value="dono">Dono</option>
-            <option value="gerente">Gerente</option>
-            <option value="funcionario">Funcionário</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Senha</label>
-          <input id="loginPassword" type="password" placeholder="••••••••" value="123456" />
-        </div>
-
-        <button class="primary-btn" onclick="login()">Entrar</button>
+<div id="loginScreen" class="login-wrap">
+  <div class="login-card">
+    <div class="brand" style="margin-bottom:18px;">
+      <div class="brand-badge">A</div>
+      <div class="brand-text">
+        <h1>AgroControl</h1>
+        <p>Farm System</p>
       </div>
     </div>
+    <h2>Entrar no sistema</h2>
+    <p>Agora com tarefas e estoque salvos no navegador.</p>
 
-    <div id="appScreen" class="hidden">
-      <div class="topbar">
-        <div class="topbar-inner">
-          <div class="brand">
-            <div class="brand-badge">A</div>
-            <div class="brand-text">
-              <h1>AgroControl</h1>
-              <p>Sistema operacional da fazenda</p>
-            </div>
-          </div>
+    <div class="field">
+      <label>Nome</label>
+      <input id="loginName" value="André" />
+    </div>
 
-          <div class="user-box">
-            <div class="pill" id="currentUser">André • Dono</div>
-            <button class="logout-btn" onclick="logout()">Sair</button>
-          </div>
+    <div class="field">
+      <label>Perfil</label>
+      <select id="loginRole">
+        <option value="dono">Dono</option>
+        <option value="gerente">Gerente</option>
+        <option value="funcionario">Funcionário</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Senha</label>
+      <input id="loginPassword" type="password" value="123456" />
+    </div>
+
+    <button class="primary-btn" onclick="login()">Entrar</button>
+  </div>
+</div>
+
+<div id="appScreen" class="hidden">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-badge">A</div>
+        <div class="brand-text">
+          <h1>AgroControl</h1>
+          <p>Sistema operacional da fazenda</p>
         </div>
       </div>
-
-      <div class="container">
-        <div class="mobile-nav" id="mobileNav"></div>
-
-        <div class="main-layout">
-          <aside class="sidebar">
-            <div class="section-head" style="margin-bottom:10px;">
-              <div>
-                <h3>Navegação</h3>
-                <p id="sidebarProfile">Perfil ativo</p>
-              </div>
-            </div>
-            <div class="nav-group" id="sidebarNav"></div>
-          </aside>
-
-          <main class="content">
-            <section id="page-dashboard" class="page">
-              <div class="page-title">
-                <div>
-                  <h2>Dashboard</h2>
-                  <p>Resumo claro da fazenda com foco em decisão rápida.</p>
-                </div>
-                <div class="status blue">Hoje • 10 de março</div>
-              </div>
-
-              <div class="grid cards-4">
-                <div class="card stat-card">
-                  <div class="label">Tarefas hoje</div>
-                  <div class="value">12</div>
-                  <div class="sub">8 concluídas • 3 em andamento • 1 pausada</div>
-                </div>
-                <div class="card stat-card">
-                  <div class="label">Diesel estimado</div>
-                  <div class="value">94 L</div>
-                  <div class="sub">Baseado em horas de máquina</div>
-                </div>
-                <div class="card stat-card">
-                  <div class="label">Janela de aplicação</div>
-                  <div class="value">18h–21h</div>
-                  <div class="sub">Vento e umidade favoráveis</div>
-                </div>
-                <div class="card stat-card">
-                  <div class="label">Estoque crítico</div>
-                  <div class="value">3 itens</div>
-                  <div class="sub">Herbicida X • Ureia • Óleo hidráulico</div>
-                </div>
-              </div>
-
-              <div class="grid cards-2">
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Centro de decisão</h3>
-                      <p>Problema, impacto e sugestão.</p>
-                    </div>
-                  </div>
-
-                  <div class="alert-box yellow">
-                    <strong>Ureia cobre apenas mais 12 dias.</strong><br>
-                    Sugestão: programar reposição antes da próxima rodada de adubação.
-                  </div>
-
-                  <div class="alert-box red">
-                    <strong>Talhão 4 pausado por solo úmido e patinagem.</strong><br>
-                    Sugestão: suspender a operação até melhora da umidade e revisar rota.
-                  </div>
-
-                  <div class="alert-box green">
-                    <strong>Janela boa de aplicação prevista para hoje às 18h.</strong><br>
-                    Sugestão: priorizar o Talhão 7 e preparar a calda com antecedência.
-                  </div>
-                </div>
-
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Atividades recentes</h3>
-                      <p>Últimos movimentos do campo.</p>
-                    </div>
-                  </div>
-
-                  <div class="list">
-                    <div class="list-item">
-                      <div class="list-main">
-                        <h4>João iniciou pulverização no Talhão 3</h4>
-                        <p>14:07 • Herbicida X • 18 ha</p>
-                      </div>
-                      <span class="status green">Em andamento</span>
-                    </div>
-
-                    <div class="list-item">
-                      <div class="list-main">
-                        <h4>Carlos enviou áudio sobre solo úmido</h4>
-                        <p>13:41 • Talhão 4 • máquina patinando</p>
-                      </div>
-                      <span class="status yellow">Atenção</span>
-                    </div>
-
-                    <div class="list-item">
-                      <div class="list-main">
-                        <h4>Abastecimento registrado no Trator JD 6110</h4>
-                        <p>12:52 • 80 L estimados</p>
-                      </div>
-                      <span class="status blue">Diesel</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section id="page-tarefas" class="page hidden">
-              <div class="page-title">
-                <div>
-                  <h2>Tarefas</h2>
-                  <p>Execução simples para operação e visão rápida para gestão.</p>
-                </div>
-                <button class="secondary-btn">Nova tarefa</button>
-              </div>
-
-              <div class="list">
-                <div class="list-item">
-                  <div class="list-main">
-                    <h4>Pulverização • Talhão 3</h4>
-                    <p>Produto: Herbicida X • Dose: 2 L/ha • Área: 18 ha • Funcionário: João</p>
-                  </div>
-                  <div class="action-row">
-                    <span class="status green">Em andamento</span>
-                    <button class="small-btn light">Ver fotos</button>
-                    <button class="small-btn light">Ouvir áudio</button>
-                  </div>
-                </div>
-
-                <div class="list-item">
-                  <div class="list-main">
-                    <h4>Adubação • Talhão 6</h4>
-                    <p>Produto: Ureia • Área: 25 ha • Funcionário: Pedro</p>
-                  </div>
-                  <div class="action-row">
-                    <span class="status gray">Pendente</span>
-                    <button class="small-btn">Iniciar</button>
-                  </div>
-                </div>
-
-                <div class="list-item">
-                  <div class="list-main">
-                    <h4>Plantio • Talhão 9</h4>
-                    <p>Semente: Soja variedade Y • 22 ha • Funcionário: Carlos</p>
-                  </div>
-                  <div class="action-row">
-                    <span class="status yellow">Pausada</span>
-                    <button class="small-btn light">Retomar</button>
-                  </div>
-                </div>
-
-                <div class="list-item">
-                  <div class="list-main">
-                    <h4>Aplicação foliar • Talhão 2</h4>
-                    <p>Concluída às 11:28 • Fotos de início e fim registradas</p>
-                  </div>
-                  <div class="action-row">
-                    <span class="status blue">Concluída</span>
-                    <button class="small-btn light">Relatório</button>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section id="page-estoque" class="page hidden">
-              <div class="page-title">
-                <div>
-                  <h2>Estoque</h2>
-                  <p>Controle limpo de sementes, defensivos, fertilizantes e consumo projetado.</p>
-                </div>
-                <button class="secondary-btn">Adicionar produto</button>
-              </div>
-
-              <div class="grid cards-2">
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Produtos cadastrados</h3>
-                      <p>Saldo, custo e status.</p>
-                    </div>
-                  </div>
-
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>Produto</th>
-                        <th>Qtd</th>
-                        <th>Custo</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Soja variedade Y</td>
-                        <td>40 bags</td>
-                        <td>R$ 280/un</td>
-                        <td><span class="status green">Normal</span></td>
-                      </tr>
-                      <tr>
-                        <td>Soja variedade Z</td>
-                        <td>18 bags</td>
-                        <td>R$ 295/un</td>
-                        <td><span class="status yellow">Atenção</span></td>
-                      </tr>
-                      <tr>
-                        <td>Herbicida X</td>
-                        <td>60 L</td>
-                        <td>R$ 48/L</td>
-                        <td><span class="status red">Crítico</span></td>
-                      </tr>
-                      <tr>
-                        <td>Ureia</td>
-                        <td>120 sacas</td>
-                        <td>R$ 145/sc</td>
-                        <td><span class="status yellow">Atenção</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Consumo projetado</h3>
-                      <p>Estimativas por período.</p>
-                    </div>
-                  </div>
-
-                  <div class="list">
-                    <div class="list-item">
-                      <div class="list-main">
-                        <h4>Hoje</h4>
-                        <p>6 bags de soja variedade Y • 18 L de Herbicida X</p>
-                      </div>
-                    </div>
-                    <div class="list-item">
-                      <div class="list-main">
-                        <h4>7 dias</h4>
-                        <p>48 L de Herbicida X • 320 kg de ureia</p>
-                      </div>
-                    </div>
-                    <div class="list-item">
-                      <div class="list-main">
-                        <h4>30 dias</h4>
-                        <p>1.200 kg de ureia • 20 bags de semente</p>
-                      </div>
-                    </div>
-                    <div class="list-item">
-                      <div class="list-main">
-                        <h4>Custo previsto</h4>
-                        <p>Próximos 30 dias: R$ 50.400</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="footer-note">
-                    O sistema pode futuramente baixar itens automaticamente conforme as tarefas forem executadas.
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section id="page-clima" class="page hidden">
-              <div class="page-title">
-                <div>
-                  <h2>Clima para aplicação</h2>
-                  <p>Leitura simples para operação: pode aplicar, atenção ou não aplicar.</p>
-                </div>
-                <span class="status green">Talhão 7 • janela favorável</span>
-              </div>
-
-              <div class="weather-panel">
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Condição atual</h3>
-                      <p>Dados pensados para pulverização.</p>
-                    </div>
-                  </div>
-
-                  <div class="big-status">Pode aplicar</div>
-                  <div class="big-sub">
-                    Vento e umidade estão em condição favorável. Priorizar operação entre 18h e 21h.
-                  </div>
-
-                  <div class="metric-row">
-                    <span>Vento</span>
-                    <strong>5,8 km/h</strong>
-                  </div>
-                  <div class="metric-row">
-                    <span>Rajadas</span>
-                    <strong>9,4 km/h</strong>
-                  </div>
-                  <div class="metric-row">
-                    <span>Umidade</span>
-                    <strong>61%</strong>
-                  </div>
-                  <div class="metric-row">
-                    <span>Temperatura</span>
-                    <strong>27°C</strong>
-                  </div>
-                  <div class="metric-row">
-                    <span>Direção do vento</span>
-                    <strong>Sudoeste → Nordeste</strong>
-                  </div>
-                </div>
-
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Janela e recomendação</h3>
-                      <p>O sistema mostra o que fazer.</p>
-                    </div>
-                  </div>
-
-                  <div class="alert-box green">
-                    <strong>Janela ideal:</strong><br>
-                    18:00 até 21:00
-                  </div>
-
-                  <div class="alert-box yellow">
-                    <strong>Atenção:</strong><br>
-                    evitar aplicação em borda leste se houver cultura sensível na direção do vento.
-                  </div>
-
-                  <div class="alert-box green">
-                    <strong>Preparo da calda:</strong><br>
-                    Herbicida X • 2 L/ha • Área 18 ha • Calda total 2.160 L
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section id="page-funcionarios" class="page hidden">
-              <div class="page-title">
-                <div>
-                  <h2>Funcionários</h2>
-                  <p>Equipe, função, tarefa atual e status operacional.</p>
-                </div>
-                <button class="secondary-btn">Novo usuário</button>
-              </div>
-
-              <div class="list">
-                <div class="list-item">
-                  <div class="list-main">
-                    <h4>João</h4>
-                    <p>Pulverizador • Tarefa atual: Talhão 3 • iniciou às 14:07</p>
-                  </div>
-                  <span class="status green">Ativo</span>
-                </div>
-
-                <div class="list-item">
-                  <div class="list-main">
-                    <h4>Carlos</h4>
-                    <p>Plantio • Tarefa atual: Talhão 9 • ocorrência por áudio enviada</p>
-                  </div>
-                  <span class="status yellow">Pausado</span>
-                </div>
-
-                <div class="list-item">
-                  <div class="list-main">
-                    <h4>Pedro</h4>
-                    <p>Adubação • aguardando início da tarefa do Talhão 6</p>
-                  </div>
-                  <span class="status gray">Pendente</span>
-                </div>
-              </div>
-            </section>
-
-            <section id="page-maquinas" class="page hidden">
-              <div class="page-title">
-                <div>
-                  <h2>Máquinas</h2>
-                  <p>Horas, manutenção e consumo médio com visão simples.</p>
-                </div>
-                <button class="secondary-btn">Nova máquina</button>
-              </div>
-
-              <div class="grid cards-3">
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>JD 6110</h3>
-                      <p>Trator</p>
-                    </div>
-                    <span class="status blue">Operando</span>
-                  </div>
-                  <div class="metric-row"><span>Horímetro</span><strong>2.392 h</strong></div>
-                  <div class="metric-row"><span>Consumo médio</span><strong>8 L/h</strong></div>
-                  <div class="metric-row"><span>Última manutenção</span><strong>há 42 h</strong></div>
-                </div>
-
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Pulverizador Jacto</h3>
-                      <p>Pulverização</p>
-                    </div>
-                    <span class="status yellow">Atenção</span>
-                  </div>
-                  <div class="metric-row"><span>Horímetro</span><strong>981 h</strong></div>
-                  <div class="metric-row"><span>Consumo médio</span><strong>5,6 L/h</strong></div>
-                  <div class="metric-row"><span>Próxima revisão</span><strong>em 19 h</strong></div>
-                </div>
-
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Plantadeira 01</h3>
-                      <p>Plantio</p>
-                    </div>
-                    <span class="status green">Ok</span>
-                  </div>
-                  <div class="metric-row"><span>Área recente</span><strong>87 ha</strong></div>
-                  <div class="metric-row"><span>Último uso</span><strong>ontem</strong></div>
-                  <div class="metric-row"><span>Observação</span><strong>sem alertas</strong></div>
-                </div>
-              </div>
-            </section>
-
-            <section id="page-operacao" class="page hidden">
-              <div class="page-title">
-                <div>
-                  <h2>Minha operação</h2>
-                  <p>Tela simplificada para o funcionário usar no campo.</p>
-                </div>
-                <span class="status green">Offline pronto</span>
-              </div>
-
-              <div class="grid cards-2">
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Tarefa atual</h3>
-                      <p>Visual direto, sem poluição.</p>
-                    </div>
-                  </div>
-
-                  <div class="list-item" style="padding:18px;">
-                    <div class="list-main">
-                      <h4>Aplicação • Talhão 3</h4>
-                      <p>Produto: Herbicida X • Dose: 2 L/ha • Área: 18 ha</p>
-                    </div>
-                  </div>
-
-                  <div class="alert-box green">
-                    <strong>Status:</strong> Pode aplicar
-                  </div>
-
-                  <div class="action-row">
-                    <button class="small-btn">Iniciar</button>
-                    <button class="small-btn light">Pausar</button>
-                    <button class="small-btn light">Finalizar</button>
-                  </div>
-                </div>
-
-                <div class="card">
-                  <div class="section-head">
-                    <div>
-                      <h3>Registros rápidos</h3>
-                      <p>Fluxo simples para a lida.</p>
-                    </div>
-                  </div>
-
-                  <div class="action-row" style="margin-bottom:12px;">
-                    <button class="small-btn light">Foto inicial</button>
-                    <button class="small-btn light">Foto final</button>
-                    <button class="small-btn light">Áudio</button>
-                    <button class="small-btn light">Abastecimento</button>
-                  </div>
-
-                  <div class="footer-note">
-                    Nesta V1 é uma demonstração visual. Depois isso pode ser ligado a banco de dados, câmera, áudio real e sincronização offline.
-                  </div>
-                </div>
-              </div>
-            </section>
-          </main>
-        </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <div class="pill" id="currentUser"></div>
+        <button class="logout-btn" onclick="logout()">Sair</button>
       </div>
     </div>
   </div>
 
-  <script>
-    const state = {
-      userName: "André",
-      role: "dono",
-      page: "dashboard"
-    };
+  <div class="container">
+    <div class="mobile-nav" id="mobileNav"></div>
 
-    const roleConfig = {
-      dono: {
-        label: "Dono",
-        pages: [
-          ["dashboard","Dashboard"],
-          ["tarefas","Tarefas"],
-          ["estoque","Estoque"],
-          ["clima","Clima"],
-          ["funcionarios","Funcionários"],
-          ["maquinas","Máquinas"]
-        ]
-      },
-      gerente: {
-        label: "Gerente",
-        pages: [
-          ["dashboard","Dashboard"],
-          ["tarefas","Tarefas"],
-          ["estoque","Estoque"],
-          ["clima","Clima"],
-          ["funcionarios","Funcionários"],
-          ["maquinas","Máquinas"]
-        ]
-      },
-      funcionario: {
-        label: "Funcionário",
-        pages: [
-          ["operacao","Minha operação"],
-          ["clima","Clima"],
-          ["tarefas","Tarefas"]
-        ]
-      }
-    };
+    <div class="main-layout">
+      <aside class="sidebar">
+        <div class="section-head" style="margin-bottom:10px;">
+          <div>
+            <h3>Navegação</h3>
+            <p id="sidebarProfile"></p>
+          </div>
+        </div>
+        <div class="nav-group" id="sidebarNav"></div>
+      </aside>
 
-    function login(){
-      const name = document.getElementById("loginName").value.trim() || "Usuário";
-      const role = document.getElementById("loginRole").value;
-      state.userName = name;
-      state.role = role;
-      state.page = role === "funcionario" ? "operacao" : "dashboard";
+      <main class="content">
+        <section id="page-dashboard" class="page">
+          <div class="page-title">
+            <div>
+              <h2>Dashboard</h2>
+              <p>Resumo automático com base nas tarefas e no estoque salvos.</p>
+            </div>
+            <div class="status blue">V1 funcional local</div>
+          </div>
 
-      document.getElementById("loginScreen").classList.add("hidden");
-      document.getElementById("appScreen").classList.remove("hidden");
+          <div class="grid cards-4">
+            <div class="card stat-card">
+              <div class="label">Total de tarefas</div>
+              <div class="value" id="dashTotalTasks">0</div>
+              <div class="sub">Registradas no sistema</div>
+            </div>
+            <div class="card stat-card">
+              <div class="label">Em andamento</div>
+              <div class="value" id="dashInProgress">0</div>
+              <div class="sub">Operações em execução</div>
+            </div>
+            <div class="card stat-card">
+              <div class="label">Concluídas</div>
+              <div class="value" id="dashDone">0</div>
+              <div class="sub">Tarefas finalizadas</div>
+            </div>
+            <div class="card stat-card">
+              <div class="label">Itens em estoque</div>
+              <div class="value" id="dashStockCount">0</div>
+              <div class="sub">Produtos cadastrados</div>
+            </div>
+          </div>
 
-      renderUI();
+          <div class="grid cards-2">
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>Centro de decisão</h3>
+                  <p>Leitura rápida do que precisa atenção.</p>
+                </div>
+              </div>
+              <div id="decisionArea"></div>
+            </div>
+
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>Últimas tarefas</h3>
+                  <p>Atualiza conforme tu cria e muda status.</p>
+                </div>
+              </div>
+              <div class="list" id="latestTasks"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-tarefas" class="page hidden">
+          <div class="page-title">
+            <div>
+              <h2>Tarefas</h2>
+              <p>Agora tu consegue cadastrar e alterar status.</p>
+            </div>
+          </div>
+
+          <div class="grid cards-2">
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>Nova tarefa</h3>
+                  <p>Cadastro simples da operação.</p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Operação</label>
+                <input id="taskOperacao" placeholder="Ex.: Pulverização" />
+              </div>
+              <div class="field">
+                <label>Talhão</label>
+                <input id="taskTalhao" placeholder="Ex.: Talhão 3" />
+              </div>
+              <div class="field">
+                <label>Funcionário</label>
+                <input id="taskFuncionario" placeholder="Ex.: João" />
+              </div>
+              <div class="field">
+                <label>Detalhes</label>
+                <textarea id="taskDetalhes" placeholder="Produto, dose, área, observações..."></textarea>
+              </div>
+
+              <button class="primary-btn" onclick="addTask()">Salvar tarefa</button>
+            </div>
+
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>Lista de tarefas</h3>
+                  <p>Muda status e remove quando quiser.</p>
+                </div>
+              </div>
+              <div class="list" id="taskList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-estoque" class="page hidden">
+          <div class="page-title">
+            <div>
+              <h2>Estoque</h2>
+              <p>Cadastra itens, quantidade e custo.</p>
+            </div>
+          </div>
+
+          <div class="grid cards-2">
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>Novo item</h3>
+                  <p>Controle simples e funcional.</p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Produto</label>
+                <input id="stockNome" placeholder="Ex.: Herbicida X" />
+              </div>
+              <div class="field">
+                <label>Quantidade</label>
+                <input id="stockQtd" type="number" placeholder="Ex.: 60" />
+              </div>
+              <div class="field">
+                <label>Unidade</label>
+                <input id="stockUnidade" placeholder="Ex.: L, bags, sacas" />
+              </div>
+              <div class="field">
+                <label>Custo unitário</label>
+                <input id="stockCusto" type="number" step="0.01" placeholder="Ex.: 48" />
+              </div>
+
+              <button class="primary-btn" onclick="addStock()">Salvar item</button>
+            </div>
+
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>Itens cadastrados</h3>
+                  <p>Soma automática no dashboard.</p>
+                </div>
+              </div>
+              <div id="stockTableWrap"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-clima" class="page hidden">
+          <div class="page-title">
+            <div>
+              <h2>Clima para aplicação</h2>
+              <p>Visual fixo por enquanto. Depois ligamos API real.</p>
+            </div>
+            <span class="status green">Pode aplicar</span>
+          </div>
+
+          <div class="weather-panel">
+            <div class="card">
+              <div class="section-head"><div><h3>Condição atual</h3><p>Leitura simples para campo.</p></div></div>
+              <div class="metric-row"><span>Vento</span><strong>5,8 km/h</strong></div>
+              <div class="metric-row"><span>Rajadas</span><strong>9,4 km/h</strong></div>
+              <div class="metric-row"><span>Umidade</span><strong>61%</strong></div>
+              <div class="metric-row"><span>Temperatura</span><strong>27°C</strong></div>
+              <div class="metric-row"><span>Janela ideal</span><strong>18h–21h</strong></div>
+            </div>
+
+            <div class="card">
+              <div class="alert-box green"><strong>Status:</strong><br>Pode aplicar</div>
+              <div class="alert-box yellow"><strong>Atenção:</strong><br>Evitar borda leste se houver cultura sensível.</div>
+              <div class="alert-box green"><strong>Calda exemplo:</strong><br>2 L/ha • 18 ha • 2.160 L total</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-funcionarios" class="page hidden">
+          <div class="page-title">
+            <div>
+              <h2>Funcionários</h2>
+              <p>Lista simples por enquanto.</p>
+            </div>
+          </div>
+          <div class="list">
+            <div class="list-item"><div class="list-main"><h4>João</h4><p>Pulverizador</p></div><span class="status green">Ativo</span></div>
+            <div class="list-item"><div class="list-main"><h4>Carlos</h4><p>Plantio</p></div><span class="status yellow">Pausado</span></div>
+            <div class="list-item"><div class="list-main"><h4>Pedro</h4><p>Adubação</p></div><span class="status gray">Pendente</span></div>
+          </div>
+        </section>
+
+        <section id="page-maquinas" class="page hidden">
+          <div class="page-title">
+            <div>
+              <h2>Máquinas</h2>
+              <p>Base visual da área de máquinas.</p>
+            </div>
+          </div>
+          <div class="grid cards-3">
+            <div class="card">
+              <div class="section-head"><div><h3>JD 6110</h3><p>Trator</p></div><span class="status blue">Operando</span></div>
+              <div class="metric-row"><span>Horímetro</span><strong>2.392 h</strong></div>
+              <div class="metric-row"><span>Consumo médio</span><strong>8 L/h</strong></div>
+            </div>
+            <div class="card">
+              <div class="section-head"><div><h3>Pulverizador Jacto</h3><p>Pulverização</p></div><span class="status yellow">Atenção</span></div>
+              <div class="metric-row"><span>Horímetro</span><strong>981 h</strong></div>
+              <div class="metric-row"><span>Próxima revisão</span><strong>19 h</strong></div>
+            </div>
+            <div class="card">
+              <div class="section-head"><div><h3>Plantadeira 01</h3><p>Plantio</p></div><span class="status green">Ok</span></div>
+              <div class="metric-row"><span>Área recente</span><strong>87 ha</strong></div>
+              <div class="metric-row"><span>Observação</span><strong>Sem alertas</strong></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-operacao" class="page hidden">
+          <div class="page-title">
+            <div>
+              <h2>Minha operação</h2>
+              <p>Versão simplificada para funcionário.</p>
+            </div>
+            <span class="status green">Pronto</span>
+          </div>
+
+          <div class="grid cards-2">
+            <div class="card">
+              <div class="section-head"><div><h3>Tarefa atual</h3><p>Exemplo visual</p></div></div>
+              <div class="list-item">
+                <div class="list-main">
+                  <h4>Aplicação • Talhão 3</h4>
+                  <p>Produto: Herbicida X • Área: 18 ha</p>
+                </div>
+              </div>
+              <div class="action-row">
+                <button class="small-btn">Iniciar</button>
+                <button class="small-btn light">Pausar</button>
+                <button class="small-btn light">Finalizar</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="section-head"><div><h3>Registros rápidos</h3><p>Base da futura operação real</p></div></div>
+              <div class="action-row">
+                <button class="small-btn light">Foto inicial</button>
+                <button class="small-btn light">Foto final</button>
+                <button class="small-btn light">Áudio</button>
+                <button class="small-btn light">Abastecimento</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = "agrocontrol_v1_data";
+
+const defaultData = {
+  tasks: [
+    {
+      id: cryptoRandom(),
+      operacao: "Pulverização",
+      talhao: "Talhão 3",
+      funcionario: "João",
+      detalhes: "Herbicida X • Dose 2 L/ha • Área 18 ha",
+      status: "em_andamento",
+      createdAt: new Date().toLocaleString("pt-BR")
+    },
+    {
+      id: cryptoRandom(),
+      operacao: "Adubação",
+      talhao: "Talhão 6",
+      funcionario: "Pedro",
+      detalhes: "Ureia • Área 25 ha",
+      status: "pendente",
+      createdAt: new Date().toLocaleString("pt-BR")
     }
+  ],
+  stock: [
+    { id: cryptoRandom(), nome: "Herbicida X", qtd: 60, unidade: "L", custo: 48 },
+    { id: cryptoRandom(), nome: "Soja variedade Y", qtd: 40, unidade: "bags", custo: 280 }
+  ]
+};
 
-    function logout(){
-      document.getElementById("appScreen").classList.add("hidden");
-      document.getElementById("loginScreen").classList.remove("hidden");
-    }
+const state = {
+  userName: "André",
+  role: "dono",
+  page: "dashboard",
+  data: loadData()
+};
 
-    function renderUI(){
-      document.getElementById("currentUser").textContent =
-        state.userName + " • " + roleConfig[state.role].label;
+const roleConfig = {
+  dono: {
+    label: "Dono",
+    pages: [
+      ["dashboard","Dashboard"],
+      ["tarefas","Tarefas"],
+      ["estoque","Estoque"],
+      ["clima","Clima"],
+      ["funcionarios","Funcionários"],
+      ["maquinas","Máquinas"]
+    ]
+  },
+  gerente: {
+    label: "Gerente",
+    pages: [
+      ["dashboard","Dashboard"],
+      ["tarefas","Tarefas"],
+      ["estoque","Estoque"],
+      ["clima","Clima"],
+      ["funcionarios","Funcionários"],
+      ["maquinas","Máquinas"]
+    ]
+  },
+  funcionario: {
+    label: "Funcionário",
+    pages: [
+      ["operacao","Minha operação"],
+      ["clima","Clima"],
+      ["tarefas","Tarefas"]
+    ]
+  }
+};
 
-      document.getElementById("sidebarProfile").textContent =
-        "Perfil ativo: " + roleConfig[state.role].label;
+function cryptoRandom(){
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
 
-      const nav = roleConfig[state.role].pages;
-      const sidebarNav = document.getElementById("sidebarNav");
-      const mobileNav = document.getElementById("mobileNav");
+function loadData(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+    return structuredClone(defaultData);
+  }
+  try{
+    return JSON.parse(raw);
+  }catch{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+    return structuredClone(defaultData);
+  }
+}
 
-      sidebarNav.innerHTML = "";
-      mobileNav.innerHTML = "";
+function saveData(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+}
 
-      nav.forEach(([key,label]) => {
-        const btn = document.createElement("button");
-        btn.className = "nav-btn" + (state.page === key ? " active" : "");
-        btn.innerHTML = "<span>" + label + "</span><small>abrir</small>";
-        btn.onclick = () => goToPage(key);
-        sidebarNav.appendChild(btn);
+function login(){
+  const name = document.getElementById("loginName").value.trim() || "Usuário";
+  const role = document.getElementById("loginRole").value;
+  state.userName = name;
+  state.role = role;
+  state.page = role === "funcionario" ? "operacao" : "dashboard";
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("appScreen").classList.remove("hidden");
+  renderUI();
+}
 
-        const mBtn = document.createElement("button");
-        mBtn.className = "nav-btn" + (state.page === key ? " active" : "");
-        mBtn.style.minWidth = "auto";
-        mBtn.innerHTML = "<span>" + label + "</span>";
-        mBtn.onclick = () => goToPage(key);
-        mobileNav.appendChild(mBtn);
-      });
+function logout(){
+  document.getElementById("appScreen").classList.add("hidden");
+  document.getElementById("loginScreen").classList.remove("hidden");
+}
 
-      document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-      const current = document.getElementById("page-" + state.page);
-      if(current) current.classList.remove("hidden");
-    }
+function renderUI(){
+  document.getElementById("currentUser").textContent = state.userName + " • " + roleConfig[state.role].label;
+  document.getElementById("sidebarProfile").textContent = "Perfil ativo: " + roleConfig[state.role].label;
 
-    function goToPage(key){
-      state.page = key;
-      renderUI();
-      window.scrollTo({top:0,behavior:"smooth"});
-    }
-  </script>
+  const nav = roleConfig[state.role].pages;
+  const sidebarNav = document.getElementById("sidebarNav");
+  const mobileNav = document.getElementById("mobileNav");
+  sidebarNav.innerHTML = "";
+  mobileNav.innerHTML = "";
+
+  nav.forEach(([key,label]) => {
+    const btn = document.createElement("button");
+    btn.className = "nav-btn" + (state.page === key ? " active" : "");
+    btn.innerHTML = "<span>" + label + "</span>";
+    btn.onclick = () => goToPage(key);
+    sidebarNav.appendChild(btn);
+
+    const mBtn = document.createElement("button");
+    mBtn.className = "nav-btn" + (state.page === key ? " active" : "");
+    mBtn.style.minWidth = "auto";
+    mBtn.innerHTML = "<span>" + label + "</span>";
+    mBtn.onclick = () => goToPage(key);
+    mobileNav.appendChild(mBtn);
+  });
+
+  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+  const current = document.getElementById("page-" + state.page);
+  if(current) current.classList.remove("hidden");
+
+  renderTasks();
+  renderStock();
+  renderDashboard();
+}
+
+function goToPage(key){
+  state.page = key;
+  renderUI();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function statusLabel(status){
+  if(status === "pendente") return ["Pendente","gray"];
+  if(status === "em_andamento") return ["Em andamento","green"];
+  if(status === "pausada") return ["Pausada","yellow"];
+  if(status === "concluida") return ["Concluída","blue"];
+  return ["Pendente","gray"];
+}
+
+function addTask(){
+  const operacao = document.getElementById("taskOperacao").value.trim();
+  const talhao = document.getElementById("taskTalhao").value.trim();
+  const funcionario = document.getElementById("taskFuncionario").value.trim();
+  const detalhes = document.getElementById("taskDetalhes").value.trim();
+
+  if(!operacao || !talhao || !funcionario){
+    alert("Preenche operação, talhão e funcionário.");
+    return;
+  }
+
+  state.data.tasks.unshift({
+    id: cryptoRandom(),
+    operacao,
+    talhao,
+    funcionario,
+    detalhes,
+    status: "pendente",
+    createdAt: new Date().toLocaleString("pt-BR")
+  });
+
+  saveData();
+
+  document.getElementById("taskOperacao").value = "";
+  document.getElementById("taskTalhao").value = "";
+  document.getElementById("taskFuncionario").value = "";
+  document.getElementById("taskDetalhes").value = "";
+
+  renderUI();
+}
+
+function setTaskStatus(id, status){
+  const task = state.data.tasks.find(t => t.id === id);
+  if(!task) return;
+  task.status = status;
+  saveData();
+  renderUI();
+}
+
+function deleteTask(id){
+  if(!confirm("Excluir essa tarefa?")) return;
+  state.data.tasks = state.data.tasks.filter(t => t.id !== id);
+  saveData();
+  renderUI();
+}
+
+function renderTasks(){
+  const list = document.getElementById("taskList");
+  list.innerHTML = "";
+
+  if(state.data.tasks.length === 0){
+    list.innerHTML = '<div class="alert-box yellow">Nenhuma tarefa cadastrada ainda.</div>';
+    return;
+  }
+
+  state.data.tasks.forEach(task => {
+    const [label, css] = statusLabel(task.status);
+    const item = document.createElement("div");
+    item.className = "list-item";
+    item.innerHTML = `
+      <div class="list-main">
+        <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
+        <p>Funcionário: ${escapeHtml(task.funcionario)}<br>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
+      </div>
+      <div class="action-row">
+        <span class="status ${css}">${label}</span>
+        <button class="small-btn light" onclick="setTaskStatus('${task.id}','pendente')">Pendente</button>
+        <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
+        <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
+        <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
+        <button class="small-btn light danger" onclick="deleteTask('${task.id}')">Excluir</button>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function addStock(){
+  const nome = document.getElementById("stockNome").value.trim();
+  const qtd = Number(document.getElementById("stockQtd").value);
+  const unidade = document.getElementById("stockUnidade").value.trim();
+  const custo = Number(document.getElementById("stockCusto").value);
+
+  if(!nome || !qtd || !unidade){
+    alert("Preenche produto, quantidade e unidade.");
+    return;
+  }
+
+  state.data.stock.unshift({
+    id: cryptoRandom(),
+    nome,
+    qtd,
+    unidade,
+    custo: isNaN(custo) ? 0 : custo
+  });
+
+  saveData();
+
+  document.getElementById("stockNome").value = "";
+  document.getElementById("stockQtd").value = "";
+  document.getElementById("stockUnidade").value = "";
+  document.getElementById("stockCusto").value = "";
+
+  renderUI();
+}
+
+function updateStock(id, delta){
+  const item = state.data.stock.find(s => s.id === id);
+  if(!item) return;
+  item.qtd = Math.max(0, Number(item.qtd) + delta);
+  saveData();
+  renderUI();
+}
+
+function deleteStock(id){
+  if(!confirm("Excluir esse item do estoque?")) return;
+  state.data.stock = state.data.stock.filter(s => s.id !== id);
+  saveData();
+  renderUI();
+}
+
+function renderStock(){
+  const wrap = document.getElementById("stockTableWrap");
+
+  if(state.data.stock.length === 0){
+    wrap.innerHTML = '<div class="alert-box yellow">Nenhum item cadastrado no estoque.</div>';
+    return;
+  }
+
+  let rows = state.data.stock.map(item => {
+    const status = item.qtd <= 10 ? ["Crítico","red"] : item.qtd <= 25 ? ["Atenção","yellow"] : ["Normal","green"];
+    return `
+      <tr>
+        <td>${escapeHtml(item.nome)}</td>
+        <td>${item.qtd} ${escapeHtml(item.unidade)}</td>
+        <td>R$ ${Number(item.custo).toFixed(2)}</td>
+        <td><span class="status ${status[1]}">${status[0]}</span></td>
+        <td>
+          <div class="action-row">
+            <button class="small-btn light" onclick="updateStock('${item.id}',1)">+1</button>
+            <button class="small-btn light" onclick="updateStock('${item.id}',-1)">-1</button>
+            <button class="small-btn light danger" onclick="deleteStock('${item.id}')">Excluir</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  wrap.innerHTML = `
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Quantidade</th>
+          <th>Custo</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function renderDashboard(){
+  const tasks = state.data.tasks;
+  const stock = state.data.stock;
+
+  const total = tasks.length;
+  const inProgress = tasks.filter(t => t.status === "em_andamento").length;
+  const done = tasks.filter(t => t.status === "concluida").length;
+
+  document.getElementById("dashTotalTasks").textContent = total;
+  document.getElementById("dashInProgress").textContent = inProgress;
+  document.getElementById("dashDone").textContent = done;
+  document.getElementById("dashStockCount").textContent = stock.length;
+
+  const decision = document.getElementById("decisionArea");
+  const lowItems = stock.filter(s => Number(s.qtd) <= 10);
+  let html = "";
+
+  if(lowItems.length){
+    html += `<div class="alert-box red"><strong>Estoque crítico:</strong><br>${lowItems.map(i => escapeHtml(i.nome)).join(", ")}</div>`;
+  } else {
+    html += `<div class="alert-box green"><strong>Estoque sob controle.</strong><br>Nenhum item crítico no momento.</div>`;
+  }
+
+  if(inProgress > 0){
+    html += `<div class="alert-box green"><strong>${inProgress} tarefa(s) em andamento.</strong><br>Operação ativa no campo.</div>`;
+  } else {
+    html += `<div class="alert-box yellow"><strong>Nenhuma tarefa em andamento.</strong><br>Verificar programação do dia.</div>`;
+  }
+
+  const paused = tasks.filter(t => t.status === "pausada").length;
+  if(paused > 0){
+    html += `<div class="alert-box yellow"><strong>${paused} tarefa(s) pausada(s).</strong><br>Vale revisar o motivo e retomar quando possível.</div>`;
+  }
+
+  decision.innerHTML = html;
+
+  const latest = document.getElementById("latestTasks");
+  latest.innerHTML = "";
+
+  if(!tasks.length){
+    latest.innerHTML = '<div class="alert-box yellow">Sem tarefas cadastradas.</div>';
+    return;
+  }
+
+  tasks.slice(0,4).forEach(task => {
+    const [label, css] = statusLabel(task.status);
+    const item = document.createElement("div");
+    item.className = "list-item";
+    item.innerHTML = `
+      <div class="list-main">
+        <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
+        <p>${escapeHtml(task.funcionario)} • ${escapeHtml(task.createdAt)}</p>
+      </div>
+      <span class="status ${css}">${label}</span>
+    `;
+    latest.appendChild(item);
+  });
+}
+
+function escapeHtml(text){
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+</script>
 </body>
 </html>
