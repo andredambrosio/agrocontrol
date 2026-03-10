@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroControl Farm System</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header>
+<h1>AgroControl Farm System</h1>
+<p>Sistema operacional da fazenda</p>
+</header>
+
+<nav>
+<button onclick="scrollToSection('sobre')">Sobre</button>
+<button onclick="scrollToSection('modulos')">Módulos</button>
+<button onclick="scrollToSection('perfis')">Perfis</button>
+<button onclick="scrollToSection('contato')">Contato</button>
+</nav>
+
+<section id="sobre" class="card">
+
+<h2>O que é o AgroControl?</h2>
+
+<p>
+Um sistema que reúne gestão de tarefas, clima para pulverização,
+controle de estoque, funcionários, diesel, máquinas e relatórios
+em um único aplicativo.
+</p>
+
+</section>
+
+<section id="modulos" class="card">
+
+<h2>Módulos do sistema</h2>
+
+<div class="grid">
+
+<div class="box">
+<h3>Tarefas no campo</h3>
+<p>Funcionários recebem tarefas e registram execução.</p>
+</div>
+
+<div class="box">
+<h3>Clima para aplicação</h3>
+<p>Indica se pode ou não pulverizar.</p>
+</div>
+
+<div class="box">
+<h3>Controle de estoque</h3>
+<p>Sementes, fertilizantes e defensivos.</p>
+</div>
+
+<div class="box">
+<h3>Painel do dono</h3>
+<p>Relatórios de custo e produtividade.</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="perfis" class="card">
+
+<h2>Perfis do sistema</h2>
+
+<div class="grid">
+
+<div class="box">
+<h3>Dono</h3>
+<p>Acesso completo ao sistema.</p>
+</div>
+
+<div class="box">
+<h3>Gerente</h3>
+<p>Controla tarefas e equipe.</p>
+</div>
+
+<div class="box">
+<h3>Funcionário</h3>
+<p>Executa tarefas e registra atividades.</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="contato" class="card">
+
+<h2>Solicitar demonstração</h2>
+
+<input placeholder="Nome">
+<input placeholder="Email">
+<input placeholder="Nome da fazenda">
+
+<button onclick="alert('Demonstração solicitada!')">
+Solicitar
+</button>
+
+</section>
+
+<footer>
+
+<p>AgroControl Farm System</p>
+<p>Gestão inteligente da fazenda</p>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

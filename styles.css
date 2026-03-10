@@ -1,0 +1,75 @@
+body{
+font-family:Arial;
+margin:0;
+background:#f4f6f7;
+color:#222;
+}
+
+header{
+background:#111827;
+color:white;
+padding:30px;
+text-align:center;
+}
+
+nav{
+background:#1f2937;
+padding:10px;
+text-align:center;
+}
+
+nav button{
+margin:5px;
+padding:10px 15px;
+border:none;
+background:#10b981;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+.card{
+background:white;
+max-width:1000px;
+margin:30px auto;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+}
+
+.box{
+background:#f9fafb;
+padding:20px;
+border-radius:10px;
+}
+
+input{
+display:block;
+margin:10px 0;
+padding:10px;
+width:100%;
+max-width:400px;
+}
+
+button{
+padding:12px 20px;
+background:#111827;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+footer{
+background:#111827;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
