@@ -680,29 +680,54 @@ function renderTasks(){
   const list = document.getElementById("taskList");
   list.innerHTML = "";
 
-  if(state.data.tasks.length === 0){
-    list.innerHTML = '<div class="alert-box yellow">Nenhuma tarefa cadastrada ainda.</div>';
+  let tasksToShow = state.data.tasks;
+
+  if(state.role === "funcionario"){
+    tasksToShow = state.data.tasks.filter(t =>
+      t.funcionario.toLowerCase() === state.userName.toLowerCase()
+    );
+  }
+
+  if(tasksToShow.length === 0){
+    list.innerHTML = '<div class="alert-box yellow">Nenhuma tarefa cadastrada para este usuário.</div>';
     return;
   }
 
-  state.data.tasks.forEach(task => {
+  tasksToShow.forEach(task => {
     const [label, css] = statusLabel(task.status);
     const item = document.createElement("div");
     item.className = "list-item";
-    item.innerHTML = `
-      <div class="list-main">
-        <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
-        <p>Funcionário: ${escapeHtml(task.funcionario)}<br>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
-      </div>
-      <div class="action-row">
-        <span class="status ${css}">${label}</span>
-        <button class="small-btn light" onclick="setTaskStatus('${task.id}','pendente')">Pendente</button>
-        <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
-        <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
-        <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
-        <button class="small-btn light danger" onclick="deleteTask('${task.id}')">Excluir</button>
-      </div>
-    `;
+
+    if(state.role === "funcionario"){
+      item.innerHTML = `
+        <div class="list-main">
+          <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
+          <p>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
+        </div>
+        <div class="action-row">
+          <span class="status ${css}">${label}</span>
+          <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
+          <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
+          <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
+        </div>
+      `;
+    } else {
+      item.innerHTML = `
+        <div class="list-main">
+          <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
+          <p>Funcionário: ${escapeHtml(task.funcionario)}<br>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
+        </div>
+        <div class="action-row">
+          <span class="status ${css}">${label}</span>
+          <button class="small-btn light" onclick="setTaskStatus('${task.id}','pendente')">Pendente</button>
+          <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
+          <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
+          <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
+          <button class="small-btn light danger" onclick="deleteTask('${task.id}')">Excluir</button>
+        </div>
+      `;
+    }
+
     list.appendChild(item);
   });
 }
@@ -864,3 +889,4 @@ function escapeHtml(text){
 </script>
 </body>
 </html>
+
