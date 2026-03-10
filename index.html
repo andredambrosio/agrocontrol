@@ -611,11 +611,19 @@ function renderUI(){
   const current = document.getElementById("page-" + state.page);
   if(current) current.classList.remove("hidden");
 
+  const newTaskCard = document.getElementById("newTaskCard");
+  if(newTaskCard){
+    if(state.role === "funcionario"){
+      newTaskCard.style.display = "none";
+    } else {
+      newTaskCard.style.display = "";
+    }
+  }
+
   renderTasks();
   renderStock();
   renderDashboard();
 }
-
 function goToPage(key){
   state.page = key;
   renderUI();
@@ -889,4 +897,5 @@ function escapeHtml(text){
 </script>
 </body>
 </html>
+
 
