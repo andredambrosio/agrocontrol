@@ -189,7 +189,6 @@
     .weather-big{
       font-size:34px;font-weight:700;letter-spacing:-.04em;margin-top:10px
     }
-    .badge-row{display:flex;gap:10px;flex-wrap:wrap}
 
     @media (max-width:1080px){
       .cards-4{grid-template-columns:repeat(2,1fr)}
@@ -222,7 +221,7 @@
       </div>
 
       <h2>Entrar no sistema</h2>
-      <p>Versão funcional local com tarefas, estoque, máquinas, funcionários e clima online.</p>
+      <p>Login real com Supabase.</p>
 
       <div class="field">
         <label>Nome</label>
@@ -239,8 +238,13 @@
       </div>
 
       <div class="field">
+        <label>Email</label>
+        <input id="loginEmail" type="email" placeholder="dono@agrocontrol.com" value="dono@agrocontrol.com">
+      </div>
+
+      <div class="field">
         <label>Senha</label>
-        <input id="loginPassword" type="password" value="123456">
+        <input id="loginPassword" type="password" value="12345678">
       </div>
 
       <button class="primary-btn" onclick="login()">Entrar</button>
@@ -677,7 +681,12 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    const SUPABASE_URL = "https://xksllcfagvpccvuzwqmg.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     const STORAGE_KEY = "agrocontrol_v2_data";
 
     function makeId(){
@@ -803,12 +812,45 @@
         .replaceAll("'","&#039;");
     }
 
-    function login(){
-      const name = document.getElementById("loginName").value.trim() || "Usuário";
-      const role = document.getElementById("loginRole").value;
-      state.userName = name;
-      state.role = role;
-      state.page = role === "funcionario" ? "operacao" : "dashboard";
+    async function login(){
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      if(!email || !password){
+        alert("Preenche email e senha.");
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if(error){
+        alert("Erro no login: " + error.message);
+        return;
+      }
+
+      const user = data.user;
+      if(!user){
+        alert("Usuário não encontrado.");
+        return;
+      }
+
+      const { data: perfil, error: perfilError } = await supabaseClient
+        .from("perfis")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if(perfilError){
+        alert("Erro ao buscar perfil: " + perfilError.message);
+        return;
+      }
+
+      state.userName = perfil.nome;
+      state.role = perfil.perfil;
+      state.page = perfil.perfil === "funcionario" ? "operacao" : "dashboard";
 
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("appScreen").classList.remove("hidden");
@@ -816,7 +858,8 @@
       renderUI();
     }
 
-    function logout(){
+    async function logout(){
+      await supabaseClient.auth.signOut();
       document.getElementById("appScreen").classList.add("hidden");
       document.getElementById("loginScreen").classList.remove("hidden");
     }
@@ -1187,12 +1230,6 @@
           emp.nome = nome;
           emp.funcao = funcao;
           emp.status = status;
-
-          state.data.tasks.forEach(task => {
-            if(task.funcionario.trim().toLowerCase() === task.funcionario.trim().toLowerCase() && task.funcionario === emp.nome){
-              // no-op
-            }
-          });
         }
       } else {
         state.data.employees.unshift({
@@ -1201,10 +1238,6 @@
           funcao,
           status
         });
-      }
-
-      if(editId){
-        const original = state.data.employees.find(e => e.id === editId);
       }
 
       saveData();
@@ -1647,6 +1680,39 @@
       document.getElementById("weatherSearchFeedback").textContent = text;
     }
 
+    async function checkSession(){
+      const { data, error } = await supabaseClient.auth.getSession();
+
+      if(error || !data.session){
+        return;
+      }
+
+      const user = data.session.user;
+
+      const { data: perfil, error: perfilError } = await supabaseClient
+        .from("perfis")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if(perfilError || !perfil){
+        return;
+      }
+
+      state.userName = perfil.nome;
+      state.role = perfil.perfil;
+      state.page = perfil.perfil === "funcionario" ? "operacao" : "dashboard";
+
+      document.getElementById("loginName").value = perfil.nome;
+      document.getElementById("loginRole").value = perfil.perfil;
+
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("appScreen").classList.remove("hidden");
+
+      renderUI();
+    }
+
+    checkSession();
     renderUI();
   </script>
 </body>
