@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta charset="UTF-8">
+<title>AgroControl Desktop</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#111;
+color:white;
+display:flex;
+}
+
+/* MENU */
+
+.sidebar{
+width:230px;
+background:#0d0d0d;
+height:100vh;
+padding:20px;
+box-sizing:border-box;
+}
+
+.sidebar h2{
+margin-top:0;
+margin-bottom:30px;
+}
+
+.menu-item{
+padding:12px;
+border-radius:6px;
+margin-bottom:8px;
+cursor:pointer;
+}
+
+.menu-item:hover{
+background:#1f1f1f;
+}
+
+/* CONTEUDO */
+
+.main{
+flex:1;
+padding:30px;
+background:#161616;
+}
+
+/* CARDS */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+margin-bottom:30px;
+}
+
+.card{
+background:#222;
+padding:20px;
+border-radius:10px;
+}
+
+.card h3{
+margin-top:0;
+}
+
+/* BLOCOS GRANDES */
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.big-card{
+background:#222;
+padding:20px;
+border-radius:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+td,th{
+padding:8px;
+border-bottom:1px solid #333;
+text-align:left;
+}
+
+.market span{
+display:block;
+margin-bottom:6px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>AgroControl</h2>
+
+<div class="menu-item">Dashboard</div>
+<div class="menu-item">Operações</div>
+<div class="menu-item">Talhões</div>
+<div class="menu-item">Máquinas</div>
+<div class="menu-item">Funcionários</div>
+<div class="menu-item">Estoque</div>
+
+<hr>
+
+<div class="menu-item">Mercado</div>
+<div class="menu-item">Financeiro</div>
+<div class="menu-item">Produtividade</div>
+
+<hr>
+
+<div class="menu-item">IA da Fazenda</div>
+<div class="menu-item">Relatórios</div>
+<div class="menu-item">Configurações</div>
+
+</div>
+
+<div class="main">
+
+<h1>Dashboard da Fazenda</h1>
+
+<div class="cards">
+
+<div class="card">
+<h3>Tarefas em andamento</h3>
+<p style="font-size:30px;">6</p>
+</div>
+
+<div class="card">
+<h3>Tarefas pendentes</h3>
+<p style="font-size:30px;">4</p>
+</div>
+
+<div class="card">
+<h3>Máquinas operando</h3>
+<p style="font-size:30px;">5</p>
+</div>
+
+<div class="card">
+<h3>Estoque crítico</h3>
+<p style="font-size:30px;">2</p>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="big-card market">
+
+<h3>Mercado</h3>
+
+<span>Soja: R$ 128,50</span>
+<span>Arroz: R$ 110,30</span>
+<span>Milho: R$ 56,20</span>
+<span>@ do Gado: R$ 250,00</span>
+
+</div>
+
+<div class="big-card">
+
+<h3>Clima para aplicação</h3>
+
+<p>Vento: 6 km/h</p>
+<p>Umidade: 85%</p>
+<p>Temperatura: 28°C</p>
+
+<p style="color:#4CAF50;">Pode aplicar</p>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="grid">
+
+<div class="big-card">
+
+<h3>Visão dos Talhões</h3>
+
+<table>
+
+<tr>
+<th>Talhão</th>
+<th>Cultura</th>
+<th>Área</th>
+<th>Produtividade</th>
+</tr>
+
+<tr>
+<td>Talhão 1</td>
+<td>Soja</td>
+<td>35 ha</td>
+<td>59 sc/ha</td>
+</tr>
+
+<tr>
+<td>Talhão 2</td>
+<td>Milho</td>
+<td>36 ha</td>
+<td>112 sc/ha</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="big-card">
+
+<h3>IA da Fazenda</h3>
+
+<p>• Estoque de ureia cobre apenas 12 dias</p>
+<p>• Faltam 180 sacas de soja para pagar os custos</p>
+<p>• Talhão 2 está acima da média de produtividade</p>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
