@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroControl</title>
+
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#111111">
+
   <style>
     :root{
       --bg:#f5f5f7;
@@ -21,173 +25,445 @@
 
     *{box-sizing:border-box}
     html,body{
-      margin:0;padding:0;
+      margin:0;
+      padding:0;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-      background:var(--bg);color:var(--text)
+      background:var(--bg);
+      color:var(--text)
     }
+
     button,input,select,textarea{font:inherit}
     .hidden{display:none !important}
-    .danger-text{color:#b91c1c}
-    .success-text{color:#15803d}
     .muted{color:var(--muted)}
 
     .topbar{
-      position:sticky;top:0;z-index:30;
+      position:sticky;
+      top:0;
+      z-index:30;
       backdrop-filter:blur(12px);
       background:rgba(245,245,247,.84);
       border-bottom:1px solid rgba(0,0,0,.06);
     }
+
     .topbar-inner{
-      max-width:1320px;margin:0 auto;padding:16px 20px;
-      display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap
+      max-width:1320px;
+      margin:0 auto;
+      padding:16px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap
     }
-    .brand{display:flex;align-items:center;gap:12px}
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px
+    }
+
     .brand-badge{
-      width:42px;height:42px;border-radius:14px;background:#111;color:#fff;
-      display:grid;place-items:center;font-weight:700;box-shadow:var(--shadow)
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      background:#111;
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-weight:700;
+      box-shadow:var(--shadow)
     }
-    .brand-text h1{margin:0;font-size:20px;letter-spacing:-.03em}
-    .brand-text p{margin:3px 0 0;font-size:12px;color:var(--muted)}
+
+    .brand-text h1{
+      margin:0;
+      font-size:20px;
+      letter-spacing:-.03em
+    }
+
+    .brand-text p{
+      margin:3px 0 0;
+      font-size:12px;
+      color:var(--muted)
+    }
 
     .pill{
-      padding:9px 13px;border-radius:999px;background:#fff;border:1px solid var(--line);
-      color:var(--muted);font-size:13px
+      padding:9px 13px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:13px
     }
-    .logout-btn,.primary-btn,.secondary-btn,.small-btn{
-      border:none;cursor:pointer;transition:.18s ease;
-    }
-    .logout-btn{
-      background:#111;color:#fff;border-radius:999px;padding:11px 15px
-    }
-    .primary-btn{
-      background:#111;color:#fff;border-radius:16px;padding:14px 18px;font-weight:600
-    }
-    .secondary-btn{
-      background:#fff;color:#111;border:1px solid var(--line);border-radius:16px;padding:14px 18px
-    }
+
+    .logout-btn,
+    .primary-btn,
+    .secondary-btn,
     .small-btn{
-      padding:10px 12px;border-radius:14px;background:#111;color:#fff;font-size:13px
+      border:none;
+      cursor:pointer;
+      transition:.18s ease;
     }
+
+    .logout-btn{
+      background:#111;
+      color:#fff;
+      border-radius:999px;
+      padding:11px 15px
+    }
+
+    .primary-btn{
+      background:#111;
+      color:#fff;
+      border-radius:16px;
+      padding:14px 18px;
+      font-weight:600
+    }
+
+    .secondary-btn{
+      background:#fff;
+      color:#111;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px 18px
+    }
+
+    .small-btn{
+      padding:10px 12px;
+      border-radius:14px;
+      background:#111;
+      color:#fff;
+      font-size:13px
+    }
+
     .small-btn.light{
-      background:#fff;color:#111;border:1px solid var(--line)
+      background:#fff;
+      color:#111;
+      border:1px solid var(--line)
     }
 
     .login-wrap{
-      min-height:100vh;display:grid;place-items:center;padding:24px
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:24px
     }
+
     .login-card{
-      width:100%;max-width:440px;background:var(--card);border:1px solid var(--line);
-      border-radius:32px;box-shadow:var(--shadow);padding:30px
+      width:100%;
+      max-width:460px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      padding:30px
     }
-    .login-card h2{margin:0;font-size:31px;letter-spacing:-.04em}
-    .login-card p{margin:10px 0 22px;color:var(--muted);line-height:1.5}
+
+    .login-card h2{
+      margin:0;
+      font-size:31px;
+      letter-spacing:-.04em
+    }
+
+    .login-card p{
+      margin:10px 0 22px;
+      color:var(--muted);
+      line-height:1.5
+    }
 
     .field{margin-bottom:14px}
-    .field label{display:block;margin-bottom:8px;font-size:13px;color:var(--muted)}
-    .field input,.field select,.field textarea{
-      width:100%;background:#fafafa;border:1px solid var(--line);border-radius:16px;
-      padding:14px 16px;outline:none
+
+    .field label{
+      display:block;
+      margin-bottom:8px;
+      font-size:13px;
+      color:var(--muted)
     }
-    .field textarea{min-height:92px;resize:vertical}
-    .field input:focus,.field select:focus,.field textarea:focus{
-      background:#fff;border-color:#c7c7cc
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      background:#fafafa;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px 16px;
+      outline:none
+    }
+
+    .field textarea{
+      min-height:92px;
+      resize:vertical
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus{
+      background:#fff;
+      border-color:#c7c7cc
+    }
+
+    .login-error{
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(239,68,68,.08);
+      color:#b91c1c;
+      font-size:14px
     }
 
     .container{
-      max-width:1320px;margin:0 auto;padding:24px 20px 40px
+      max-width:1320px;
+      margin:0 auto;
+      padding:24px 20px 40px
     }
 
     .main-layout{
-      display:grid;grid-template-columns:270px 1fr;gap:22px
+      display:grid;
+      grid-template-columns:270px 1fr;
+      gap:22px
     }
 
     .sidebar{
-      background:var(--card);border:1px solid var(--line);border-radius:28px;padding:16px;
-      box-shadow:var(--shadow);height:calc(100vh - 110px);position:sticky;top:88px
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:16px;
+      box-shadow:var(--shadow);
+      height:calc(100vh - 110px);
+      position:sticky;
+      top:88px
     }
-    .nav-group{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+
+    .nav-group{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:10px
+    }
+
     .nav-btn{
-      border:none;text-align:left;background:#fafafa;border:1px solid transparent;color:#1d1d1f;
-      border-radius:18px;padding:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between
+      border:none;
+      text-align:left;
+      background:#fafafa;
+      border:1px solid transparent;
+      color:#1d1d1f;
+      border-radius:18px;
+      padding:14px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between
     }
-    .nav-btn.active{background:#111;color:#fff}
+
+    .nav-btn.active{
+      background:#111;
+      color:#fff
+    }
 
     .mobile-nav{
-      display:none;gap:10px;overflow:auto;padding-bottom:8px;margin-bottom:12px
+      display:none;
+      gap:10px;
+      overflow:auto;
+      padding-bottom:8px;
+      margin-bottom:12px
     }
 
-    .content{display:flex;flex-direction:column;gap:20px}
+    .content{
+      display:flex;
+      flex-direction:column;
+      gap:20px
+    }
 
     .page-title{
-      display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:16px;
+      flex-wrap:wrap
     }
-    .page-title h2{margin:0;font-size:36px;letter-spacing:-.04em}
-    .page-title p{margin:6px 0 0;color:var(--muted)}
 
-    .grid{display:grid;gap:18px}
+    .page-title h2{
+      margin:0;
+      font-size:36px;
+      letter-spacing:-.04em
+    }
+
+    .page-title p{
+      margin:6px 0 0;
+      color:var(--muted)
+    }
+
+    .grid{
+      display:grid;
+      gap:18px
+    }
+
     .cards-4{grid-template-columns:repeat(4,1fr)}
     .cards-3{grid-template-columns:repeat(3,1fr)}
     .cards-2{grid-template-columns:repeat(2,1fr)}
 
     .card{
-      background:var(--card);border:1px solid var(--line);border-radius:28px;
-      box-shadow:var(--shadow);padding:20px
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:20px
     }
 
     .section-head{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+      flex-wrap:wrap
     }
-    .section-head h3{margin:0;font-size:20px;letter-spacing:-.02em}
-    .section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
 
-    .stat-card .label{color:var(--muted);font-size:13px}
-    .stat-card .value{margin-top:10px;font-size:30px;font-weight:700;letter-spacing:-.04em}
-    .stat-card .sub{margin-top:6px;color:var(--muted);font-size:13px}
+    .section-head h3{
+      margin:0;
+      font-size:20px;
+      letter-spacing:-.02em
+    }
+
+    .section-head p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:13px
+    }
+
+    .stat-card .label{
+      color:var(--muted);
+      font-size:13px
+    }
+
+    .stat-card .value{
+      margin-top:10px;
+      font-size:30px;
+      font-weight:700;
+      letter-spacing:-.04em
+    }
+
+    .stat-card .sub{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:13px
+    }
 
     .status{
-      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
-      font-size:12px;font-weight:600
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600
     }
+
     .status.green{background:rgba(34,197,94,.12);color:#15803d}
     .status.yellow{background:rgba(245,158,11,.12);color:#b45309}
     .status.red{background:rgba(239,68,68,.12);color:#b91c1c}
     .status.blue{background:rgba(59,130,246,.12);color:#1d4ed8}
     .status.gray{background:#f3f4f6;color:#4b5563}
 
-    .list{display:flex;flex-direction:column;gap:12px}
-    .list-item{
-      background:#fafafa;border:1px solid var(--line);border-radius:20px;padding:16px;
-      display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:12px
     }
-    .list-main h4{margin:0;font-size:16px}
-    .list-main p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
-    .action-row{display:flex;gap:10px;flex-wrap:wrap}
 
-    .table{width:100%;border-collapse:collapse}
-    .table th,.table td{
-      text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top
+    .list-item{
+      background:#fafafa;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap
     }
+
+    .list-main h4{
+      margin:0;
+      font-size:16px
+    }
+
+    .list-main p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5
+    }
+
+    .action-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap
+    }
+
+    .table{
+      width:100%;
+      border-collapse:collapse
+    }
+
+    .table th,
+    .table td{
+      text-align:left;
+      padding:14px 12px;
+      border-bottom:1px solid var(--line);
+      font-size:14px;
+      vertical-align:top
+    }
+
     .table th{
-      color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em
+      color:var(--muted);
+      font-weight:600;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.04em
     }
 
     .alert-box{
-      padding:16px;border-radius:20px;margin-bottom:12px;font-size:14px;line-height:1.5
+      padding:16px;
+      border-radius:20px;
+      margin-bottom:12px;
+      font-size:14px;
+      line-height:1.5
     }
+
     .alert-box.green{background:rgba(34,197,94,.10);color:#166534}
     .alert-box.yellow{background:rgba(245,158,11,.12);color:#92400e}
     .alert-box.red{background:rgba(239,68,68,.10);color:#991b1b}
     .alert-box.blue{background:rgba(59,130,246,.10);color:#1d4ed8}
 
     .metric-row{
-      display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);gap:10px;font-size:14px
+      display:flex;
+      justify-content:space-between;
+      padding:14px 0;
+      border-bottom:1px solid var(--line);
+      gap:10px;
+      font-size:14px
     }
+
     .metric-row:last-child{border-bottom:none}
 
-    .footer-note{color:var(--muted);font-size:12px;margin-top:14px}
-    .weather-panel{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+    .footer-note{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:14px
+    }
+
+    .weather-panel{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px
+    }
+
     .weather-big{
-      font-size:34px;font-weight:700;letter-spacing:-.04em;margin-top:10px
+      font-size:34px;
+      font-weight:700;
+      letter-spacing:-.04em;
+      margin-top:10px
     }
 
     @media (max-width:1080px){
@@ -195,11 +471,13 @@
       .cards-3{grid-template-columns:repeat(2,1fr)}
       .weather-panel{grid-template-columns:1fr}
     }
+
     @media (max-width:860px){
       .main-layout{grid-template-columns:1fr}
       .sidebar{display:none}
       .mobile-nav{display:flex}
     }
+
     @media (max-width:640px){
       .cards-4,.cards-3,.cards-2{grid-template-columns:1fr}
       .page-title h2{font-size:28px}
@@ -207,50 +485,32 @@
       .container{padding:18px 16px 28px}
       .card{padding:18px}
     }
- </style>
-
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#111111">
-
+  </style>
 </head>
-
 <body>
-
-<div id="loginScreen" class="login-wrap">
-  <div class="login-card">
-    <div class="brand" style="margin-bottom:18px;">
-      <div class="brand-badge">A</div>
-      <div class="brand-text">
-        <h1>AgroControl</h1>
-        <p>Farm System</p>
+  <div id="loginScreen" class="login-wrap">
+    <div class="login-card">
+      <div class="brand" style="margin-bottom:18px;">
+        <div class="brand-badge">A</div>
+        <div class="brand-text">
+          <h1>AgroControl</h1>
+          <p>Farm System</p>
+        </div>
       </div>
-    </div>
 
-    <h2>Entrar no sistema</h2>
-    <p>Login real com Supabase.</p>
+      <h2>Entrar no sistema</h2>
+      <p>Login real com Supabase.</p>
 
-    <div class="field">
-      <label>Nome</label>
-      <input id="loginName" placeholder="Ex.: André ou João">
-    </div>
-
-      <div class="field">
-        <label>Perfil</label>
-        <select id="loginRole">
-          <option value="dono">Dono</option>
-          <option value="gerente">Gerente</option>
-          <option value="funcionario">Funcionário</option>
-        </select>
-      </div>
+      <div id="loginError" class="login-error hidden"></div>
 
       <div class="field">
         <label>Email</label>
-        <input id="loginEmail" type="email" placeholder="dono@agrocontrol.com" value="dono@agrocontrol.com">
+        <input id="loginEmail" type="email" placeholder="dono@agrocontrol.com">
       </div>
 
       <div class="field">
         <label>Senha</label>
-        <input id="loginPassword" type="password" value="12345678">
+        <input id="loginPassword" type="password" placeholder="Digite sua senha">
       </div>
 
       <button class="primary-btn" onclick="login()">Entrar</button>
@@ -269,6 +529,7 @@
         </div>
 
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <button id="installAppBtn" class="secondary-btn hidden" type="button">Instalar app</button>
           <div class="pill" id="currentUser"></div>
           <button class="logout-btn" onclick="logout()">Sair</button>
         </div>
@@ -294,7 +555,7 @@
             <div class="page-title">
               <div>
                 <h2>Dashboard</h2>
-                <p>Resumo real com base nos dados salvos no navegador.</p>
+                <p>Resumo atual do sistema.</p>
               </div>
               <span class="status blue">V1 funcional</span>
             </div>
@@ -688,12 +949,14 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     const SUPABASE_URL = "https://xksllcfagvpccvuzwqmg.supabase.co";
     const SUPABASE_KEY = "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const STORAGE_KEY = "agrocontrol_v2_data";
+    let deferredPrompt = null;
 
     function makeId(){
       return Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -766,8 +1029,8 @@
     }
 
     const state = {
-      userName: "André",
-      role: "dono",
+      userName: "",
+      role: "",
       page: "dashboard",
       data: loadData()
     };
@@ -818,12 +1081,25 @@
         .replaceAll("'","&#039;");
     }
 
+    function showLoginError(message){
+      const box = document.getElementById("loginError");
+      box.textContent = message;
+      box.classList.remove("hidden");
+    }
+
+    function hideLoginError(){
+      document.getElementById("loginError").classList.add("hidden");
+      document.getElementById("loginError").textContent = "";
+    }
+
     async function login(){
+      hideLoginError();
+
       const email = document.getElementById("loginEmail").value.trim();
       const password = document.getElementById("loginPassword").value;
 
       if(!email || !password){
-        alert("Preenche email e senha.");
+        showLoginError("Preenche email e senha.");
         return;
       }
 
@@ -833,13 +1109,13 @@
       });
 
       if(error){
-        alert("Erro no login: " + error.message);
+        showLoginError("Erro no login: " + error.message);
         return;
       }
 
       const user = data.user;
       if(!user){
-        alert("Usuário não encontrado.");
+        showLoginError("Usuário não encontrado.");
         return;
       }
 
@@ -849,8 +1125,8 @@
         .eq("id", user.id)
         .single();
 
-      if(perfilError){
-        alert("Erro ao buscar perfil: " + perfilError.message);
+      if(perfilError || !perfil){
+        showLoginError("Erro ao buscar perfil.");
         return;
       }
 
@@ -868,6 +1144,9 @@
       await supabaseClient.auth.signOut();
       document.getElementById("appScreen").classList.add("hidden");
       document.getElementById("loginScreen").classList.remove("hidden");
+      document.getElementById("loginEmail").value = "";
+      document.getElementById("loginPassword").value = "";
+      hideLoginError();
     }
 
     function goToPage(key){
@@ -903,6 +1182,7 @@
     function renderUI(){
       document.getElementById("currentUser").textContent =
         state.userName + " • " + roleConfig[state.role].label;
+
       document.getElementById("sidebarProfile").textContent =
         "Perfil ativo: " + roleConfig[state.role].label;
 
@@ -1586,7 +1866,7 @@
         title: "Pode aplicar",
         css: "green",
         summary: "Condição favorável para aplicação, com vento e umidade dentro de faixa mais confortável."
-      };
+        };
     }
 
     async function searchWeatherByCity(){
@@ -1709,18 +1989,45 @@
       state.role = perfil.perfil;
       state.page = perfil.perfil === "funcionario" ? "operacao" : "dashboard";
 
-      document.getElementById("loginName").value = perfil.nome;
-      document.getElementById("loginRole").value = perfil.perfil;
-
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("appScreen").classList.remove("hidden");
 
       renderUI();
     }
 
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      if(!session){
+        document.getElementById("appScreen").classList.add("hidden");
+        document.getElementById("loginScreen").classList.remove("hidden");
+      }
+    });
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById("installAppBtn").classList.remove("hidden");
+    });
+
+    document.getElementById("installAppBtn").addEventListener("click", async () => {
+      if(!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      document.getElementById("installAppBtn").classList.add("hidden");
+    });
+
     checkSession();
     renderUI();
   </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/service-worker.js")
+          .then(() => console.log("Service Worker registrado"))
+          .catch(err => console.log("Erro no Service Worker", err));
+      });
+    }
+  </script>
 </body>
 </html>
-
