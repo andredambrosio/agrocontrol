@@ -9,15 +9,16 @@
     :root{
       --bg:#0b0f13;
       --bg-2:#10161d;
-      --panel:#151c24;
+      --panel:#141b22;
       --panel-2:#1a222c;
+      --panel-3:#10161c;
       --line:rgba(255,255,255,.08);
       --text:#f4f7fa;
       --muted:#97a3af;
-      --green:#59c36a;
-      --green-soft:rgba(89,195,106,.14);
-      --yellow:#d6a445;
-      --yellow-soft:rgba(214,164,69,.14);
+      --green:#58c472;
+      --green-soft:rgba(88,196,114,.14);
+      --yellow:#d7a441;
+      --yellow-soft:rgba(215,164,65,.14);
       --blue:#5b90ff;
       --blue-soft:rgba(91,144,255,.14);
       --red:#eb6464;
@@ -42,7 +43,7 @@
       min-height:100vh;
     }
 
-    /* LOGIN DESKTOP */
+    /* LOGIN */
     .login-screen{
       min-height:100vh;
       display:grid;
@@ -50,8 +51,8 @@
       position:relative;
       overflow:hidden;
       background:
-        linear-gradient(90deg, rgba(7,10,12,.78) 0%, rgba(7,10,12,.58) 42%, rgba(7,10,12,.35) 100%),
-        url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+        linear-gradient(90deg, rgba(6,9,12,.78) 0%, rgba(6,9,12,.58) 42%, rgba(6,9,12,.34) 100%),
+        url("https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
     }
 
     .login-screen::after{
@@ -59,7 +60,7 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(circle at bottom right, rgba(89,195,106,.10), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(88,196,114,.10), transparent 30%),
         radial-gradient(circle at top left, rgba(255,255,255,.05), transparent 20%);
       pointer-events:none;
     }
@@ -85,6 +86,7 @@
       font-weight:800;
       font-size:20px;
       backdrop-filter:blur(10px);
+      color:#fff;
     }
 
     .login-brand h1{
@@ -134,7 +136,7 @@
       font-size:13px;
     }
 
-    .field input{
+    .field input,.field select,.field textarea{
       width:100%;
       padding:14px 16px;
       border-radius:16px;
@@ -144,26 +146,51 @@
       outline:none;
     }
 
-    .field input::placeholder{
+    .field textarea{
+      min-height:100px;
+      resize:vertical;
+    }
+
+    .field input::placeholder,.field textarea::placeholder{
       color:#a5b0ba;
     }
 
-    .field input:focus{
-      border-color:rgba(89,195,106,.45);
+    .field input:focus,.field select:focus,.field textarea:focus{
+      border-color:rgba(88,196,114,.45);
       background:rgba(255,255,255,.07);
     }
 
-    .login-btn{
-      width:100%;
+    .login-btn,.btn-primary,.btn-secondary,.btn-light{
       border:none;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .login-btn,.btn-primary{
+      width:100%;
       border-radius:16px;
       padding:15px 18px;
       background:linear-gradient(180deg,#4cb763 0%, #389650 100%);
       color:#fff;
       font-weight:700;
-      cursor:pointer;
-      margin-top:6px;
       box-shadow:0 14px 30px rgba(56,150,80,.28);
+    }
+
+    .btn-secondary{
+      border-radius:14px;
+      padding:12px 14px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      color:#fff;
+    }
+
+    .btn-light{
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      color:#fff;
+      width:auto;
     }
 
     .login-note{
@@ -262,8 +289,8 @@
     }
 
     .menu-item.active{
-      background:linear-gradient(90deg,rgba(89,195,106,.18) 0%, rgba(89,195,106,.07) 100%);
-      border-color:rgba(89,195,106,.18);
+      background:linear-gradient(90deg,rgba(88,196,114,.18) 0%, rgba(88,196,114,.07) 100%);
+      border-color:rgba(88,196,114,.18);
       color:#fff;
     }
 
@@ -326,7 +353,7 @@
     .main{
       padding:24px;
       background:
-        radial-gradient(circle at top right, rgba(89,195,106,.07), transparent 28%),
+        radial-gradient(circle at top right, rgba(88,196,114,.07), transparent 28%),
         radial-gradient(circle at top left, rgba(91,144,255,.05), transparent 18%),
         linear-gradient(180deg,#0d1116 0%, #11161c 100%);
       min-height:100vh;
@@ -369,13 +396,8 @@
       white-space:nowrap;
     }
 
-    .page{
-      display:none;
-    }
-
-    .page.active{
-      display:block;
-    }
+    .page{display:none}
+    .page.active{display:block}
 
     .hero{
       display:grid;
@@ -393,7 +415,7 @@
       box-shadow:var(--shadow);
       background:
         linear-gradient(90deg, rgba(8,10,13,.90) 0%, rgba(8,10,13,.62) 48%, rgba(8,10,13,.34) 100%),
-        url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+        url("https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
       padding:28px;
       display:flex;
       flex-direction:column;
@@ -461,16 +483,8 @@
     }
 
     .quick-row:last-child{border-bottom:none}
-
-    .quick-row span{
-      color:var(--muted);
-      font-size:14px;
-    }
-
-    .quick-row strong{
-      font-size:18px;
-      letter-spacing:-.02em;
-    }
+    .quick-row span{color:var(--muted);font-size:14px}
+    .quick-row strong{font-size:18px;letter-spacing:-.02em}
 
     .cards{
       display:grid;
@@ -494,12 +508,7 @@
       gap:10px;
     }
 
-    .card-title{
-      color:var(--muted);
-      font-size:13px;
-      margin-bottom:10px;
-    }
-
+    .card-title{color:var(--muted);font-size:13px;margin-bottom:10px}
     .card-value{
       font-size:40px;
       line-height:1;
@@ -508,11 +517,7 @@
       margin-bottom:8px;
     }
 
-    .card-sub{
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.4;
-    }
+    .card-sub{color:var(--muted);font-size:13px;line-height:1.4}
 
     .card-icon{
       width:42px;
@@ -606,7 +611,7 @@
       position:relative;
       background:
         linear-gradient(180deg, rgba(8,10,12,.20) 0%, rgba(8,10,12,.58) 100%),
-        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+        url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
     }
 
     .climate-content{position:relative;z-index:2}
@@ -722,7 +727,7 @@
       display:grid;
       place-items:center;
       font-size:12px;
-      background:rgba(89,195,106,.14);
+      background:rgba(88,196,114,.14);
       color:#8fe0a2;
       flex-shrink:0;
       margin-top:2px;
@@ -785,21 +790,8 @@
     }
 
     .info-row:last-child{border-bottom:none}
-
-    .info-row span{
-      color:var(--muted);
-      font-size:14px;
-    }
-
-    .info-row strong{
-      font-size:15px;
-    }
-
-    .empty-note{
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.5;
-    }
+    .info-row span{color:var(--muted);font-size:14px}
+    .info-row strong{font-size:15px}
 
     @media (max-width: 1450px){
       .cards{grid-template-columns:repeat(2,1fr)}
@@ -818,10 +810,7 @@
 
     @media (max-width: 760px){
       .cards{grid-template-columns:1fr}
-      .market-grid,
-      .finance-grid,
-      .report-grid,
-      .climate-stats{grid-template-columns:1fr}
+      .market-grid,.finance-grid,.report-grid,.climate-stats{grid-template-columns:1fr}
       .main{padding:16px}
       .topbar{flex-direction:column; align-items:stretch}
       .search{max-width:none}
@@ -877,50 +866,26 @@
       </div>
 
       <div class="menu-group">
-        <div class="menu-item active" data-page="dashboard">
-          <span class="menu-icon">🏠</span> Dashboard
-        </div>
-        <div class="menu-item" data-page="operacoes">
-          <span class="menu-icon">🧭</span> Operações
-        </div>
-        <div class="menu-item" data-page="talhoes">
-          <span class="menu-icon">🌱</span> Talhões
-        </div>
-        <div class="menu-item" data-page="maquinas">
-          <span class="menu-icon">🚜</span> Máquinas
-        </div>
-        <div class="menu-item" data-page="funcionarios">
-          <span class="menu-icon">👷</span> Funcionários
-        </div>
-        <div class="menu-item" data-page="estoque">
-          <span class="menu-icon">📦</span> Estoque
-        </div>
+        <div class="menu-item active" data-page="dashboard"><span class="menu-icon">🏠</span> Dashboard</div>
+        <div class="menu-item" data-page="operacoes"><span class="menu-icon">🧭</span> Operações</div>
+        <div class="menu-item" data-page="talhoes"><span class="menu-icon">🌱</span> Talhões</div>
+        <div class="menu-item" data-page="maquinas"><span class="menu-icon">🚜</span> Máquinas</div>
+        <div class="menu-item" data-page="funcionarios"><span class="menu-icon">👷</span> Funcionários</div>
+        <div class="menu-item" data-page="estoque"><span class="menu-icon">📦</span> Estoque</div>
       </div>
 
       <div class="menu-group">
         <div class="menu-title">Gestão</div>
-        <div class="menu-item" data-page="mercado">
-          <span class="menu-icon">📈</span> Mercado
-        </div>
-        <div class="menu-item" data-page="financeiro">
-          <span class="menu-icon">💰</span> Financeiro
-        </div>
-        <div class="menu-item" data-page="produtividade">
-          <span class="menu-icon">📊</span> Produtividade
-        </div>
+        <div class="menu-item" data-page="mercado"><span class="menu-icon">📈</span> Mercado</div>
+        <div class="menu-item" data-page="financeiro"><span class="menu-icon">💰</span> Financeiro</div>
+        <div class="menu-item" data-page="produtividade"><span class="menu-icon">📊</span> Produtividade</div>
       </div>
 
       <div class="menu-group">
         <div class="menu-title">Inteligência</div>
-        <div class="menu-item" data-page="ia">
-          <span class="menu-icon">🧠</span> IA da Fazenda
-        </div>
-        <div class="menu-item" data-page="relatorios">
-          <span class="menu-icon">🧾</span> Relatórios
-        </div>
-        <div class="menu-item" data-page="configuracoes">
-          <span class="menu-icon">⚙️</span> Configurações
-        </div>
+        <div class="menu-item" data-page="ia"><span class="menu-icon">🧠</span> IA da Fazenda</div>
+        <div class="menu-item" data-page="relatorios"><span class="menu-icon">🧾</span> Relatórios</div>
+        <div class="menu-item" data-page="configuracoes"><span class="menu-icon">⚙️</span> Configurações</div>
       </div>
 
       <div class="sidebar-user">
@@ -928,7 +893,7 @@
           <div class="avatar" id="userAvatar">A</div>
           <div>
             <strong id="userName">André</strong>
-            <span id="userRole">Dono da fazenda</span>
+            <span id="userRole">Dono</span>
           </div>
         </div>
         <button class="sidebar-logout" onclick="desktopLogout()">Sair</button>
@@ -937,8 +902,7 @@
 
     <main class="main">
       <div class="topbar">
-        <input class="search" placeholder="Buscar talhão, máquina, funcionário, operação..." />
-
+        <input id="desktopSearch" class="search" placeholder="Buscar talhão, máquina, funcionário, operação..." />
         <div class="top-chips">
           <div class="chip">🌬️ Vento 6 km/h</div>
           <div class="chip">🌱 Soja R$ 128,50</div>
@@ -947,43 +911,28 @@
         </div>
       </div>
 
-      <!-- DASHBOARD -->
       <section id="page-dashboard" class="page active">
         <section class="hero">
           <div class="hero-card">
-            <h1>AgroControl Desktop</h1>
+            <h1 id="dashboardFarmName">Fazenda Santa Clara</h1>
             <p>
               Painel completo de gestão para dono e gerente, com operação, estoque,
               clima, mercado, financeiro e inteligência da fazenda em um só lugar.
             </p>
-
             <div class="hero-badges">
-              <div class="hero-badge">Fazenda Santa Clara</div>
               <div class="hero-badge">Safra 2026</div>
               <div class="hero-badge">Operação ativa</div>
+              <div class="hero-badge">Desktop V1</div>
             </div>
           </div>
 
           <div class="quick-card">
             <h3>Resumo rápido do dia</h3>
-
             <div class="quick-list">
-              <div class="quick-row">
-                <span>Tarefas em andamento</span>
-                <strong>6</strong>
-              </div>
-              <div class="quick-row">
-                <span>Tarefas pendentes</span>
-                <strong>4</strong>
-              </div>
-              <div class="quick-row">
-                <span>Máquinas operando</span>
-                <strong>5</strong>
-              </div>
-              <div class="quick-row">
-                <span>Estoque crítico</span>
-                <strong>2</strong>
-              </div>
+              <div class="quick-row"><span>Tarefas em andamento</span><strong>6</strong></div>
+              <div class="quick-row"><span>Tarefas pendentes</span><strong>4</strong></div>
+              <div class="quick-row"><span>Máquinas operando</span><strong>5</strong></div>
+              <div class="quick-row"><span>Estoque crítico</span><strong>2</strong></div>
             </div>
           </div>
         </section>
@@ -1045,22 +994,10 @@
             </div>
 
             <div class="market-grid">
-              <div class="market-item">
-                <small>Soja</small>
-                <strong>R$ 128,50</strong>
-              </div>
-              <div class="market-item">
-                <small>Arroz</small>
-                <strong>R$ 110,30</strong>
-              </div>
-              <div class="market-item">
-                <small>Milho</small>
-                <strong>R$ 56,20</strong>
-              </div>
-              <div class="market-item">
-                <small>@ do Gado</small>
-                <strong>R$ 250,00</strong>
-              </div>
+              <div class="market-item"><small>Soja</small><strong>R$ 128,50</strong></div>
+              <div class="market-item"><small>Arroz</small><strong>R$ 110,30</strong></div>
+              <div class="market-item"><small>Milho</small><strong>R$ 56,20</strong></div>
+              <div class="market-item"><small>@ do Gado</small><strong>R$ 250,00</strong></div>
             </div>
           </div>
 
@@ -1075,22 +1012,10 @@
               </div>
 
               <div class="climate-stats">
-                <div class="climate-stat">
-                  <span>Vento</span>
-                  <strong>6 km/h</strong>
-                </div>
-                <div class="climate-stat">
-                  <span>Rajadas</span>
-                  <strong>9 km/h</strong>
-                </div>
-                <div class="climate-stat">
-                  <span>Umidade</span>
-                  <strong>82%</strong>
-                </div>
-                <div class="climate-stat">
-                  <span>Temperatura</span>
-                  <strong>29°C</strong>
-                </div>
+                <div class="climate-stat"><span>Vento</span><strong>6 km/h</strong></div>
+                <div class="climate-stat"><span>Rajadas</span><strong>9 km/h</strong></div>
+                <div class="climate-stat"><span>Umidade</span><strong>82%</strong></div>
+                <div class="climate-stat"><span>Temperatura</span><strong>29°C</strong></div>
               </div>
             </div>
           </div>
@@ -1117,34 +1042,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Talhão 1</td>
-                  <td>Soja</td>
-                  <td>35 ha</td>
-                  <td>59 sc/ha</td>
-                  <td class="good">Dentro da meta</td>
-                </tr>
-                <tr>
-                  <td>Talhão 2</td>
-                  <td>Milho</td>
-                  <td>36 ha</td>
-                  <td>112 sc/ha</td>
-                  <td class="good">Acima da média</td>
-                </tr>
-                <tr>
-                  <td>Talhão 3</td>
-                  <td>Arroz</td>
-                  <td>18 ha</td>
-                  <td>44 sc/ha</td>
-                  <td class="warn">Atenção</td>
-                </tr>
-                <tr>
-                  <td>Talhão 4</td>
-                  <td>Soja</td>
-                  <td>22 ha</td>
-                  <td>47 sc/ha</td>
-                  <td class="bad">Abaixo da meta</td>
-                </tr>
+                <tr><td>Talhão 1</td><td>Soja</td><td>35 ha</td><td>59 sc/ha</td><td class="good">Dentro da meta</td></tr>
+                <tr><td>Talhão 2</td><td>Milho</td><td>36 ha</td><td>112 sc/ha</td><td class="good">Acima da média</td></tr>
+                <tr><td>Talhão 3</td><td>Arroz</td><td>18 ha</td><td>44 sc/ha</td><td class="warn">Atenção</td></tr>
+                <tr><td>Talhão 4</td><td>Soja</td><td>22 ha</td><td>47 sc/ha</td><td class="bad">Abaixo da meta</td></tr>
               </tbody>
             </table>
           </div>
@@ -1159,28 +1060,15 @@
             </div>
 
             <div class="ai-list">
-              <div class="ai-item">
-                <div class="ai-bullet">✓</div>
-                <p>O estoque de ureia cobre apenas mais 12 dias no ritmo atual de consumo.</p>
-              </div>
-              <div class="ai-item">
-                <div class="ai-bullet">✓</div>
-                <p>Faltam cerca de 180 sacas de soja vendidas para cobrir o custo atual da safra.</p>
-              </div>
-              <div class="ai-item">
-                <div class="ai-bullet">✓</div>
-                <p>O Talhão 2 está 15% acima da média de produtividade da propriedade.</p>
-              </div>
-              <div class="ai-item">
-                <div class="ai-bullet">✓</div>
-                <p>A participação da equipe na safra está estimada em R$ 42.000 no cenário atual.</p>
-              </div>
+              <div class="ai-item"><div class="ai-bullet">✓</div><p>O estoque de ureia cobre apenas mais 12 dias no ritmo atual de consumo.</p></div>
+              <div class="ai-item"><div class="ai-bullet">✓</div><p>Faltam cerca de 180 sacas de soja vendidas para cobrir o custo atual da safra.</p></div>
+              <div class="ai-item"><div class="ai-bullet">✓</div><p>O Talhão 2 está 15% acima da média de produtividade da propriedade.</p></div>
+              <div class="ai-item"><div class="ai-bullet">✓</div><p>A participação da equipe na safra está estimada em R$ 42.000 no cenário atual.</p></div>
             </div>
           </div>
         </section>
       </section>
 
-      <!-- OPERAÇÕES -->
       <section id="page-operacoes" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1203,36 +1091,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Pulverização</td>
-                <td>Talhão 3</td>
-                <td>João</td>
-                <td>Pulverizador Jacto</td>
-                <td class="good">Em andamento</td>
-                <td>12/03/2026</td>
-              </tr>
-              <tr>
-                <td>Adubação</td>
-                <td>Talhão 1</td>
-                <td>Pedro</td>
-                <td>JD 6110</td>
-                <td class="warn">Pendente</td>
-                <td>12/03/2026</td>
-              </tr>
-              <tr>
-                <td>Plantio</td>
-                <td>Talhão 2</td>
-                <td>Carlos</td>
-                <td>Plantadeira 01</td>
-                <td class="good">Em andamento</td>
-                <td>11/03/2026</td>
-              </tr>
+              <tr><td>Pulverização</td><td>Talhão 3</td><td>João</td><td>Pulverizador Jacto</td><td class="good">Em andamento</td><td>12/03/2026</td></tr>
+              <tr><td>Adubação</td><td>Talhão 1</td><td>Pedro</td><td>JD 6110</td><td class="warn">Pendente</td><td>12/03/2026</td></tr>
+              <tr><td>Plantio</td><td>Talhão 2</td><td>Carlos</td><td>Plantadeira 01</td><td class="good">Em andamento</td><td>11/03/2026</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- TALHÕES -->
       <section id="page-talhoes" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1255,36 +1121,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Talhão 1</td>
-                <td>35 ha</td>
-                <td>Soja</td>
-                <td>59 sc/ha</td>
-                <td>R$ 182.000</td>
-                <td class="good">+ R$ 28.400</td>
-              </tr>
-              <tr>
-                <td>Talhão 2</td>
-                <td>36 ha</td>
-                <td>Milho</td>
-                <td>112 sc/ha</td>
-                <td>R$ 98.000</td>
-                <td class="good">+ R$ 18.900</td>
-              </tr>
-              <tr>
-                <td>Talhão 3</td>
-                <td>18 ha</td>
-                <td>Arroz</td>
-                <td>44 sc/ha</td>
-                <td>R$ 87.000</td>
-                <td class="bad">- R$ 9.600</td>
-              </tr>
+              <tr><td>Talhão 1</td><td>35 ha</td><td>Soja</td><td>59 sc/ha</td><td>R$ 182.000</td><td class="good">+ R$ 28.400</td></tr>
+              <tr><td>Talhão 2</td><td>36 ha</td><td>Milho</td><td>112 sc/ha</td><td>R$ 98.000</td><td class="good">+ R$ 18.900</td></tr>
+              <tr><td>Talhão 3</td><td>18 ha</td><td>Arroz</td><td>44 sc/ha</td><td>R$ 87.000</td><td class="bad">- R$ 9.600</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- MÁQUINAS -->
       <section id="page-maquinas" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1306,33 +1150,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>JD 6110</td>
-                <td>Trator</td>
-                <td>2.392 h</td>
-                <td class="good">Operando</td>
-                <td>8 L/h</td>
-              </tr>
-              <tr>
-                <td>Pulverizador Jacto</td>
-                <td>Pulverização</td>
-                <td>981 h</td>
-                <td class="warn">Atenção</td>
-                <td>5 L/h</td>
-              </tr>
-              <tr>
-                <td>Plantadeira 01</td>
-                <td>Plantio</td>
-                <td>644 h</td>
-                <td class="good">Ok</td>
-                <td>—</td>
-              </tr>
+              <tr><td>JD 6110</td><td>Trator</td><td>2.392 h</td><td class="good">Operando</td><td>8 L/h</td></tr>
+              <tr><td>Pulverizador Jacto</td><td>Pulverização</td><td>981 h</td><td class="warn">Atenção</td><td>5 L/h</td></tr>
+              <tr><td>Plantadeira 01</td><td>Plantio</td><td>644 h</td><td class="good">Ok</td><td>—</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- FUNCIONÁRIOS -->
       <section id="page-funcionarios" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1354,27 +1179,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>João</td>
-                <td>Tratorista</td>
-                <td>R$ 3.200</td>
-                <td>2% da safra</td>
-                <td class="good">Ativo</td>
-              </tr>
-              <tr>
-                <td>Pedro</td>
-                <td>Capataz</td>
-                <td>R$ 4.500</td>
-                <td>3% da safra</td>
-                <td class="good">Ativo</td>
-              </tr>
-              <tr>
-                <td>Carlos</td>
-                <td>Pulverizador</td>
-                <td>R$ 2.900</td>
-                <td>1,5% da safra</td>
-                <td class="warn">Pausado</td>
-              </tr>
+              <tr><td>João</td><td>Tratorista</td><td>R$ 3.200</td><td>2% da safra</td><td class="good">Ativo</td></tr>
+              <tr><td>Pedro</td><td>Capataz</td><td>R$ 4.500</td><td>3% da safra</td><td class="good">Ativo</td></tr>
+              <tr><td>Carlos</td><td>Pulverizador</td><td>R$ 2.900</td><td>1,5% da safra</td><td class="warn">Pausado</td></tr>
             </tbody>
           </table>
         </div>
@@ -1424,7 +1231,6 @@
         </div>
       </section>
 
-      <!-- ESTOQUE -->
       <section id="page-estoque" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1447,36 +1253,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Ureia</td>
-                <td>12</td>
-                <td>sacas</td>
-                <td>R$ 145,00</td>
-                <td>R$ 1.740,00</td>
-                <td class="bad">Crítico</td>
-              </tr>
-              <tr>
-                <td>Herbicida X</td>
-                <td>50</td>
-                <td>L</td>
-                <td>R$ 48,00</td>
-                <td>R$ 2.400,00</td>
-                <td class="good">Normal</td>
-              </tr>
-              <tr>
-                <td>Soja variedade Y</td>
-                <td>29</td>
-                <td>bags</td>
-                <td>R$ 280,00</td>
-                <td>R$ 8.120,00</td>
-                <td class="warn">Atenção</td>
-              </tr>
+              <tr><td>Ureia</td><td>12</td><td>sacas</td><td>R$ 145,00</td><td>R$ 1.740,00</td><td class="bad">Crítico</td></tr>
+              <tr><td>Herbicida X</td><td>50</td><td>L</td><td>R$ 48,00</td><td>R$ 2.400,00</td><td class="good">Normal</td></tr>
+              <tr><td>Soja variedade Y</td><td>29</td><td>bags</td><td>R$ 280,00</td><td>R$ 8.120,00</td><td class="warn">Atenção</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- MERCADO -->
       <section id="page-mercado" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1498,7 +1282,6 @@
         </div>
       </section>
 
-      <!-- FINANCEIRO -->
       <section id="page-financeiro" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1510,22 +1293,10 @@
           </div>
 
           <div class="finance-grid">
-            <div class="finance-box">
-              <small>Custo atual da safra</small>
-              <strong>R$ 725.800</strong>
-            </div>
-            <div class="finance-box">
-              <small>Receita já realizada</small>
-              <strong>R$ 630.000</strong>
-            </div>
-            <div class="finance-box">
-              <small>Saldo atual</small>
-              <strong class="bad">- R$ 95.800</strong>
-            </div>
-            <div class="finance-box">
-              <small>Falta para empatar</small>
-              <strong>180 sc</strong>
-            </div>
+            <div class="finance-box"><small>Custo atual da safra</small><strong>R$ 725.800</strong></div>
+            <div class="finance-box"><small>Receita já realizada</small><strong>R$ 630.000</strong></div>
+            <div class="finance-box"><small>Saldo atual</small><strong class="bad">- R$ 95.800</strong></div>
+            <div class="finance-box"><small>Falta para empatar</small><strong>180 sc</strong></div>
           </div>
 
           <table>
@@ -1540,44 +1311,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Soja</td>
-                <td>5.200 sc</td>
-                <td>2.400 sc</td>
-                <td>R$ 308.400</td>
-                <td>R$ 355.000</td>
-                <td class="bad">- R$ 46.600</td>
-              </tr>
-              <tr>
-                <td>Arroz</td>
-                <td>2.100 sc</td>
-                <td>1.300 sc</td>
-                <td>R$ 143.390</td>
-                <td>R$ 170.800</td>
-                <td class="bad">- R$ 27.410</td>
-              </tr>
-              <tr>
-                <td>Milho</td>
-                <td>1.850 sc</td>
-                <td>1.100 sc</td>
-                <td>R$ 61.820</td>
-                <td>R$ 58.000</td>
-                <td class="good">+ R$ 3.820</td>
-              </tr>
-              <tr>
-                <td>Gado</td>
-                <td>64 @</td>
-                <td>47 @</td>
-                <td>R$ 116.390</td>
-                <td>R$ 142.000</td>
-                <td class="bad">- R$ 25.610</td>
-              </tr>
+              <tr><td>Soja</td><td>5.200 sc</td><td>2.400 sc</td><td>R$ 308.400</td><td>R$ 355.000</td><td class="bad">- R$ 46.600</td></tr>
+              <tr><td>Arroz</td><td>2.100 sc</td><td>1.300 sc</td><td>R$ 143.390</td><td>R$ 170.800</td><td class="bad">- R$ 27.410</td></tr>
+              <tr><td>Milho</td><td>1.850 sc</td><td>1.100 sc</td><td>R$ 61.820</td><td>R$ 58.000</td><td class="good">+ R$ 3.820</td></tr>
+              <tr><td>Gado</td><td>64 @</td><td>47 @</td><td>R$ 116.390</td><td>R$ 142.000</td><td class="bad">- R$ 25.610</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- PRODUTIVIDADE -->
       <section id="page-produtividade" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1599,33 +1341,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Talhão 1</td>
-                <td>Soja</td>
-                <td>59 sc/ha</td>
-                <td>R$ 1.480</td>
-                <td class="good">Boa</td>
-              </tr>
-              <tr>
-                <td>Talhão 2</td>
-                <td>Milho</td>
-                <td>112 sc/ha</td>
-                <td>R$ 1.210</td>
-                <td class="good">Muito boa</td>
-              </tr>
-              <tr>
-                <td>Talhão 3</td>
-                <td>Arroz</td>
-                <td>44 sc/ha</td>
-                <td>R$ 1.690</td>
-                <td class="warn">Atenção</td>
-              </tr>
+              <tr><td>Talhão 1</td><td>Soja</td><td>59 sc/ha</td><td>R$ 1.480</td><td class="good">Boa</td></tr>
+              <tr><td>Talhão 2</td><td>Milho</td><td>112 sc/ha</td><td>R$ 1.210</td><td class="good">Muito boa</td></tr>
+              <tr><td>Talhão 3</td><td>Arroz</td><td>44 sc/ha</td><td>R$ 1.690</td><td class="warn">Atenção</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- IA -->
       <section id="page-ia" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1637,27 +1360,14 @@
           </div>
 
           <div class="ai-list">
-            <div class="ai-item">
-              <div class="ai-bullet">✓</div>
-              <p>Com o custo atual da soja, faltarão aproximadamente 180 sacas para cobrir os custos totais da safra.</p>
-            </div>
-            <div class="ai-item">
-              <div class="ai-bullet">✓</div>
-              <p>O Talhão 4 está abaixo da média e merece revisão de manejo, fertilidade e histórico climático.</p>
-            </div>
-            <div class="ai-item">
-              <div class="ai-bullet">✓</div>
-              <p>A mão de obra representa cerca de 14% do custo atual, dentro de uma faixa considerada controlada.</p>
-            </div>
-            <div class="ai-item">
-              <div class="ai-bullet">✓</div>
-              <p>O estoque de ureia e herbicida indica necessidade de reposição antes da próxima rodada operacional.</p>
-            </div>
+            <div class="ai-item"><div class="ai-bullet">✓</div><p>Com o custo atual da soja, faltarão aproximadamente 180 sacas para cobrir os custos totais da safra.</p></div>
+            <div class="ai-item"><div class="ai-bullet">✓</div><p>O Talhão 4 está abaixo da média e merece revisão de manejo, fertilidade e histórico climático.</p></div>
+            <div class="ai-item"><div class="ai-bullet">✓</div><p>A mão de obra representa cerca de 14% do custo atual, dentro de uma faixa considerada controlada.</p></div>
+            <div class="ai-item"><div class="ai-bullet">✓</div><p>O estoque de ureia e herbicida indica necessidade de reposição antes da próxima rodada operacional.</p></div>
           </div>
         </div>
       </section>
 
-      <!-- RELATÓRIOS -->
       <section id="page-relatorios" class="page">
         <div class="panel">
           <div class="panel-header">
@@ -1669,42 +1379,55 @@
           </div>
 
           <div class="report-grid">
-            <button class="report-btn">
-              <strong>Relatório de Safra</strong>
-              <span>Resumo geral de produção, custos e saldo.</span>
-            </button>
-            <button class="report-btn">
-              <strong>Relatório de Estoque</strong>
-              <span>Itens, consumos, status e valor total.</span>
-            </button>
-            <button class="report-btn">
-              <strong>Financeiro Rural</strong>
-              <span>Custos, vendas, equilíbrio e margem.</span>
-            </button>
-            <button class="report-btn">
-              <strong>Exportar Excel</strong>
-              <span>Planilha para análise detalhada no computador.</span>
-            </button>
+            <button class="report-btn"><strong>Relatório de Safra</strong><span>Resumo geral de produção, custos e saldo.</span></button>
+            <button class="report-btn"><strong>Relatório de Estoque</strong><span>Itens, consumos, status e valor total.</span></button>
+            <button class="report-btn"><strong>Financeiro Rural</strong><span>Custos, vendas, equilíbrio e margem.</span></button>
+            <button class="report-btn"><strong>Exportar Excel</strong><span>Planilha para análise detalhada no computador.</span></button>
           </div>
         </div>
       </section>
 
-      <!-- CONFIGURAÇÕES -->
       <section id="page-configuracoes" class="page">
         <div class="panel">
           <div class="panel-header">
             <div>
               <h3>Configurações</h3>
-              <p>Base inicial de preferências do sistema.</p>
+              <p>Personalização inicial da fazenda e do painel.</p>
             </div>
-            <div class="pill blue">Desktop V2</div>
+            <div class="pill blue">Operante</div>
           </div>
 
-          <div class="info-list">
-            <div class="info-row"><span>Fazenda principal</span><strong>Fazenda Santa Clara</strong></div>
-            <div class="info-row"><span>Safra ativa</span><strong>2026</strong></div>
-            <div class="info-row"><span>Perfil logado</span><strong id="settingsUserRole">Dono</strong></div>
-            <div class="info-row"><span>Status do painel</span><strong class="good">Operacional</strong></div>
+          <div class="two-col">
+            <div class="panel" style="margin:0;">
+              <div class="panel-header">
+                <div>
+                  <h3>Dados da fazenda</h3>
+                  <p>Informações exibidas no dashboard.</p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Nome da fazenda</label>
+                <input id="farmNameInput" placeholder="Ex.: Fazenda Santa Clara">
+              </div>
+
+              <button class="btn-primary" onclick="saveFarmName()">Salvar nome da fazenda</button>
+            </div>
+
+            <div class="panel" style="margin:0;">
+              <div class="panel-header">
+                <div>
+                  <h3>Status do sistema</h3>
+                  <p>Leitura da base desktop atual.</p>
+                </div>
+              </div>
+
+              <div class="info-list">
+                <div class="info-row"><span>Entrada desktop</span><strong>/desktop.html</strong></div>
+                <div class="info-row"><span>Modo atual</span><strong>Desktop completo</strong></div>
+                <div class="info-row"><span>Nome visível no dashboard</span><strong id="currentFarmNameText">Fazenda Santa Clara</strong></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1714,9 +1437,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = "https://xksllcfagvpccvuzwqmg.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabaseClient = window.supabase.createClient(
+      "https://xksllcfagvpccvuzwqmg.supabase.co",
+      "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy"
+    );
+
+    const FARM_NAME_KEY = "agrocontrol_desktop_farm_name";
 
     const loginScreen = document.getElementById("loginScreen");
     const appShell = document.getElementById("appShell");
@@ -1725,7 +1451,10 @@
     const userNameEl = document.getElementById("userName");
     const userRoleEl = document.getElementById("userRole");
     const userAvatarEl = document.getElementById("userAvatar");
-    const settingsUserRole = document.getElementById("settingsUserRole");
+
+    const dashboardFarmName = document.getElementById("dashboardFarmName");
+    const farmNameInput = document.getElementById("farmNameInput");
+    const currentFarmNameText = document.getElementById("currentFarmNameText");
 
     function showError(message){
       loginError.textContent = message;
@@ -1744,14 +1473,38 @@
       return "Usuário";
     }
 
+    function applyFarmName(name){
+      const farmName = (name || "Fazenda Santa Clara").trim();
+      dashboardFarmName.textContent = farmName;
+      farmNameInput.value = farmName;
+      currentFarmNameText.textContent = farmName;
+    }
+
+    function loadFarmName(){
+      const stored = localStorage.getItem(FARM_NAME_KEY);
+      applyFarmName(stored || "Fazenda Santa Clara");
+    }
+
+    function saveFarmName(){
+      const name = farmNameInput.value.trim();
+      if(!name){
+        alert("Digita o nome da fazenda.");
+        return;
+      }
+      localStorage.setItem(FARM_NAME_KEY, name);
+      applyFarmName(name);
+      alert("Nome da fazenda salvo.");
+    }
+
     function showApp(perfil){
       const name = perfil?.nome || "Usuário";
       const role = roleLabel(perfil?.perfil || "dono");
 
       userNameEl.textContent = name;
       userRoleEl.textContent = role;
-      settingsUserRole.textContent = role;
       userAvatarEl.textContent = (name || "U").trim().charAt(0).toUpperCase();
+
+      loadFarmName();
 
       loginScreen.classList.add("hidden");
       appShell.classList.remove("hidden");
@@ -1760,6 +1513,8 @@
     function showLogin(){
       appShell.classList.add("hidden");
       loginScreen.classList.remove("hidden");
+      document.getElementById("loginPassword").value = "";
+      hideError();
     }
 
     async function desktopLogin(){
@@ -1805,33 +1560,7 @@
 
     async function desktopLogout(){
       await supabaseClient.auth.signOut();
-      document.getElementById("loginEmail").value = "";
-      document.getElementById("loginPassword").value = "";
       showLogin();
-    }
-
-    async function checkDesktopSession(){
-      const { data, error } = await supabaseClient.auth.getSession();
-
-      if(error || !data.session){
-        showLogin();
-        return;
-      }
-
-      const user = data.session.user;
-
-      const { data: perfil, error: perfilError } = await supabaseClient
-        .from("perfis")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if(perfilError || !perfil){
-        showLogin();
-        return;
-      }
-
-      showApp(perfil);
     }
 
     document.querySelectorAll(".menu-item").forEach(item => {
@@ -1848,7 +1577,16 @@
       });
     });
 
-    checkDesktopSession();
+    document.getElementById("desktopSearch").addEventListener("input", (e) => {
+      const term = e.target.value.trim().toLowerCase();
+      document.querySelectorAll("table tbody tr").forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(term) ? "" : "none";
+      });
+    });
+
+    showLogin();
+    loadFarmName();
   </script>
 </body>
 </html>
