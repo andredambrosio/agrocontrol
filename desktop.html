@@ -6,1141 +6,1423 @@
   <title>AgroControl Desktop</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root {
-      --bg: #0a1010;
-      --panel: rgba(14, 21, 21, 0.88);
-      --panel-solid: #101818;
-      --panel-soft: #142020;
-      --stroke: rgba(255,255,255,0.08);
-      --stroke-strong: rgba(255,255,255,0.14);
-      --text: #eef7f1;
-      --muted: #a5b8ae;
-      --green: #4ec27f;
-      --green-2: #2f9f63;
-      --red: #d85d5d;
-      --yellow: #d5b65a;
-      --blue: #59a8ff;
-      --shadow: 0 18px 60px rgba(0,0,0,0.38);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --login-bg: url("assets/colheitadeira-login.jpg");
-      --sidebar-width: 280px;
-      --header-height: 82px;
-      --transition: all .22s ease;
+    :root{
+      --bg:#0b0f0d;
+      --bg-2:#0f1412;
+      --panel:#121816;
+      --panel-2:#171e1b;
+      --line:rgba(255,255,255,.08);
+      --line-2:rgba(255,255,255,.12);
+      --text:#f3f6f4;
+      --muted:#aeb7b2;
+      --green:#61c26a;
+      --green-2:#4dae58;
+      --yellow:#d7a24d;
+      --orange:#df8a4f;
+      --red:#cf5f5f;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:18px;
+      --radius-lg:24px;
+      --sidebar-w:260px;
+      --topbar-h:54px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+    body{min-height:100vh;overflow:hidden}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
 
-    html, body {
-      margin: 0;
-      padding: 0;
+    .app{display:none;height:100vh;width:100vw;background:#0b0f0d}
+    .app.active{display:block}
+
+    /* LOGIN */
+    .login-screen{
+      position:fixed;
+      inset:0;
       background:
-        radial-gradient(circle at top left, rgba(78,194,127,.10), transparent 25%),
-        radial-gradient(circle at bottom right, rgba(89,168,255,.08), transparent 24%),
-        var(--bg);
-      color: var(--text);
-      font-family: Inter, "Segoe UI", Arial, sans-serif;
-      min-height: 100%;
+        linear-gradient(90deg, rgba(0,0,0,.68) 0%, rgba(0,0,0,.38) 34%, rgba(0,0,0,.18) 62%, rgba(0,0,0,.22) 100%),
+        url("hero_bg_crop.png") center center / cover no-repeat;
+      display:flex;
+      align-items:flex-start;
+      justify-content:flex-start;
+      padding:88px 0 0 86px;
+      z-index:100;
     }
 
-    body {
-      min-height: 100vh;
-      overflow: hidden;
+    .login-logo-top{
+      position:absolute;
+      top:54px;
+      left:84px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-weight:800;
+      font-size:42px;
+      letter-spacing:-.02em;
+      color:#fff;
+      text-shadow:0 2px 20px rgba(0,0,0,.28);
     }
 
-    button, input, select, textarea {
-      font: inherit;
+    .logo-mark{
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      border:4px solid var(--green);
+      position:relative;
+      flex:none;
+      box-shadow:0 0 0 2px rgba(0,0,0,.2) inset;
     }
 
-    button {
-      cursor: pointer;
-      border: 0;
-      transition: var(--transition);
+    .logo-mark:before,
+    .logo-mark:after{
+      content:"";
+      position:absolute;
+      border-radius:999px;
+      background:var(--green);
+      transform-origin:center;
     }
 
-    input, select, textarea {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
-      outline: none;
+    .logo-mark:before{
+      width:28px;
+      height:5px;
+      left:4px;
+      top:16px;
+      transform:rotate(34deg);
     }
 
-    input::placeholder, textarea::placeholder {
-      color: #8ea295;
+    .logo-mark:after{
+      width:20px;
+      height:5px;
+      left:11px;
+      top:22px;
+      transform:rotate(-32deg);
     }
 
-    input:focus, select:focus, textarea:focus {
-      border-color: rgba(78,194,127,.45);
-      box-shadow: 0 0 0 4px rgba(78,194,127,.12);
-    }
-
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .app-shell {
-      display: none;
-      width: 100%;
-      height: 100vh;
-      grid-template-columns: var(--sidebar-width) 1fr;
+    .login-card{
+      width:390px;
+      min-height:470px;
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0)),
-        transparent;
+        linear-gradient(180deg, rgba(23,27,29,.80), rgba(15,17,19,.84));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      padding:36px 32px 24px;
+      margin-top:88px;
+      position:relative;
+    }
+
+    .login-brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:28px;
+      font-weight:800;
+      margin-bottom:28px;
+    }
+
+    .login-brand .logo-mark{width:34px;height:34px;border-width:3px}
+    .login-brand .logo-mark:before{width:22px;left:3px;top:12px}
+    .login-brand .logo-mark:after{width:15px;left:9px;top:17px}
+
+    .login-status{
+      margin:0 0 14px;
+    }
+
+    .notice{
+      border-radius:16px;
+      padding:14px 16px;
+      font-size:14px;
+      line-height:1.45;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      color:#dce6df;
+    }
+    .notice.success{
+      background:linear-gradient(180deg, rgba(73,155,81,.18), rgba(41,92,47,.18));
+      border-color:rgba(97,194,106,.25);
+    }
+    .notice.error{
+      background:rgba(176,68,68,.16);
+      border-color:rgba(207,95,95,.25);
+    }
+    .notice.warn{
+      background:rgba(196,140,62,.14);
+      border-color:rgba(215,162,77,.25);
+    }
+
+    .form-group{margin-bottom:14px}
+    .label{
+      font-weight:700;
+      font-size:14px;
+      color:#eef2ef;
+      margin:0 0 8px;
+      display:block;
+    }
+
+    .input-wrap{
+      position:relative;
+    }
+
+    .input-wrap input{
+      width:100%;
+      height:58px;
+      background:rgba(14,17,18,.58);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.10);
+      outline:none;
+      border-radius:10px;
+      padding:0 48px 0 44px;
+      font-size:18px;
+    }
+
+    .input-wrap input::placeholder{
+      color:#b7c0ba;
+    }
+
+    .input-wrap input:focus{
+      border-color:rgba(97,194,106,.42);
+      box-shadow:0 0 0 4px rgba(97,194,106,.10);
+    }
+
+    .input-icon-left,
+    .input-icon-right{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      color:#d6ddd8;
+      opacity:.95;
+      font-size:18px;
+      line-height:1;
+      pointer-events:none;
     }
 
-    .app-shell.active {
-      display: grid;
-    }
-
-    .sidebar {
-      background: linear-gradient(180deg, rgba(13,19,19,.98), rgba(10,15,15,.94));
-      border-right: 1px solid var(--stroke);
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      overflow-y: auto;
-    }
-
-    .brand {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--stroke);
-      border-radius: 24px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    .brand-title {
-      font-size: 1.2rem;
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-
-    .brand-subtitle {
-      color: var(--muted);
-      margin-top: 6px;
-      font-size: .92rem;
-    }
-
-    .farm-badge {
-      margin-top: 14px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(78,194,127,.12);
-      color: #dcf7e7;
-      font-size: .9rem;
-      border: 1px solid rgba(78,194,127,.16);
-    }
-
-    .nav-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .nav-title {
-      color: #7f9389;
-      text-transform: uppercase;
-      font-size: .72rem;
-      letter-spacing: .12em;
-      padding: 4px 8px;
-    }
-
-    .nav-btn {
-      text-align: left;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: transparent;
-      color: #d7e5dc;
-      border: 1px solid transparent;
-      font-weight: 600;
-    }
-
-    .nav-btn:hover {
-      background: rgba(255,255,255,.04);
-      border-color: var(--stroke);
-    }
-
-    .nav-btn.active {
-      background: linear-gradient(180deg, rgba(78,194,127,.18), rgba(78,194,127,.08));
-      border-color: rgba(78,194,127,.28);
-      color: #effff5;
-    }
-
-    .sidebar-bottom {
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .session-card {
-      padding: 14px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.03);
-      border: 1px solid var(--stroke);
-      color: var(--muted);
-      font-size: .9rem;
-    }
-
-    .danger-btn,
-    .ghost-btn,
-    .primary-btn,
-    .soft-btn {
-      border-radius: 14px;
-      padding: 13px 16px;
-      font-weight: 700;
-    }
-
-    .primary-btn {
-      background: linear-gradient(180deg, var(--green), var(--green-2));
-      color: #07110b;
-      box-shadow: 0 10px 30px rgba(78,194,127,.25);
-    }
-
-    .primary-btn:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.04);
-    }
-
-    .soft-btn {
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-      border: 1px solid var(--stroke);
-    }
-
-    .soft-btn:hover {
-      background: rgba(255,255,255,.08);
-    }
-
-    .ghost-btn {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--stroke);
-    }
-
-    .ghost-btn:hover {
-      background: rgba(255,255,255,.04);
-    }
-
-    .danger-btn {
-      background: rgba(216,93,93,.10);
-      color: #ffdede;
-      border: 1px solid rgba(216,93,93,.18);
-    }
-
-    .danger-btn:hover {
-      background: rgba(216,93,93,.16);
-    }
-
-    .main-area {
-      display: grid;
-      grid-template-rows: var(--header-height) 1fr;
-      min-width: 0;
-      min-height: 100vh;
-    }
-
-    .topbar {
-      border-bottom: 1px solid var(--stroke);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 24px;
-      gap: 18px;
-      background: rgba(10,16,16,.72);
-      backdrop-filter: blur(14px);
-      position: sticky;
-      top: 0;
-      z-index: 20;
-    }
-
-    .topbar h1 {
-      margin: 0;
-      font-size: 1.25rem;
-      font-weight: 800;
-    }
-
-    .topbar p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: .92rem;
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .top-pill {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--stroke);
-      color: var(--muted);
-      white-space: nowrap;
-      font-size: .9rem;
-    }
-
-    .content-area {
-      overflow: auto;
-      padding: 24px;
-    }
-
-    .view {
-      display: none;
-      animation: fadeIn .18s ease;
-    }
-
-    .view.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .grid-cards {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-      margin-bottom: 24px;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--stroke);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-    }
-
-    .metric-card {
-      padding: 18px;
-      min-height: 132px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .metric-title {
-      color: var(--muted);
-      font-size: .9rem;
-    }
-
-    .metric-value {
-      font-size: 1.8rem;
-      font-weight: 800;
-      letter-spacing: -.02em;
-      margin-top: 8px;
-    }
-
-    .metric-foot {
-      font-size: .86rem;
-      color: #b8c8c0;
-      margin-top: 8px;
-    }
-
-    .section {
-      margin-top: 18px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin: 0;
-    }
-
-    .section-subtitle {
-      color: var(--muted);
-      margin-top: 4px;
-      font-size: .9rem;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .search-input {
-      max-width: 320px;
-    }
-
-    .panel {
-      padding: 18px;
-    }
-
-    .table-wrap {
-      overflow: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 980px;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 14px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      font-size: .94rem;
-    }
-
-    th {
-      color: #9fb0a7;
-      font-size: .82rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      position: sticky;
-      top: 0;
-      background: rgba(16,24,24,.98);
-      z-index: 1;
-    }
-
-    td {
-      color: #edf5f0;
-      vertical-align: top;
-    }
-
-    tr:hover td {
-      background: rgba(255,255,255,.02);
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: .8rem;
-      font-weight: 700;
-      border: 1px solid transparent;
-      white-space: nowrap;
-    }
-
-    .tag.green { background: rgba(78,194,127,.12); color: #dff9e8; border-color: rgba(78,194,127,.2); }
-    .tag.red { background: rgba(216,93,93,.12); color: #ffdede; border-color: rgba(216,93,93,.2); }
-    .tag.yellow { background: rgba(213,182,90,.12); color: #fff3c8; border-color: rgba(213,182,90,.2); }
-    .tag.blue { background: rgba(89,168,255,.12); color: #ddecff; border-color: rgba(89,168,255,.2); }
-
-    .row-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .mini-btn {
-      padding: 9px 12px;
-      border-radius: 12px;
-      font-size: .84rem;
-      font-weight: 700;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-    }
-
-    .mini-btn:hover {
-      background: rgba(255,255,255,.08);
-    }
-
-    .split-grid {
-      display: grid;
-      grid-template-columns: 1.4fr .9fr;
-      gap: 18px;
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .three-col {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .notice {
-      padding: 14px 16px;
-      border-radius: 16px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .notice.success {
-      background: rgba(78,194,127,.12);
-      border-color: rgba(78,194,127,.22);
-      color: #dbf9e7;
-    }
-
-    .notice.error {
-      background: rgba(216,93,93,.12);
-      border-color: rgba(216,93,93,.22);
-      color: #ffdede;
-    }
-
-    .notice.warn {
-      background: rgba(213,182,90,.12);
-      border-color: rgba(213,182,90,.22);
-      color: #fff2c6;
-    }
-
-    .empty-state {
-      padding: 24px;
-      border-radius: 18px;
-      border: 1px dashed rgba(255,255,255,.12);
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .login-screen {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
+    .input-icon-left{left:14px}
+    .input-icon-right{right:14px}
+
+    .login-btn{
+      width:124px;
+      height:44px;
+      margin:18px auto 12px;
+      display:block;
+      border:none;
+      border-radius:6px;
+      background:linear-gradient(180deg, #57b85f, #419c49);
+      color:white;
+      font-weight:800;
+      font-size:14px;
+      letter-spacing:.04em;
+      box-shadow:0 8px 24px rgba(73,155,81,.28);
+      text-transform:uppercase;
+    }
+
+    .login-btn:hover{filter:brightness(1.05)}
+
+    .login-checks{
+      margin-top:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      font-size:15px;
+      color:#d8dfda;
+    }
+
+    .check-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+    }
+
+    .check-row input{
+      width:18px;
+      height:18px;
+      accent-color:var(--green);
+      cursor:pointer;
+    }
+
+    .recover-link{
+      background:none;
+      border:none;
+      color:#d8dfda;
+      padding:0;
+      font-size:15px;
+      text-align:left;
+      font-weight:500;
+    }
+
+    .recover-link:hover{
+      color:#fff;
+      text-decoration:underline;
+    }
+
+    .continue-btn{
+      width:100%;
+      height:48px;
+      margin-top:14px;
+      background:rgba(255,255,255,.06);
+      color:#f4f6f5;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      font-weight:700;
+    }
+
+    .continue-btn:hover{background:rgba(255,255,255,.10)}
+
+    .recover-box{
+      margin-top:16px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+      padding:14px;
+    }
+
+    .recover-box h4{
+      margin:0 0 8px;
+      font-size:15px;
+    }
+
+    .recover-box p{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .recover-actions{
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .sub-btn{
+      flex:1;
+      height:42px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:#fff;
+      font-weight:700;
+    }
+
+    .sub-btn.green{
+      background:linear-gradient(180deg, #57b85f, #419c49);
+      border:none;
+    }
+
+    .login-footer{
+      position:absolute;
+      left:32px;
+      right:32px;
+      bottom:18px;
+      text-align:left;
+      color:#c6cec9;
+      font-size:13px;
+      opacity:.88;
+    }
+
+    /* DASHBOARD */
+    .dashboard{
+      display:grid;
+      grid-template-columns:var(--sidebar-w) 1fr;
+      grid-template-rows:var(--topbar-h) 1fr;
+      height:100vh;
+      width:100vw;
+      background:#0b0f0d;
+    }
+
+    .sidebar{
+      grid-row:1 / span 2;
+      grid-column:1;
       background:
-        linear-gradient(120deg, rgba(4,8,8,.82), rgba(4,8,8,.55)),
-        linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.72)),
-        var(--login-bg),
-        radial-gradient(circle at center, #12201d, #081010 75%);
-      background-size: cover;
-      background-position: center;
-      z-index: 100;
+        radial-gradient(circle at top left, rgba(73,155,81,.16), transparent 24%),
+        linear-gradient(180deg, #111613, #0e1311);
+      border-right:1px solid var(--line);
+      display:flex;
+      flex-direction:column;
+      min-width:0;
     }
 
-    .login-screen.hidden {
-      display: none !important;
+    .sidebar-brand{
+      height:84px;
+      padding:18px 20px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:23px;
+      font-weight:800;
+      border-bottom:1px solid var(--line);
     }
 
-    .login-left {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      align-items: flex-end;
-      padding: 42px;
+    .sidebar-brand .logo-mark{
+      width:32px;height:32px;border-width:3px
+    }
+    .sidebar-brand .logo-mark:before{width:20px;left:3px;top:11px}
+    .sidebar-brand .logo-mark:after{width:14px;left:8px;top:16px}
+
+    .sidebar-nav{
+      padding:16px 12px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
     }
 
-    .hero-box {
-      max-width: 680px;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border: 1px solid rgba(255,255,255,.10);
-      backdrop-filter: blur(10px);
-      border-radius: 28px;
-      padding: 28px;
-      box-shadow: var(--shadow);
+    .nav-title{
+      color:#7f8a84;
+      font-size:12px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      padding:10px 14px 6px;
     }
 
-    .hero-kicker {
-      display: inline-flex;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(78,194,127,.12);
-      color: #dcf7e7;
-      border: 1px solid rgba(78,194,127,.18);
-      font-size: .82rem;
-      font-weight: 700;
-      margin-bottom: 16px;
+    .nav-btn{
+      position:relative;
+      width:100%;
+      height:48px;
+      border:none;
+      border-radius:10px;
+      background:transparent;
+      color:#e9efeb;
+      text-align:left;
+      padding:0 16px 0 18px;
+      font-size:17px;
+      display:flex;
+      align-items:center;
+      gap:12px;
     }
 
-    .hero-box h2 {
-      margin: 0;
-      font-size: 2.35rem;
-      line-height: 1.05;
-      max-width: 520px;
+    .nav-btn.active{
+      background:linear-gradient(90deg, rgba(82,154,65,.46), rgba(82,154,65,.16));
+      color:#fff;
+      box-shadow:inset 0 0 0 1px rgba(97,194,106,.16);
     }
 
-    .hero-box p {
-      margin: 16px 0 0;
-      color: #d0ddd5;
-      max-width: 520px;
-      line-height: 1.6;
-      font-size: 1rem;
+    .nav-btn.active::before{
+      content:"";
+      position:absolute;
+      left:-12px;
+      top:0;
+      bottom:0;
+      width:6px;
+      border-radius:0 6px 6px 0;
+      background:#54c15b;
     }
 
-    .hero-stats {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 22px;
+    .nav-icon{
+      width:18px;
+      text-align:center;
+      opacity:.95;
+      font-size:16px;
     }
 
-    .hero-stat {
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      min-width: 140px;
+    .sidebar-user{
+      margin-top:auto;
+      border-top:1px solid var(--line);
+      padding:14px 14px 16px;
     }
 
-    .hero-stat strong {
-      display: block;
-      font-size: 1.05rem;
+    .user-card{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
 
-    .hero-stat span {
-      color: #adc0b6;
-      font-size: .88rem;
+    .user-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
     }
 
-    .login-right {
-      width: min(520px, 100%);
-      padding: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .avatar{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      background:linear-gradient(180deg,#3a403d,#1d221f);
+      border:1px solid rgba(255,255,255,.12);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
     }
 
-    .login-card {
-      width: 100%;
-      max-width: 440px;
-      background: linear-gradient(180deg, rgba(10,16,16,.82), rgba(10,16,16,.92));
-      border: 1px solid rgba(255,255,255,.10);
-      backdrop-filter: blur(14px);
-      border-radius: 30px;
-      box-shadow: var(--shadow);
-      padding: 28px;
+    .user-text{
+      min-width:0;
     }
 
-    .login-card h1 {
-      margin: 0;
-      font-size: 1.65rem;
-      font-weight: 900;
+    .user-name{
+      font-weight:700;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
-    .login-card .subtitle {
-      color: #b2c2ba;
-      margin-top: 8px;
-      line-height: 1.5;
-      font-size: .95rem;
+    .user-email{
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
-    .login-status {
-      margin-top: 18px;
+    .logout-mini{
+      border:none;
+      background:transparent;
+      color:#d9e1dc;
+      font-size:18px;
+      opacity:.9;
     }
 
-    .login-form {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 22px;
+    .topbar{
+      grid-column:2;
+      grid-row:1;
+      border-bottom:1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(31,37,34,.92), rgba(18,21,20,.94) 44%, rgba(12,14,14,.96));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      gap:12px;
+      overflow:hidden;
     }
 
-    .checkbox-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+    .topbar-left{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      color:#e7ede9;
+      font-size:14px;
+      white-space:nowrap;
+      overflow:auto;
+      scrollbar-width:none;
+    }
+    .topbar-left::-webkit-scrollbar{display:none}
+
+    .top-item{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      position:relative;
+      color:#d8e0db;
     }
 
-    .checkbox {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      user-select: none;
-      color: #d7e5dc;
-      font-size: .95rem;
+    .top-item:not(:last-child)::after{
+      content:"";
+      position:absolute;
+      right:-10px;
+      top:50%;
+      transform:translateY(-50%);
+      width:1px;
+      height:18px;
+      background:rgba(255,255,255,.10);
     }
 
-    .checkbox input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--green);
-      cursor: pointer;
+    .topbar-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex:none;
     }
 
-    .link-btn {
-      background: transparent;
-      padding: 0;
-      color: #cfe9da;
-      font-weight: 700;
-      border: 0;
+    .top-icon-btn{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:transparent;
+      border:none;
+      color:#fff;
+      font-size:15px;
     }
 
-    .link-btn:hover {
-      color: #fff;
-      text-decoration: underline;
+    .profile-pill{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:6px 10px 6px 6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
     }
 
-    .login-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 8px;
+    .profile-pill .avatar{
+      width:34px;height:34px;font-size:12px
     }
 
-    .login-note {
-      margin-top: 18px;
-      color: #8da198;
-      font-size: .88rem;
-      line-height: 1.5;
+    .content{
+      grid-column:2;
+      grid-row:2;
+      overflow:auto;
+      padding:18px 18px 22px;
+      background:#0c100f;
     }
 
-    .recover-box {
-      margin-top: 16px;
-      padding: 16px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
+    .cards-row{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr 1.08fr;
+      gap:14px;
+      margin-bottom:14px;
     }
 
-    .recover-box h3 {
-      margin: 0 0 8px;
-      font-size: 1rem;
+    .metric-card,
+    .panel{
+      background:
+        linear-gradient(180deg, rgba(23,29,27,.98), rgba(16,20,18,.98));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      box-shadow:var(--shadow);
     }
 
-    .recover-box p {
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: .92rem;
-      line-height: 1.5;
+    .metric-card{
+      min-height:108px;
+      padding:18px 18px 14px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+      overflow:hidden;
     }
 
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(4,7,7,.62);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 120;
+    .metric-card.greenish{
+      background:
+        radial-gradient(circle at top right, rgba(83,162,87,.20), transparent 24%),
+        linear-gradient(180deg, rgba(26,34,28,.98), rgba(17,21,19,.98));
     }
 
-    .modal-backdrop.active {
-      display: flex;
+    .metric-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
     }
 
-    .modal {
-      width: min(880px, 100%);
-      max-height: 90vh;
-      overflow: auto;
-      background: linear-gradient(180deg, rgba(13,20,20,.98), rgba(10,16,16,.98));
-      border: 1px solid var(--stroke-strong);
-      border-radius: 26px;
-      box-shadow: var(--shadow);
-      padding: 22px;
+    .metric-title{
+      font-weight:700;
+      font-size:17px;
+      margin-bottom:10px;
     }
 
-    .modal-header {
-      display: flex;
-      align-items: start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 18px;
+    .metric-sub{
+      color:#bdd8bd;
+      font-size:13px;
+      display:flex;
+      align-items:center;
+      gap:6px;
     }
 
-    .modal-header h3 {
-      margin: 0;
-      font-size: 1.2rem;
+    .metric-value{
+      position:absolute;
+      right:18px;
+      bottom:16px;
+      font-size:52px;
+      line-height:1;
+      color:#7ccd61;
+      font-weight:300;
     }
 
-    .modal-header p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: .92rem;
+    .metric-value.orange{color:#f0b04d}
+    .metric-value.red{color:#ef8e5f}
+
+    .weather-card{
+      min-height:108px;
+      border-radius:14px;
+      overflow:hidden;
+      position:relative;
+      background:
+        linear-gradient(90deg, rgba(14,17,16,.68), rgba(14,17,16,.38)),
+        url("small_climate_crop.png") center center / cover no-repeat;
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+    .weather-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,.14), rgba(0,0,0,.30));
     }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .weather-inner{
+      position:relative;
+      z-index:1;
+      padding:16px 18px;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
 
-    .form-group.full {
-      grid-column: 1 / -1;
+    .weather-title{
+      font-size:18px;
+      font-weight:700;
+      margin-bottom:12px;
     }
 
-    label {
-      font-size: .9rem;
-      color: #dbe7e0;
-      font-weight: 700;
+    .weather-lines{
+      font-size:14px;
+      line-height:1.7;
+      color:#eef3f0;
     }
 
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 18px;
+    .weather-ok{
+      margin-top:8px;
+      font-weight:800;
+      color:#f3be58;
     }
 
-    .settings-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
+    .weather-ok span{
+      color:#85db75;
+      margin-left:6px;
     }
 
-    .settings-box {
-      padding: 18px;
+    .lower-grid{
+      display:grid;
+      grid-template-columns:1.16fr .84fr 1fr;
+      gap:14px;
     }
 
-    .muted {
-      color: var(--muted);
+    .left-col,
+    .mid-col,
+    .right-col{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      min-width:0;
     }
 
-    .big-value {
-      font-size: 1.45rem;
-      font-weight: 800;
-      margin-top: 8px;
+    .panel{
+      padding:14px 16px 16px;
+      min-width:0;
     }
 
-    .kpi-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 14px;
+    .panel-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
     }
 
-    .kpi-item {
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.03);
-      border: 1px solid var(--stroke);
+    .panel-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:18px;
+      font-weight:800;
     }
 
-    .kpi-item strong {
-      display: block;
-      font-size: 1rem;
-      margin-bottom: 6px;
+    .panel-title .ic{
+      color:#7ecb6c;
     }
 
-    .small {
-      font-size: .88rem;
+    .panel-meta{
+      color:#8d9792;
+      font-size:12px;
     }
 
-    @media (max-width: 1220px) {
-      .grid-cards {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .market-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      row-gap:18px;
+      column-gap:10px;
+    }
+
+    .market-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding-right:8px;
+    }
+
+    .market-name{
+      font-size:19px;
+      color:#edf2ee;
+    }
+
+    .market-price{
+      font-size:18px;
+      font-weight:800;
+      color:#ffffff;
+    }
+
+    .market-price.small-green{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .green-box{
+      width:16px;
+      height:16px;
+      border-radius:4px;
+      background:#53b95a;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+      color:#fff;
+    }
+
+    .climate-list{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      padding-top:4px;
+    }
+
+    .climate-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-size:16px;
+    }
+
+    .climate-item .left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:#e7ede8;
+    }
+
+    .climate-item .val{
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .table-wrap{
+      overflow:auto;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:520px;
+    }
+
+    th,td{
+      padding:11px 10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      text-align:left;
+      font-size:15px;
+      white-space:nowrap;
+    }
+
+    th{
+      color:#8d9792;
+      font-size:13px;
+      font-weight:700;
+      background:rgba(255,255,255,.02);
+    }
+
+    td strong{font-weight:800}
+    .orange-text{color:#df8a4f}
+    .yellow-text{color:#f0b04d}
+    .green-text{color:#83d56b}
+
+    .chart{
+      height:190px;
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      padding:12px 8px 10px;
+      border-top:1px solid rgba(255,255,255,.05);
+      margin-top:6px;
+      position:relative;
+      background:
+        linear-gradient(180deg, transparent 24%, rgba(255,255,255,.04) 24%, rgba(255,255,255,.04) 25%, transparent 25%),
+        linear-gradient(180deg, transparent 49%, rgba(255,255,255,.04) 49%, rgba(255,255,255,.04) 50%, transparent 50%),
+        linear-gradient(180deg, transparent 74%, rgba(255,255,255,.04) 74%, rgba(255,255,255,.04) 75%, transparent 75%);
+    }
+
+    .bar-wrap{
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      align-items:center;
+      gap:8px;
+      width:38px;
+      height:100%;
+    }
+
+    .bar{
+      width:28px;
+      border-radius:4px 4px 0 0;
+      background:linear-gradient(180deg, #71c765, #418b3c);
+      box-shadow:0 8px 20px rgba(83,162,87,.20);
+    }
+
+    .bar-label{
+      font-size:12px;
+      color:#99a39e;
+    }
+
+    .ai-list{
+      list-style:none;
+      padding:0;
+      margin:8px 0 0;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .ai-list li{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      line-height:1.48;
+      color:#ecf2ee;
+      font-size:16px;
+    }
+
+    .check-green{
+      color:#73d060;
+      font-weight:900;
+      margin-top:1px;
+    }
+
+    /* VIEWS */
+    .view{display:none}
+    .view.active{display:block}
+
+    .crud-toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .crud-toolbar input{
+      height:46px;
+      background:#121816;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:12px;
+      padding:0 14px;
+      min-width:260px;
+      outline:none;
+    }
+
+    .crud-btn{
+      height:46px;
+      border:none;
+      border-radius:12px;
+      padding:0 16px;
+      background:#1b2320;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.10);
+      font-weight:700;
+    }
+
+    .crud-btn.primary{
+      background:linear-gradient(180deg, #57b85f, #419c49);
+      border:none;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      border:1px solid transparent;
+    }
+
+    .status-green{background:rgba(73,155,81,.18);color:#dff4e0;border-color:rgba(97,194,106,.22)}
+    .status-yellow{background:rgba(196,140,62,.18);color:#fff0d4;border-color:rgba(215,162,77,.22)}
+    .status-red{background:rgba(176,68,68,.18);color:#ffdcdc;border-color:rgba(207,95,95,.22)}
+    .status-blue{background:rgba(75,127,190,.18);color:#deebff;border-color:rgba(110,154,217,.22)}
+
+    .mini-action{
+      border:none;
+      height:34px;
+      padding:0 12px;
+      border-radius:10px;
+      background:rgba(255,255,255,.05);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      font-weight:700;
+    }
+
+    .section-title-page{
+      font-size:28px;
+      font-weight:800;
+      margin:0 0 6px;
+    }
+
+    .section-subtitle-page{
+      color:#9da7a2;
+      margin:0 0 18px;
+      font-size:15px;
+    }
+
+    /* MODAL */
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:130;
+      padding:20px;
+    }
+
+    .modal-backdrop.active{display:flex}
+
+    .modal{
+      width:min(860px, 100%);
+      background:linear-gradient(180deg, #151b18, #101412);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:20px;
+      max-height:90vh;
+      overflow:auto;
+    }
+
+    .modal-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .modal-title{
+      font-size:22px;
+      font-weight:800;
+      margin:0 0 6px;
+    }
+
+    .modal-subtitle{
+      color:#9da7a2;
+      margin:0;
+      font-size:14px;
+    }
+
+    .modal-close{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      border:none;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      font-size:20px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .form-group-modal{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .form-group-modal.full{grid-column:1/-1}
+
+    .form-group-modal label{
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .form-group-modal input,
+    .form-group-modal select,
+    .form-group-modal textarea{
+      width:100%;
+      min-height:48px;
+      background:#131917;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:12px;
+      padding:12px 14px;
+      outline:none;
+    }
+
+    .form-group-modal textarea{
+      min-height:100px;
+      resize:vertical;
+    }
+
+    .modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    @media (max-width: 1200px){
+      .cards-row{grid-template-columns:1fr 1fr}
+      .lower-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 980px){
+      body{overflow:auto}
+      .login-screen{
+        padding:30px 18px;
+        justify-content:center;
+        align-items:center;
+        background-position:center;
       }
-
-      .split-grid,
-      .settings-grid {
-        grid-template-columns: 1fr;
+      .login-logo-top{
+        left:18px;
+        top:18px;
+        font-size:30px;
       }
-
-      .login-left {
-        display: none;
+      .login-card{
+        margin-top:50px;
+        width:min(430px,100%);
       }
-
-      .login-right {
-        width: 100%;
+      .dashboard{
+        grid-template-columns:1fr;
+        grid-template-rows:auto auto 1fr;
+        height:auto;
+        min-height:100vh;
       }
-    }
-
-    @media (max-width: 920px) {
-      .app-shell.active {
-        grid-template-columns: 1fr;
+      .sidebar{
+        grid-row:1;
+        grid-column:1;
+        width:100%;
+        min-height:auto;
       }
-
-      .sidebar {
-        display: none;
+      .topbar{
+        grid-row:2;
+        grid-column:1;
       }
-
-      .content-area {
-        padding: 18px;
+      .content{
+        grid-row:3;
+        grid-column:1;
       }
-
-      .grid-cards {
-        grid-template-columns: 1fr;
-      }
-
-      .form-grid,
-      .two-col,
-      .three-col {
-        grid-template-columns: 1fr;
-      }
-
-      .topbar {
-        padding: 16px 18px;
-      }
-
-      .topbar-right {
-        flex-wrap: wrap;
-        justify-content: flex-end;
-      }
+      .cards-row{grid-template-columns:1fr}
+      .form-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-  <div id="loginScreen" class="login-screen">
-    <div class="login-left">
-      <div class="hero-box">
-        <div class="hero-kicker">AgroControl Desktop</div>
-        <h2>Centro de comando da fazenda, bruto, moderno e pronto para operação real.</h2>
-        <p>
-          O desktop foi feito para dono e gerente: visão financeira, operações, estoque, equipe,
-          produtividade e inteligência da fazenda em um só lugar.
-        </p>
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <strong>Operação</strong>
-            <span>Tarefas, talhões e execução</span>
-          </div>
-          <div class="hero-stat">
-            <strong>Financeiro</strong>
-            <span>Custo, receita e equilíbrio</span>
-          </div>
-          <div class="hero-stat">
-            <strong>Estoque</strong>
-            <span>Insumos, peças e consumo</span>
-          </div>
-        </div>
-      </div>
+
+  <!-- LOGIN -->
+  <section id="loginScreen" class="login-screen">
+    <div class="login-logo-top">
+      <div class="logo-mark"></div>
+      <div>AgroControl</div>
     </div>
 
-    <div class="login-right">
-      <div class="login-card">
-        <h1>AgroControl</h1>
-        <div class="subtitle">Centro de comando da fazenda</div>
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="logo-mark"></div>
+        <div>AgroControl</div>
+      </div>
 
-        <div id="loginStatus" class="login-status"></div>
+      <div id="loginStatus" class="login-status"></div>
 
-        <form id="loginForm" class="login-form">
-          <div class="form-group">
-            <label for="loginEmail">E-mail</label>
-            <input id="loginEmail" type="email" placeholder="seuemail@fazenda.com" autocomplete="username" required />
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="label" for="loginEmail">E-mail</label>
+          <div class="input-wrap">
+            <span class="input-icon-left">👤</span>
+            <input id="loginEmail" type="email" placeholder="gustavo@gmail.com" autocomplete="username" required />
+            <span class="input-icon-right">👤</span>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label for="loginPassword">Senha</label>
-            <input id="loginPassword" type="password" placeholder="Digite sua senha" autocomplete="current-password" />
+        <div class="form-group">
+          <label class="label" for="loginPassword">Senha</label>
+          <div class="input-wrap">
+            <span class="input-icon-left">•</span>
+            <input id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password" required />
+            <span class="input-icon-right">🔒</span>
           </div>
+        </div>
 
-          <div class="checkbox-row">
-            <label class="checkbox">
-              <input id="rememberLogin" type="checkbox" />
-              <span>Salvar meu login</span>
-            </label>
+        <button type="submit" class="login-btn">Entrar</button>
 
-            <button type="button" id="toggleRecoverBtn" class="link-btn">Recuperar minha senha</button>
+        <div class="login-checks">
+          <label class="check-row">
+            <input id="rememberLogin" type="checkbox" />
+            <span>Memorizar senha</span>
+          </label>
+
+          <div class="check-row">
+            <input id="recoverToggle" type="checkbox" />
+            <button type="button" id="recoverBtn" class="recover-link">Esqueci minha senha</button>
           </div>
+        </div>
 
-          <div class="login-actions">
-            <button type="submit" class="primary-btn">Entrar no AgroControl</button>
-            <button type="button" id="continueSessionBtn" class="soft-btn hidden">Continuar com sessão salva</button>
-          </div>
-        </form>
+        <button type="button" id="continueBtn" class="continue-btn hidden">Continuar com sessão salva</button>
 
         <div id="recoverBox" class="recover-box hidden">
-          <h3>Recuperar senha</h3>
-          <p>Informe o e-mail da conta. O Supabase enviará o link de recuperação.</p>
-          <div class="form-group">
-            <label for="recoverEmail">E-mail para recuperação</label>
+          <h4>Recuperar senha</h4>
+          <p>Informe o e-mail para receber o link de recuperação.</p>
+          <div class="input-wrap">
+            <span class="input-icon-left">✉</span>
             <input id="recoverEmail" type="email" placeholder="seuemail@fazenda.com" />
           </div>
-          <div class="modal-actions" style="margin-top:14px;">
-            <button type="button" id="cancelRecoverBtn" class="ghost-btn">Fechar</button>
-            <button type="button" id="sendRecoverBtn" class="primary-btn">Enviar link</button>
+          <div class="recover-actions">
+            <button type="button" id="closeRecoverBtn" class="sub-btn">Fechar</button>
+            <button type="button" id="sendRecoverBtn" class="sub-btn green">Enviar</button>
           </div>
         </div>
+      </form>
 
-        <div class="login-note">
-          A tela de login sempre aparece primeiro. Mesmo com sessão salva, o sistema não entra direto sem passar por esta tela.
-        </div>
+      <div class="login-footer">
+        Copyright 2024. AgroControl. Todos os direitos reservados.
       </div>
     </div>
-  </div>
+  </section>
 
-  <div id="appShell" class="app-shell">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-title">AgroControl Desktop</div>
-        <div class="brand-subtitle">Centro de comando da fazenda</div>
-        <div class="farm-badge" id="farmBadge">Fazenda Dambrosio</div>
-      </div>
-
-      <div class="nav-group">
-        <div class="nav-title">Painel</div>
-        <button class="nav-btn active" data-view="dashboard">Dashboard</button>
-      </div>
-
-      <div class="nav-group">
-        <div class="nav-title">Operação</div>
-        <button class="nav-btn" data-view="employees">Funcionários</button>
-        <button class="nav-btn" data-view="operations">Tarefas / Operações</button>
-        <button class="nav-btn" data-view="inventory">Estoque</button>
-      </div>
-
-      <div class="nav-group">
-        <div class="nav-title">Gestão</div>
-        <button class="nav-btn" data-view="finance">Financeiro</button>
-        <button class="nav-btn" data-view="market">Mercado</button>
-        <button class="nav-btn" data-view="ai">IA da Fazenda</button>
-        <button class="nav-btn" data-view="reports">Relatórios</button>
-        <button class="nav-btn" data-view="settings">Configurações</button>
-      </div>
-
-      <div class="sidebar-bottom">
-        <div class="session-card">
-          <div><strong>Usuário:</strong> <span id="sidebarUserName">-</span></div>
-          <div style="margin-top:6px;"><strong>E-mail:</strong> <span id="sidebarUserEmail">-</span></div>
+  <!-- APP -->
+  <section id="app" class="app">
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="logo-mark"></div>
+          <div>AgroControl</div>
         </div>
-        <button id="logoutBtn" class="danger-btn">Sair do sistema</button>
-      </div>
-    </aside>
 
-    <main class="main-area">
+        <nav class="sidebar-nav">
+          <button class="nav-btn active" data-view="dashboard"><span class="nav-icon">🧭</span>Dashboard</button>
+          <button class="nav-btn" data-view="operations"><span class="nav-icon">🚜</span>Operações</button>
+          <button class="nav-btn" data-view="fields"><span class="nav-icon">🌾</span>Talhões</button>
+          <button class="nav-btn" data-view="machines"><span class="nav-icon">⚙</span>Máquinas</button>
+          <button class="nav-btn" data-view="employees"><span class="nav-icon">🧑‍🌾</span>Funcionários</button>
+
+          <div class="nav-title">Gestão Agro</div>
+
+          <button class="nav-btn" data-view="market"><span class="nav-icon">🌿</span>Mercado</button>
+          <button class="nav-btn" data-view="finance"><span class="nav-icon">💰</span>Financeiro</button>
+          <button class="nav-btn" data-view="productivity"><span class="nav-icon">📈</span>Produtividade</button>
+          <button class="nav-btn" data-view="settings"><span class="nav-icon">⚙</span>Configurações</button>
+        </nav>
+
+        <div class="sidebar-user">
+          <div class="user-card">
+            <div class="user-left">
+              <div class="avatar" id="userAvatar">A</div>
+              <div class="user-text">
+                <div class="user-name" id="userName">Usuário</div>
+                <div class="user-email" id="userEmail">email@fazenda.com</div>
+              </div>
+            </div>
+            <button id="logoutBtn" class="logout-mini" title="Sair">›</button>
+          </div>
+        </div>
+      </aside>
+
       <header class="topbar">
-        <div>
-          <h1 id="topbarTitle">Dashboard</h1>
-          <p id="topbarSubtitle">Visão geral da operação, equipe, estoque e financeiro</p>
+        <div class="topbar-left">
+          <div class="top-item">🏠 <span id="farmNameTop">Fazenda Santa Clara</span></div>
+          <div class="top-item"><span id="userNameTop">Gustavo</span></div>
+          <div class="top-item">Vento 6 km/h</div>
+          <div class="top-item">★ Soja R$ 128,50</div>
+          <div class="top-item">▤ Milho R$ 58,20</div>
+          <div class="top-item">🍃 60 Boi R$ 250,00</div>
         </div>
 
         <div class="topbar-right">
-          <div class="top-pill" id="topFarmName">Fazenda Dambrosio</div>
-          <div class="top-pill" id="sessionPill">Sessão não carregada</div>
+          <button class="top-icon-btn">🔔</button>
+          <button class="top-icon-btn">⚙</button>
+          <div class="profile-pill">
+            <div class="avatar" id="profileAvatar">A</div>
+            <div id="profileName">Usuário</div>
+          </div>
         </div>
       </header>
 
-      <section class="content-area">
+      <main class="content">
         <div id="globalNotice"></div>
 
+        <!-- DASHBOARD -->
         <section id="view-dashboard" class="view active">
-          <div class="grid-cards">
-            <div class="card metric-card">
-              <div class="metric-title">Funcionários ativos</div>
-              <div class="metric-value" id="metricEmployees">0</div>
-              <div class="metric-foot">Equipe cadastrada no Supabase</div>
+          <div class="cards-row">
+            <div class="metric-card greenish">
+              <div class="metric-head">
+                <div>
+                  <div class="metric-title">Tarefas em Andamento</div>
+                  <div class="metric-sub">📋 <span id="dashAndamentoText">4 keme</span></div>
+                </div>
+              </div>
+              <div class="metric-value" id="dashAndamento">6</div>
             </div>
-            <div class="card metric-card">
-              <div class="metric-title">Operações abertas</div>
-              <div class="metric-value" id="metricOperations">0</div>
-              <div class="metric-foot">Tarefas em andamento ou pendentes</div>
+
+            <div class="metric-card">
+              <div class="metric-head">
+                <div>
+                  <div class="metric-title">Tarefas Pendentes</div>
+                  <div class="metric-sub">📋 <span id="dashPendentesText">4 keme</span></div>
+                </div>
+              </div>
+              <div class="metric-value orange" id="dashPendentes">4</div>
             </div>
-            <div class="card metric-card">
-              <div class="metric-title">Itens em estoque</div>
-              <div class="metric-value" id="metricInventory">0</div>
-              <div class="metric-foot">Cadastro atual de itens</div>
+
+            <div class="metric-card">
+              <div class="metric-head">
+                <div>
+                  <div class="metric-title">Máquinas Operando</div>
+                  <div class="metric-sub">🚜 <span id="dashMaquinasText">5 keme</span></div>
+                </div>
+              </div>
+              <div class="metric-value red" id="dashMaquinas">5</div>
             </div>
-            <div class="card metric-card">
-              <div class="metric-title">Saldo financeiro</div>
-              <div class="metric-value" id="metricBalance">R$ 0,00</div>
-              <div class="metric-foot">Receitas menos despesas</div>
+
+            <div class="weather-card">
+              <div class="weather-inner">
+                <div>
+                  <div class="weather-title">Clima para Aplicação</div>
+                  <div class="weather-lines">
+                    Vento: 6 km/h<br>
+                    Rajisto: 6 km/h<br>
+                    Umida: 98'2S<br>
+                    Temperatura: 29°C
+                  </div>
+                </div>
+                <div class="weather-ok">Pode Aplicar <span>Sim</span></div>
+              </div>
             </div>
           </div>
 
-          <div class="split-grid">
-            <div class="card panel">
-              <div class="section-header">
-                <div>
-                  <h3 class="section-title">Resumo operacional</h3>
-                  <div class="section-subtitle">Baseado nos dados reais carregados do desktop</div>
+          <div class="lower-grid">
+            <div class="left-col">
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title"><span class="ic">🌿</span>Mercado</div>
+                  <div class="panel-meta">Tempor editia</div>
+                </div>
+
+                <div class="market-grid">
+                  <div class="market-row">
+                    <div class="market-name">Soja</div>
+                    <div class="market-price">R$ 128,50</div>
+                  </div>
+                  <div class="market-row">
+                    <div class="market-name">Arroz</div>
+                    <div class="market-price small-green"><span class="green-box">✓</span>1104,30</div>
+                  </div>
+
+                  <div class="market-row">
+                    <div class="market-name">Milho</div>
+                    <div class="market-price">R$ 56,20</div>
+                  </div>
+                  <div class="market-row">
+                    <div class="market-name">@ do Gado</div>
+                    <div class="market-price">R$ 250,00</div>
+                  </div>
                 </div>
               </div>
-              <div class="kpi-list">
-                <div class="kpi-item">
-                  <strong>Pendentes</strong>
-                  <div id="kpiPendingOps" class="small muted">0 operações</div>
+
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title"><span class="ic">🌱</span>Visão dos Talhões</div>
                 </div>
-                <div class="kpi-item">
-                  <strong>Concluídas</strong>
-                  <div id="kpiDoneOps" class="small muted">0 operações</div>
-                </div>
-                <div class="kpi-item">
-                  <strong>Estoque crítico</strong>
-                  <div id="kpiLowStock" class="small muted">0 itens abaixo do mínimo</div>
-                </div>
-                <div class="kpi-item">
-                  <strong>Receitas</strong>
-                  <div id="kpiRevenue" class="small muted">R$ 0,00</div>
+
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Talhão</th>
+                        <th>Cultura</th>
+                        <th>Área</th>
+                        <th>Produtividade</th>
+                        <th>Situação</th>
+                      </tr>
+                    </thead>
+                    <tbody id="fieldsDashTable">
+                      <tr>
+                        <td>Soja</td>
+                        <td><strong>Soja</strong></td>
+                        <td>35 ha</td>
+                        <td>59 sc/ha</td>
+                        <td class="orange-text">Dio hevea</td>
+                      </tr>
+                      <tr>
+                        <td>Milho</td>
+                        <td><strong>Milho</strong></td>
+                        <td>36 ha</td>
+                        <td>59 sc/ha</td>
+                        <td class="orange-text">Pooiato</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
 
-            <div class="card panel">
-              <div class="section-header">
-                <div>
-                  <h3 class="section-title">Status do sistema</h3>
-                  <div class="section-subtitle">Pronto para evolução modular</div>
+            <div class="mid-col">
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title"><span class="ic">🌦</span>Clima</div>
+                  <div class="panel-meta">Pretpo mrog</div>
+                </div>
+
+                <div class="climate-list">
+                  <div class="climate-item">
+                    <div class="left">🍃 Ventão fapingtôurit</div>
+                    <div class="val">R$ 725,800,00</div>
+                  </div>
+                  <div class="climate-item">
+                    <div class="left">🟨 Gýciuc ãcgmefè</div>
+                    <div class="val">R$ 530,000,00</div>
+                  </div>
                 </div>
               </div>
-              <div class="notice success">Desktop separado do mobile e autenticado com o mesmo Supabase.</div>
-              <div class="notice">Login sempre obrigatório na abertura do desktop, mesmo com sessão salva.</div>
-              <div class="notice warn">Funcionários, Operações, Estoque e Financeiro já estão prontos para CRUD real.</div>
+
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title"><span class="ic">📈</span>Produtividade da Safra</div>
+                </div>
+
+                <div class="chart">
+                  <div class="bar-wrap"><div class="bar" style="height:112px"></div><div class="bar-label">2a</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:78px"></div><div class="bar-label">28</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:72px"></div><div class="bar-label">2aes</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:70px"></div><div class="bar-label">Sm</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:106px"></div><div class="bar-label">44f</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:104px"></div><div class="bar-label">5pm</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="right-col">
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title"><span class="ic">🧠</span>IA da Fazenda</div>
+                </div>
+
+                <ul class="ai-list">
+                  <li><span class="check-green">✓</span><span>O ceisato de areia cobre spenes,razá: 12 dies.</span></li>
+                  <li><span class="check-green">✓</span><span>Faitam BO socis 26-463 ppib cósire orcsrio astul da Safca.</span></li>
+                  <li><span class="check-green">✓</span><span>O Talhou.4 tem 15% momos produtividade qje a madia.</span></li>
+                  <li><span class="check-green">✓</span><span>O lr vestimento em defenovora sabiou esto mès.</span></li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="view-employees" class="view">
-          <div class="section-header">
-            <div>
-              <h3 class="section-title">Funcionários</h3>
-              <div class="section-subtitle">Equipe, salário, participação e status</div>
-            </div>
-            <div class="toolbar">
-              <input id="employeesSearch" class="search-input" type="text" placeholder="Buscar por nome, cargo ou setor" />
-              <button class="soft-btn" id="refreshEmployeesBtn">Atualizar</button>
-              <button class="primary-btn" id="newEmployeeBtn">Novo funcionário</button>
-            </div>
-          </div>
-          <div class="card panel">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Cargo</th>
-                    <th>Setor</th>
-                    <th>Salário</th>
-                    <th>Participação</th>
-                    <th>Status</th>
-                    <th>Telefone</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="employeesTableBody"></tbody>
-              </table>
-            </div>
-            <div id="employeesEmpty" class="empty-state hidden">Nenhum funcionário encontrado.</div>
-          </div>
-        </section>
-
+        <!-- OPERATIONS -->
         <section id="view-operations" class="view">
-          <div class="section-header">
-            <div>
-              <h3 class="section-title">Tarefas / Operações</h3>
-              <div class="section-subtitle">Planejamento, execução e custo operacional</div>
-            </div>
-            <div class="toolbar">
-              <input id="operationsSearch" class="search-input" type="text" placeholder="Buscar por título, talhão, máquina ou status" />
-              <button class="soft-btn" id="refreshOperationsBtn">Atualizar</button>
-              <button class="primary-btn" id="newOperationBtn">Nova operação</button>
-            </div>
+          <h2 class="section-title-page">Operações</h2>
+          <p class="section-subtitle-page">Tarefas, execução, máquina, responsável e custo operacional.</p>
+
+          <div class="crud-toolbar">
+            <input id="operationsSearch" type="text" placeholder="Buscar por título, talhão, máquina ou status" />
+            <button id="operationsRefresh" class="crud-btn">Atualizar</button>
+            <button id="operationsNew" class="crud-btn primary">Nova operação</button>
           </div>
-          <div class="card panel">
+
+          <div class="panel">
             <div class="table-wrap">
               <table>
                 <thead>
@@ -1156,85 +1438,146 @@
                     <th>Ações</th>
                   </tr>
                 </thead>
-                <tbody id="operationsTableBody"></tbody>
+                <tbody id="operationsTable"></tbody>
               </table>
             </div>
-            <div id="operationsEmpty" class="empty-state hidden">Nenhuma operação encontrada.</div>
           </div>
         </section>
 
-        <section id="view-inventory" class="view">
-          <div class="section-header">
-            <div>
-              <h3 class="section-title">Estoque</h3>
-              <div class="section-subtitle">Insumos, peças, combustível e controle mínimo</div>
-            </div>
-            <div class="toolbar">
-              <input id="inventorySearch" class="search-input" type="text" placeholder="Buscar por item, categoria ou local" />
-              <button class="soft-btn" id="refreshInventoryBtn">Atualizar</button>
-              <button class="primary-btn" id="newInventoryBtn">Novo item</button>
-            </div>
-          </div>
-          <div class="card panel">
+        <!-- FIELDS -->
+        <section id="view-fields" class="view">
+          <h2 class="section-title-page">Talhões</h2>
+          <p class="section-subtitle-page">Visão geral dos talhões e suas culturas.</p>
+
+          <div class="panel">
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>Item</th>
-                    <th>Categoria</th>
-                    <th>Quantidade</th>
-                    <th>Mínimo</th>
-                    <th>Unidade</th>
-                    <th>Custo médio</th>
-                    <th>Local</th>
-                    <th>Status</th>
-                    <th>Ações</th>
+                    <th>Talhão</th>
+                    <th>Cultura</th>
+                    <th>Área</th>
+                    <th>Produtividade</th>
+                    <th>Situação</th>
                   </tr>
                 </thead>
-                <tbody id="inventoryTableBody"></tbody>
+                <tbody>
+                  <tr><td>Talhão 1</td><td>Soja</td><td>42 ha</td><td>61 sc/ha</td><td><span class="status-pill status-green">Bom</span></td></tr>
+                  <tr><td>Talhão 2</td><td>Arroz</td><td>35 ha</td><td>71 sc/ha</td><td><span class="status-pill status-yellow">Atenção</span></td></tr>
+                  <tr><td>Talhão 3</td><td>Milho</td><td>28 ha</td><td>109 sc/ha</td><td><span class="status-pill status-green">Bom</span></td></tr>
+                </tbody>
               </table>
             </div>
-            <div id="inventoryEmpty" class="empty-state hidden">Nenhum item encontrado.</div>
           </div>
         </section>
 
+        <!-- MACHINES -->
+        <section id="view-machines" class="view">
+          <h2 class="section-title-page">Máquinas</h2>
+          <p class="section-subtitle-page">Controle base de máquinas e situação operacional.</p>
+
+          <div class="panel">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Máquina</th>
+                    <th>Modelo</th>
+                    <th>Status</th>
+                    <th>Horas</th>
+                    <th>Local</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Colheitadeira 01</td><td>S790</td><td><span class="status-pill status-green">Operando</span></td><td>1.420</td><td>Talhão 4</td></tr>
+                  <tr><td>Trator 01</td><td>Valtra 230</td><td><span class="status-pill status-yellow">Parado</span></td><td>2.190</td><td>Galpão</td></tr>
+                  <tr><td>Pulverizador</td><td>Uniport</td><td><span class="status-pill status-blue">Pronto</span></td><td>980</td><td>Pátio</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- EMPLOYEES -->
+        <section id="view-employees" class="view">
+          <h2 class="section-title-page">Funcionários</h2>
+          <p class="section-subtitle-page">Equipe, salário, participação e status.</p>
+
+          <div class="crud-toolbar">
+            <input id="employeesSearch" type="text" placeholder="Buscar por nome, cargo ou setor" />
+            <button id="employeesRefresh" class="crud-btn">Atualizar</button>
+            <button id="employeesNew" class="crud-btn primary">Novo funcionário</button>
+          </div>
+
+          <div class="panel">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Cargo</th>
+                    <th>Setor</th>
+                    <th>Salário</th>
+                    <th>Participação</th>
+                    <th>Status</th>
+                    <th>Telefone</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="employeesTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- MARKET -->
+        <section id="view-market" class="view">
+          <h2 class="section-title-page">Mercado</h2>
+          <p class="section-subtitle-page">Área reservada para cotações futuras e integração externa.</p>
+
+          <div class="panel">
+            <div class="market-grid">
+              <div class="market-row"><div class="market-name">Soja</div><div class="market-price">R$ 128,50</div></div>
+              <div class="market-row"><div class="market-name">Arroz</div><div class="market-price">R$ 104,30</div></div>
+              <div class="market-row"><div class="market-name">Milho</div><div class="market-price">R$ 58,20</div></div>
+              <div class="market-row"><div class="market-name">@ do Gado</div><div class="market-price">R$ 250,00</div></div>
+              <div class="market-row"><div class="market-name">Dólar</div><div class="market-price">R$ 5,38</div></div>
+              <div class="market-row"><div class="market-name">Diesel</div><div class="market-price">R$ 6,14</div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FINANCE -->
         <section id="view-finance" class="view">
-          <div class="section-header">
-            <div>
-              <h3 class="section-title">Financeiro</h3>
-              <div class="section-subtitle">Receitas, despesas, cultura, quantidade e saldo</div>
-            </div>
-            <div class="toolbar">
-              <input id="financeSearch" class="search-input" type="text" placeholder="Buscar por categoria, descrição ou cultura" />
-              <button class="soft-btn" id="refreshFinanceBtn">Atualizar</button>
-              <button class="primary-btn" id="newFinanceBtn">Nova transação</button>
-            </div>
+          <h2 class="section-title-page">Financeiro</h2>
+          <p class="section-subtitle-page">Receitas, despesas, saldo, lucro e ponto de equilíbrio base.</p>
+
+          <div class="crud-toolbar">
+            <input id="financeSearch" type="text" placeholder="Buscar por categoria, descrição ou cultura" />
+            <button id="financeRefresh" class="crud-btn">Atualizar</button>
+            <button id="financeNew" class="crud-btn primary">Nova transação</button>
           </div>
 
-          <div class="grid-cards" style="margin-bottom:18px;">
-            <div class="card metric-card">
+          <div class="cards-row" style="grid-template-columns:repeat(4,1fr); margin-top:6px;">
+            <div class="metric-card">
               <div class="metric-title">Receitas</div>
-              <div class="metric-value" id="financeRevenue">R$ 0,00</div>
-              <div class="metric-foot">Total de entradas</div>
+              <div class="metric-value" style="font-size:34px;color:#86d86d;position:static" id="financeRevenueCard">R$ 0,00</div>
             </div>
-            <div class="card metric-card">
+            <div class="metric-card">
               <div class="metric-title">Despesas</div>
-              <div class="metric-value" id="financeExpenses">R$ 0,00</div>
-              <div class="metric-foot">Total de saídas</div>
+              <div class="metric-value" style="font-size:34px;color:#f0b04d;position:static" id="financeExpenseCard">R$ 0,00</div>
             </div>
-            <div class="card metric-card">
+            <div class="metric-card">
               <div class="metric-title">Lucro / Prejuízo</div>
-              <div class="metric-value" id="financeProfit">R$ 0,00</div>
-              <div class="metric-foot">Resultado consolidado</div>
+              <div class="metric-value" style="font-size:34px;color:#7fcf66;position:static" id="financeProfitCard">R$ 0,00</div>
             </div>
-            <div class="card metric-card">
-              <div class="metric-title">Ponto de equilíbrio</div>
-              <div class="metric-value" id="financeBreakEven">R$ 0,00</div>
-              <div class="metric-foot">Estimativa simples atual</div>
+            <div class="metric-card">
+              <div class="metric-title">Ponto de Equilíbrio</div>
+              <div class="metric-value" style="font-size:34px;color:#d5a14e;position:static" id="financeBreakEvenCard">R$ 0,00</div>
             </div>
           </div>
 
-          <div class="card panel">
+          <div class="panel">
             <div class="table-wrap">
               <table>
                 <thead>
@@ -1250,97 +1593,64 @@
                     <th>Ações</th>
                   </tr>
                 </thead>
-                <tbody id="financeTableBody"></tbody>
+                <tbody id="financeTable"></tbody>
               </table>
             </div>
-            <div id="financeEmpty" class="empty-state hidden">Nenhuma transação encontrada.</div>
           </div>
         </section>
 
-        <section id="view-market" class="view">
-          <div class="card panel">
-            <h3 class="section-title">Mercado</h3>
-            <div class="section-subtitle">Área preparada para cotações futuras de soja, arroz, milho, gado, dólar e diesel.</div>
-            <div class="notice" style="margin-top:16px;">Nesta etapa o módulo está reservado para integração posterior com dados de mercado.</div>
-          </div>
-        </section>
+        <!-- PRODUCTIVITY -->
+        <section id="view-productivity" class="view">
+          <h2 class="section-title-page">Produtividade</h2>
+          <p class="section-subtitle-page">Visão base da performance da safra.</p>
 
-        <section id="view-ai" class="view">
-          <div class="card panel">
-            <h3 class="section-title">IA da Fazenda</h3>
-            <div class="section-subtitle">Área para análises futuras com base nos dados reais da operação.</div>
-            <div class="notice" style="margin-top:16px;">
-              A base já está pronta para a IA consumir funcionários, operações, estoque e financeiro quando esses módulos estiverem consolidados.
+          <div class="panel">
+            <div class="chart">
+              <div class="bar-wrap"><div class="bar" style="height:120px"></div><div class="bar-label">Jan</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:80px"></div><div class="bar-label">Fev</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:92px"></div><div class="bar-label">Mar</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:68px"></div><div class="bar-label">Abr</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:110px"></div><div class="bar-label">Mai</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:116px"></div><div class="bar-label">Jun</div></div>
             </div>
           </div>
         </section>
 
-        <section id="view-reports" class="view">
-          <div class="card panel">
-            <h3 class="section-title">Relatórios</h3>
-            <div class="section-subtitle">Área reservada para relatórios operacionais, financeiros e produtivos.</div>
-            <div class="notice" style="margin-top:16px;">
-              O próximo ciclo pode gerar exportações e painéis consolidados a partir do Supabase.
-            </div>
-          </div>
-        </section>
-
+        <!-- SETTINGS -->
         <section id="view-settings" class="view">
-          <div class="settings-grid">
-            <div class="card settings-box">
-              <h3 class="section-title">Nome da fazenda</h3>
-              <div class="section-subtitle">Esse nome aparece no desktop e pode ser alterado a qualquer momento</div>
-              <div class="form-group" style="margin-top:16px;">
-                <label for="farmNameInput">Nome da fazenda</label>
-                <input id="farmNameInput" type="text" placeholder="Ex.: Fazenda Dambrosio" />
-              </div>
-              <div class="modal-actions" style="justify-content:flex-start;">
-                <button id="saveFarmNameBtn" class="primary-btn">Salvar nome</button>
-              </div>
-            </div>
+          <h2 class="section-title-page">Configurações</h2>
+          <p class="section-subtitle-page">Ajustes gerais do AgroControl Desktop.</p>
 
-            <div class="card settings-box">
-              <h3 class="section-title">Ambiente do sistema</h3>
-              <div class="section-subtitle">Identidade técnica atual do desktop</div>
-              <div class="kpi-list">
-                <div class="kpi-item">
-                  <strong>Mobile</strong>
-                  <span class="muted small">Permanece em <code>index.html</code> sem alterações</span>
-                </div>
-                <div class="kpi-item">
-                  <strong>Desktop</strong>
-                  <span class="muted small">Rodando em <code>desktop.html</code> separado</span>
-                </div>
-                <div class="kpi-item">
-                  <strong>Auth</strong>
-                  <span class="muted small">Mesmo Supabase do projeto</span>
-                </div>
-                <div class="kpi-item">
-                  <strong>Escala</strong>
-                  <span class="muted small">Estrutura pronta para módulos maiores</span>
-                </div>
-              </div>
+          <div class="panel" style="max-width:700px">
+            <div class="form-group-modal">
+              <label for="farmNameInput">Nome da fazenda</label>
+              <input id="farmNameInput" type="text" placeholder="Ex.: Fazenda Santa Clara" />
+            </div>
+            <div class="modal-actions" style="justify-content:flex-start">
+              <button id="saveFarmNameBtn" class="crud-btn primary">Salvar nome</button>
             </div>
           </div>
         </section>
-      </section>
-    </main>
-  </div>
+      </main>
+    </div>
+  </section>
 
-  <div id="entityModalBackdrop" class="modal-backdrop">
+  <!-- MODAL -->
+  <div id="modalBackdrop" class="modal-backdrop">
     <div class="modal">
       <div class="modal-header">
         <div>
-          <h3 id="entityModalTitle">Novo cadastro</h3>
-          <p id="entityModalSubtitle">Preencha os dados do módulo selecionado</p>
+          <h3 id="modalTitle" class="modal-title">Novo cadastro</h3>
+          <p id="modalSubtitle" class="modal-subtitle">Preencha os dados abaixo</p>
         </div>
-        <button id="closeEntityModalBtn" class="ghost-btn">Fechar</button>
+        <button id="closeModalBtn" class="modal-close">×</button>
       </div>
+
       <form id="entityForm">
-        <div id="entityFormFields" class="form-grid"></div>
+        <div id="entityFields" class="form-grid"></div>
         <div class="modal-actions">
-          <button type="button" id="cancelEntityModalBtn" class="ghost-btn">Cancelar</button>
-          <button type="submit" class="primary-btn">Salvar</button>
+          <button type="button" id="cancelModalBtn" class="crud-btn">Cancelar</button>
+          <button type="submit" class="crud-btn primary">Salvar</button>
         </div>
       </form>
     </div>
@@ -1349,21 +1659,20 @@
   <script>
     const SUPABASE_URL = "https://xksllcfagvpccvuzwqmg.supabase.co";
     const SUPABASE_KEY = "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy";
-    const REMEMBERED_EMAIL_KEY = "agrocontrol_desktop_remembered_email";
-    const FARM_NAME_KEY = "agrocontrol_desktop_farm_name";
+
+    const REMEMBER_KEY = "agrocontrol_desktop_remember_email";
+    const FARM_KEY = "agrocontrol_desktop_farm_name";
 
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const state = {
       session: null,
+      farmName: localStorage.getItem(FARM_KEY) || "Fazenda Santa Clara",
       currentView: "dashboard",
-      farmName: localStorage.getItem(FARM_NAME_KEY) || "Fazenda Dambrosio",
       employees: [],
       operations: [],
-      inventory: [],
       finance: [],
-      employeeMap: new Map(),
-      entityModal: {
+      modal: {
         module: null,
         mode: "create",
         record: null
@@ -1372,626 +1681,439 @@
 
     const refs = {
       loginScreen: document.getElementById("loginScreen"),
-      appShell: document.getElementById("appShell"),
+      app: document.getElementById("app"),
       loginForm: document.getElementById("loginForm"),
       loginEmail: document.getElementById("loginEmail"),
       loginPassword: document.getElementById("loginPassword"),
-      rememberLogin: document.getElementById("rememberLogin"),
       loginStatus: document.getElementById("loginStatus"),
-      continueSessionBtn: document.getElementById("continueSessionBtn"),
-      toggleRecoverBtn: document.getElementById("toggleRecoverBtn"),
+      rememberLogin: document.getElementById("rememberLogin"),
+      continueBtn: document.getElementById("continueBtn"),
+      recoverBtn: document.getElementById("recoverBtn"),
+      recoverToggle: document.getElementById("recoverToggle"),
       recoverBox: document.getElementById("recoverBox"),
       recoverEmail: document.getElementById("recoverEmail"),
+      closeRecoverBtn: document.getElementById("closeRecoverBtn"),
       sendRecoverBtn: document.getElementById("sendRecoverBtn"),
-      cancelRecoverBtn: document.getElementById("cancelRecoverBtn"),
-      sidebarUserName: document.getElementById("sidebarUserName"),
-      sidebarUserEmail: document.getElementById("sidebarUserEmail"),
-      farmBadge: document.getElementById("farmBadge"),
-      topFarmName: document.getElementById("topFarmName"),
-      sessionPill: document.getElementById("sessionPill"),
+
+      userAvatar: document.getElementById("userAvatar"),
+      profileAvatar: document.getElementById("profileAvatar"),
+      userName: document.getElementById("userName"),
+      userEmail: document.getElementById("userEmail"),
+      userNameTop: document.getElementById("userNameTop"),
+      profileName: document.getElementById("profileName"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      farmNameTop: document.getElementById("farmNameTop"),
       farmNameInput: document.getElementById("farmNameInput"),
       saveFarmNameBtn: document.getElementById("saveFarmNameBtn"),
-      topbarTitle: document.getElementById("topbarTitle"),
-      topbarSubtitle: document.getElementById("topbarSubtitle"),
       globalNotice: document.getElementById("globalNotice"),
-      logoutBtn: document.getElementById("logoutBtn"),
+
+      operationsSearch: document.getElementById("operationsSearch"),
+      operationsRefresh: document.getElementById("operationsRefresh"),
+      operationsNew: document.getElementById("operationsNew"),
+      operationsTable: document.getElementById("operationsTable"),
 
       employeesSearch: document.getElementById("employeesSearch"),
-      operationsSearch: document.getElementById("operationsSearch"),
-      inventorySearch: document.getElementById("inventorySearch"),
+      employeesRefresh: document.getElementById("employeesRefresh"),
+      employeesNew: document.getElementById("employeesNew"),
+      employeesTable: document.getElementById("employeesTable"),
+
       financeSearch: document.getElementById("financeSearch"),
+      financeRefresh: document.getElementById("financeRefresh"),
+      financeNew: document.getElementById("financeNew"),
+      financeTable: document.getElementById("financeTable"),
 
-      employeesTableBody: document.getElementById("employeesTableBody"),
-      operationsTableBody: document.getElementById("operationsTableBody"),
-      inventoryTableBody: document.getElementById("inventoryTableBody"),
-      financeTableBody: document.getElementById("financeTableBody"),
+      dashAndamento: document.getElementById("dashAndamento"),
+      dashPendentes: document.getElementById("dashPendentes"),
+      dashMaquinas: document.getElementById("dashMaquinas"),
 
-      employeesEmpty: document.getElementById("employeesEmpty"),
-      operationsEmpty: document.getElementById("operationsEmpty"),
-      inventoryEmpty: document.getElementById("inventoryEmpty"),
-      financeEmpty: document.getElementById("financeEmpty"),
+      financeRevenueCard: document.getElementById("financeRevenueCard"),
+      financeExpenseCard: document.getElementById("financeExpenseCard"),
+      financeProfitCard: document.getElementById("financeProfitCard"),
+      financeBreakEvenCard: document.getElementById("financeBreakEvenCard"),
 
-      metricEmployees: document.getElementById("metricEmployees"),
-      metricOperations: document.getElementById("metricOperations"),
-      metricInventory: document.getElementById("metricInventory"),
-      metricBalance: document.getElementById("metricBalance"),
-
-      kpiPendingOps: document.getElementById("kpiPendingOps"),
-      kpiDoneOps: document.getElementById("kpiDoneOps"),
-      kpiLowStock: document.getElementById("kpiLowStock"),
-      kpiRevenue: document.getElementById("kpiRevenue"),
-
-      financeRevenue: document.getElementById("financeRevenue"),
-      financeExpenses: document.getElementById("financeExpenses"),
-      financeProfit: document.getElementById("financeProfit"),
-      financeBreakEven: document.getElementById("financeBreakEven"),
-
-      refreshEmployeesBtn: document.getElementById("refreshEmployeesBtn"),
-      refreshOperationsBtn: document.getElementById("refreshOperationsBtn"),
-      refreshInventoryBtn: document.getElementById("refreshInventoryBtn"),
-      refreshFinanceBtn: document.getElementById("refreshFinanceBtn"),
-
-      newEmployeeBtn: document.getElementById("newEmployeeBtn"),
-      newOperationBtn: document.getElementById("newOperationBtn"),
-      newInventoryBtn: document.getElementById("newInventoryBtn"),
-      newFinanceBtn: document.getElementById("newFinanceBtn"),
-
-      entityModalBackdrop: document.getElementById("entityModalBackdrop"),
-      entityModalTitle: document.getElementById("entityModalTitle"),
-      entityModalSubtitle: document.getElementById("entityModalSubtitle"),
-      closeEntityModalBtn: document.getElementById("closeEntityModalBtn"),
-      cancelEntityModalBtn: document.getElementById("cancelEntityModalBtn"),
+      modalBackdrop: document.getElementById("modalBackdrop"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalSubtitle: document.getElementById("modalSubtitle"),
+      closeModalBtn: document.getElementById("closeModalBtn"),
+      cancelModalBtn: document.getElementById("cancelModalBtn"),
       entityForm: document.getElementById("entityForm"),
-      entityFormFields: document.getElementById("entityFormFields")
+      entityFields: document.getElementById("entityFields")
     };
 
-    const viewMeta = {
-      dashboard: {
-        title: "Dashboard",
-        subtitle: "Visão geral da operação, equipe, estoque e financeiro"
-      },
-      employees: {
-        title: "Funcionários",
-        subtitle: "Equipe, cargos, salários, participação e status"
-      },
-      operations: {
-        title: "Tarefas / Operações",
-        subtitle: "Execução operacional com responsável, máquina e custo"
-      },
-      inventory: {
-        title: "Estoque",
-        subtitle: "Itens, categorias, quantidade, mínimo e custo médio"
-      },
-      finance: {
-        title: "Financeiro",
-        subtitle: "Receitas, despesas, saldo e visão básica de equilíbrio"
-      },
-      market: {
-        title: "Mercado",
-        subtitle: "Módulo reservado para integrações futuras de cotação"
-      },
-      ai: {
-        title: "IA da Fazenda",
-        subtitle: "Base pronta para análises futuras em cima dos dados da fazenda"
-      },
-      reports: {
-        title: "Relatórios",
-        subtitle: "Consolidação futura da operação, produtividade e financeiro"
-      },
-      settings: {
-        title: "Configurações",
-        subtitle: "Ajustes gerais do desktop e identidade da fazenda"
-      }
-    };
-
-    const moduleSchemas = {
+    const schemas = {
       employees: {
         table: "employees",
-        orderBy: { column: "created_at", ascending: false },
-        formTitleCreate: "Novo funcionário",
-        formTitleEdit: "Editar funcionário",
-        formSubtitle: "Cadastro da equipe com salário, participação e status",
+        titleCreate: "Novo funcionário",
+        titleEdit: "Editar funcionário",
+        subtitle: "Cadastro da equipe com salário e participação.",
         fields: [
-          { name: "name", label: "Nome", type: "text", required: true },
-          { name: "role", label: "Cargo", type: "text" },
-          { name: "sector", label: "Setor", type: "text" },
-          { name: "salary", label: "Salário", type: "number", step: "0.01" },
-          {
-            name: "harvest_participation_type",
-            label: "Tipo de participação",
-            type: "select",
-            options: [
-              { value: "", label: "Sem participação" },
-              { value: "percentual", label: "Percentual" },
-              { value: "valor_fixo", label: "Valor fixo" }
-            ]
-          },
-          { name: "harvest_participation_value", label: "Valor da participação", type: "number", step: "0.01" },
-          {
-            name: "status",
-            label: "Status",
-            type: "select",
-            options: [
-              { value: "ativo", label: "Ativo" },
-              { value: "inativo", label: "Inativo" }
-            ]
-          },
-          { name: "phone", label: "Telefone", type: "text" },
-          { name: "notes", label: "Observações", type: "textarea", full: true }
+          {name:"name", label:"Nome", type:"text", required:true},
+          {name:"role", label:"Cargo", type:"text"},
+          {name:"sector", label:"Setor", type:"text"},
+          {name:"salary", label:"Salário", type:"number", step:"0.01"},
+          {name:"harvest_participation_type", label:"Tipo de participação", type:"select", options:[
+            {value:"", label:"Sem participação"},
+            {value:"percentual", label:"Percentual"},
+            {value:"valor_fixo", label:"Valor fixo"}
+          ]},
+          {name:"harvest_participation_value", label:"Valor da participação", type:"number", step:"0.01"},
+          {name:"status", label:"Status", type:"select", options:[
+            {value:"ativo", label:"Ativo"},
+            {value:"inativo", label:"Inativo"}
+          ]},
+          {name:"phone", label:"Telefone", type:"text"},
+          {name:"notes", label:"Observações", type:"textarea", full:true}
         ]
       },
       operations: {
         table: "operations",
-        orderBy: { column: "created_at", ascending: false },
-        formTitleCreate: "Nova operação",
-        formTitleEdit: "Editar operação",
-        formSubtitle: "Planejamento, execução e custo da operação",
+        titleCreate: "Nova operação",
+        titleEdit: "Editar operação",
+        subtitle: "Planejamento e execução operacional.",
         fields: [
-          { name: "title", label: "Título", type: "text", required: true },
-          { name: "category", label: "Categoria", type: "text" },
-          { name: "farm_sector", label: "Setor da fazenda", type: "text" },
-          { name: "field_name", label: "Talhão", type: "text" },
-          { name: "machine_name", label: "Máquina", type: "text" },
-          {
-            name: "employee_id",
-            label: "Responsável",
-            type: "select",
-            dynamicOptions: "employees"
-          },
-          {
-            name: "status",
-            label: "Status",
-            type: "select",
-            options: [
-              { value: "pendente", label: "Pendente" },
-              { value: "em_andamento", label: "Em andamento" },
-              { value: "concluida", label: "Concluída" },
-              { value: "cancelada", label: "Cancelada" }
-            ]
-          },
-          { name: "planned_date", label: "Data prevista", type: "date" },
-          { name: "completed_date", label: "Data concluída", type: "date" },
-          { name: "estimated_cost", label: "Custo estimado", type: "number", step: "0.01" },
-          { name: "actual_cost", label: "Custo real", type: "number", step: "0.01" },
-          { name: "notes", label: "Observações", type: "textarea", full: true }
-        ]
-      },
-      inventory: {
-        table: "inventory_items",
-        orderBy: { column: "created_at", ascending: false },
-        formTitleCreate: "Novo item de estoque",
-        formTitleEdit: "Editar item de estoque",
-        formSubtitle: "Cadastro básico de item com quantidade, mínimo e custo",
-        fields: [
-          { name: "name", label: "Nome do item", type: "text", required: true },
-          { name: "category", label: "Categoria", type: "text" },
-          { name: "current_quantity", label: "Quantidade atual", type: "number", step: "0.01" },
-          { name: "minimum_quantity", label: "Estoque mínimo", type: "number", step: "0.01" },
-          { name: "unit", label: "Unidade", type: "text" },
-          { name: "average_cost", label: "Custo médio", type: "number", step: "0.01" },
-          { name: "location", label: "Local", type: "text" },
-          {
-            name: "status",
-            label: "Status",
-            type: "select",
-            options: [
-              { value: "ativo", label: "Ativo" },
-              { value: "inativo", label: "Inativo" }
-            ]
-          }
+          {name:"title", label:"Título", type:"text", required:true},
+          {name:"category", label:"Categoria", type:"text"},
+          {name:"farm_sector", label:"Setor da fazenda", type:"text"},
+          {name:"field_name", label:"Talhão", type:"text"},
+          {name:"machine_name", label:"Máquina", type:"text"},
+          {name:"employee_name", label:"Responsável", type:"text"},
+          {name:"status", label:"Status", type:"select", options:[
+            {value:"pendente", label:"Pendente"},
+            {value:"em_andamento", label:"Em andamento"},
+            {value:"concluida", label:"Concluída"},
+            {value:"cancelada", label:"Cancelada"}
+          ]},
+          {name:"planned_date", label:"Data prevista", type:"date"},
+          {name:"completed_date", label:"Data concluída", type:"date"},
+          {name:"estimated_cost", label:"Custo estimado", type:"number", step:"0.01"},
+          {name:"actual_cost", label:"Custo real", type:"number", step:"0.01"},
+          {name:"notes", label:"Observações", type:"textarea", full:true}
         ]
       },
       finance: {
         table: "financial_transactions",
-        orderBy: { column: "created_at", ascending: false },
-        formTitleCreate: "Nova transação financeira",
-        formTitleEdit: "Editar transação financeira",
-        formSubtitle: "Receitas e despesas com categoria, cultura e quantidade",
+        titleCreate: "Nova transação",
+        titleEdit: "Editar transação",
+        subtitle: "Receitas e despesas do financeiro.",
         fields: [
-          {
-            name: "type",
-            label: "Tipo",
-            type: "select",
-            options: [
-              { value: "receita", label: "Receita" },
-              { value: "despesa", label: "Despesa" }
-            ]
-          },
-          { name: "category", label: "Categoria", type: "text", required: true },
-          { name: "description", label: "Descrição", type: "text" },
-          { name: "amount", label: "Valor", type: "number", step: "0.01", required: true },
-          { name: "culture", label: "Cultura", type: "text" },
-          { name: "quantity", label: "Quantidade vendida / usada", type: "number", step: "0.01" },
-          { name: "unit_price", label: "Preço unitário", type: "number", step: "0.01" },
-          { name: "due_date", label: "Vencimento", type: "date" },
-          { name: "payment_date", label: "Pagamento", type: "date" },
-          {
-            name: "status",
-            label: "Status",
-            type: "select",
-            options: [
-              { value: "pendente", label: "Pendente" },
-              { value: "pago", label: "Pago" },
-              { value: "recebido", label: "Recebido" }
-            ]
-          },
-          { name: "source_module", label: "Módulo de origem", type: "text" },
-          { name: "reference_id", label: "ID de referência", type: "text" }
+          {name:"type", label:"Tipo", type:"select", options:[
+            {value:"receita", label:"Receita"},
+            {value:"despesa", label:"Despesa"}
+          ]},
+          {name:"category", label:"Categoria", type:"text", required:true},
+          {name:"description", label:"Descrição", type:"text"},
+          {name:"culture", label:"Cultura", type:"text"},
+          {name:"quantity", label:"Quantidade", type:"number", step:"0.01"},
+          {name:"amount", label:"Valor", type:"number", step:"0.01", required:true},
+          {name:"due_date", label:"Vencimento", type:"date"},
+          {name:"payment_date", label:"Pagamento", type:"date"},
+          {name:"status", label:"Status", type:"select", options:[
+            {value:"pendente", label:"Pendente"},
+            {value:"pago", label:"Pago"},
+            {value:"recebido", label:"Recebido"}
+          ]},
+          {name:"source_module", label:"Módulo origem", type:"text"},
+          {name:"reference_id", label:"ID referência", type:"text"}
         ]
       }
     };
 
-    function formatMoney(value) {
-      const num = Number(value || 0);
-      return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(num);
+    function money(v){
+      return new Intl.NumberFormat("pt-BR",{style:"currency", currency:"BRL"}).format(Number(v || 0));
     }
 
-    function formatDate(value) {
-      if (!value) return "-";
-      const d = new Date(value + (String(value).includes("T") ? "" : "T00:00:00"));
-      if (Number.isNaN(d.getTime())) return value;
+    function dateBr(v){
+      if(!v) return "-";
+      const d = new Date(v + (String(v).includes("T") ? "" : "T00:00:00"));
+      if(Number.isNaN(d.getTime())) return v;
       return d.toLocaleDateString("pt-BR");
     }
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    function esc(v){
+      return String(v ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
-    function setNotice(message, type = "default", target = refs.globalNotice) {
-      if (!message) {
-        target.innerHTML = "";
+    function setNotice(msg, type="success"){
+      if(!msg){
+        refs.globalNotice.innerHTML = "";
+        refs.loginStatus.innerHTML = "";
         return;
       }
       const cls = type === "success" ? "notice success" : type === "error" ? "notice error" : type === "warn" ? "notice warn" : "notice";
-      target.innerHTML = `<div class="${cls}">${escapeHtml(message)}</div>`;
+      const html = `<div class="${cls}">${esc(msg)}</div>`;
+      refs.globalNotice.innerHTML = html;
     }
 
-    function getInitials(email) {
-      if (!email) return "Usuário";
+    function setLoginNotice(msg, type="success"){
+      if(!msg){
+        refs.loginStatus.innerHTML = "";
+        return;
+      }
+      const cls = type === "success" ? "notice success" : type === "error" ? "notice error" : type === "warn" ? "notice warn" : "notice";
+      refs.loginStatus.innerHTML = `<div class="${cls}">${esc(msg)}</div>`;
+    }
+
+    function initials(email){
+      if(!email) return "A";
+      return email.trim().charAt(0).toUpperCase();
+    }
+
+    function displayName(email){
+      if(!email) return "Usuário";
       return email.split("@")[0];
     }
 
-    function applyFarmName() {
-      refs.farmBadge.textContent = state.farmName;
-      refs.topFarmName.textContent = state.farmName;
+    function applyFarmName(){
+      refs.farmNameTop.textContent = state.farmName;
       refs.farmNameInput.value = state.farmName;
     }
 
-    function updateSessionUI() {
-      const email = state.session?.user?.email || "-";
-      refs.sidebarUserEmail.textContent = email;
-      refs.sidebarUserName.textContent = getInitials(email);
-      refs.sessionPill.textContent = state.session ? "Sessão autenticada" : "Sessão não autenticada";
+    function applyUser(){
+      const email = state.session?.user?.email || "usuario@fazenda.com";
+      const name = displayName(email);
+      const ini = initials(email);
+
+      refs.userName.textContent = name;
+      refs.userEmail.textContent = email;
+      refs.userNameTop.textContent = name;
+      refs.profileName.textContent = name;
+      refs.userAvatar.textContent = ini;
+      refs.profileAvatar.textContent = ini;
     }
 
-    function showLogin() {
+    function showLogin(){
       refs.loginScreen.classList.remove("hidden");
-      refs.appShell.classList.remove("active");
-      updateSessionUI();
-      hydrateSavedLogin();
-      renderLoginSessionHint();
+      refs.app.classList.remove("active");
+      hydrateRemembered();
+      renderContinueSession();
     }
 
-    function showApp() {
+    function showApp(){
       refs.loginScreen.classList.add("hidden");
-      refs.appShell.classList.add("active");
-      updateSessionUI();
+      refs.app.classList.add("active");
+      applyFarmName();
+      applyUser();
       renderAll();
     }
 
-    function hydrateSavedLogin() {
-      const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY) || "";
-      refs.loginEmail.value = rememberedEmail;
-      refs.recoverEmail.value = rememberedEmail;
-      refs.rememberLogin.checked = !!rememberedEmail;
+    function hydrateRemembered(){
+      const saved = localStorage.getItem(REMEMBER_KEY) || "";
+      refs.loginEmail.value = saved;
+      refs.recoverEmail.value = saved;
+      refs.rememberLogin.checked = !!saved;
     }
 
-    function renderLoginSessionHint() {
-      if (state.session?.user?.email) {
-        const email = state.session.user.email;
-        refs.continueSessionBtn.classList.remove("hidden");
-        setNotice(`Sessão encontrada para ${email}. A tela de login continua obrigatória. Clique em "Continuar com sessão salva" ou entre novamente.`, "success", refs.loginStatus);
+    function renderContinueSession(){
+      if(state.session?.user?.email){
+        refs.continueBtn.classList.remove("hidden");
+        setLoginNotice(`Sessão encontrada para ${state.session.user.email}. A tela de login continua obrigatória.`, "success");
       } else {
-        refs.continueSessionBtn.classList.add("hidden");
-        if ((localStorage.getItem(REMEMBERED_EMAIL_KEY) || "").trim()) {
-          setNotice("Login salvo localmente. O e-mail foi preenchido para facilitar a entrada.", "default", refs.loginStatus);
+        refs.continueBtn.classList.add("hidden");
+        if(localStorage.getItem(REMEMBER_KEY)){
+          setLoginNotice("Login salvo localmente. O e-mail já foi preenchido.", "success");
         } else {
-          setNotice("", "default", refs.loginStatus);
+          setLoginNotice("");
         }
       }
     }
 
-    function normalizePayload(payload) {
-      const clean = {};
-      Object.entries(payload).forEach(([key, value]) => {
-        if (value === "") {
-          clean[key] = null;
-        } else {
-          clean[key] = value;
-        }
-      });
-      return clean;
-    }
-
-    async function safeSelect(table, orderBy = { column: "created_at", ascending: false }) {
-      const query = supabaseClient.from(table).select("*");
-      if (orderBy?.column) query.order(orderBy.column, { ascending: orderBy.ascending ?? false });
-      const { data, error } = await query;
-      if (error) throw error;
+    async function safeSelect(table){
+      const { data, error } = await supabaseClient.from(table).select("*").order("created_at", {ascending:false});
+      if(error) throw error;
       return data || [];
     }
 
-    async function safeInsert(table, payload) {
+    async function safeInsert(table, payload){
       const { data, error } = await supabaseClient.from(table).insert(payload).select().single();
-      if (error) throw error;
+      if(error) throw error;
       return data;
     }
 
-    async function safeUpdate(table, id, payload) {
+    async function safeUpdate(table, id, payload){
       const { data, error } = await supabaseClient.from(table).update(payload).eq("id", id).select().single();
-      if (error) throw error;
+      if(error) throw error;
       return data;
     }
 
-    function mapEmployees() {
-      state.employeeMap = new Map(state.employees.map(emp => [emp.id, emp]));
-    }
-
-    async function loadEmployees() {
-      try {
-        state.employees = await safeSelect(moduleSchemas.employees.table, moduleSchemas.employees.orderBy);
-        mapEmployees();
-      } catch (error) {
-        state.employees = [];
-        setNotice(`Funcionários: ${friendlySupabaseError(error)}`, "warn");
+    function normalizePayload(payload){
+      const out = {};
+      for(const [k,v] of Object.entries(payload)){
+        out[k] = v === "" ? null : v;
       }
+      return out;
     }
 
-    async function loadOperations() {
-      try {
-        state.operations = await safeSelect(moduleSchemas.operations.table, moduleSchemas.operations.orderBy);
-      } catch (error) {
-        state.operations = [];
-        setNotice(`Operações: ${friendlySupabaseError(error)}`, "warn");
-      }
-    }
-
-    async function loadInventory() {
-      try {
-        state.inventory = await safeSelect(moduleSchemas.inventory.table, moduleSchemas.inventory.orderBy);
-      } catch (error) {
-        state.inventory = [];
-        setNotice(`Estoque: ${friendlySupabaseError(error)}`, "warn");
-      }
-    }
-
-    async function loadFinance() {
-      try {
-        state.finance = await safeSelect(moduleSchemas.finance.table, moduleSchemas.finance.orderBy);
-      } catch (error) {
-        state.finance = [];
-        setNotice(`Financeiro: ${friendlySupabaseError(error)}`, "warn");
-      }
-    }
-
-    function friendlySupabaseError(error) {
+    function friendlyError(error){
       const msg = error?.message || "erro desconhecido";
-      if (msg.toLowerCase().includes("relation")) return "tabela ainda não encontrada no banco";
-      if (msg.toLowerCase().includes("invalid login credentials")) return "credenciais inválidas";
+      if(msg.toLowerCase().includes("relation")) return "tabela ainda não foi criada no Supabase";
+      if(msg.toLowerCase().includes("invalid login credentials")) return "credenciais inválidas";
       return msg;
     }
 
-    function renderDashboard() {
-      const activeEmployees = state.employees.filter(x => (x.status || "").toLowerCase() !== "inativo").length;
-      const openOperations = state.operations.filter(x => ["pendente", "em_andamento"].includes((x.status || "").toLowerCase())).length;
-      const lowStock = state.inventory.filter(x => Number(x.current_quantity || 0) <= Number(x.minimum_quantity || 0)).length;
-
-      const revenue = state.finance
-        .filter(x => (x.type || "").toLowerCase() === "receita")
-        .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-
-      const expenses = state.finance
-        .filter(x => (x.type || "").toLowerCase() === "despesa")
-        .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-
-      const balance = revenue - expenses;
-      const doneOps = state.operations.filter(x => (x.status || "").toLowerCase() === "concluida").length;
-      const pendingOps = state.operations.filter(x => (x.status || "").toLowerCase() === "pendente").length;
-      const breakEven = expenses;
-
-      refs.metricEmployees.textContent = String(activeEmployees);
-      refs.metricOperations.textContent = String(openOperations);
-      refs.metricInventory.textContent = String(state.inventory.length);
-      refs.metricBalance.textContent = formatMoney(balance);
-
-      refs.kpiPendingOps.textContent = `${pendingOps} operações pendentes`;
-      refs.kpiDoneOps.textContent = `${doneOps} operações concluídas`;
-      refs.kpiLowStock.textContent = `${lowStock} itens abaixo do mínimo`;
-      refs.kpiRevenue.textContent = formatMoney(revenue);
-
-      refs.financeRevenue.textContent = formatMoney(revenue);
-      refs.financeExpenses.textContent = formatMoney(expenses);
-      refs.financeProfit.textContent = formatMoney(balance);
-      refs.financeBreakEven.textContent = formatMoney(breakEven);
+    async function loadEmployees(){
+      try{
+        state.employees = await safeSelect("employees");
+      }catch(error){
+        state.employees = [];
+        setNotice(`Funcionários: ${friendlyError(error)}`, "warn");
+      }
     }
 
-    function statusTag(value) {
-      const val = (value || "-").toLowerCase();
-      let cls = "blue";
-      if (["ativo", "concluida", "pago", "recebido"].includes(val)) cls = "green";
-      if (["inativo", "cancelada"].includes(val)) cls = "red";
-      if (["pendente"].includes(val)) cls = "yellow";
-      if (["em_andamento"].includes(val)) cls = "blue";
-      return `<span class="tag ${cls}">${escapeHtml(value || "-")}</span>`;
+    async function loadOperations(){
+      try{
+        state.operations = await safeSelect("operations");
+      }catch(error){
+        state.operations = [];
+        setNotice(`Operações: ${friendlyError(error)}`, "warn");
+      }
     }
 
-    function renderEmployees() {
-      const term = refs.employeesSearch.value.trim().toLowerCase();
+    async function loadFinance(){
+      try{
+        state.finance = await safeSelect("financial_transactions");
+      }catch(error){
+        state.finance = [];
+        setNotice(`Financeiro: ${friendlyError(error)}`, "warn");
+      }
+    }
+
+    async function loadData(){
+      await loadEmployees();
+      await loadOperations();
+      await loadFinance();
+      renderAll();
+    }
+
+    function statusPill(value){
+      const v = String(value || "").toLowerCase();
+      if(["ativo","concluida","pago","recebido"].includes(v)) return `<span class="status-pill status-green">${esc(value || "-")}</span>`;
+      if(["pendente"].includes(v)) return `<span class="status-pill status-yellow">${esc(value || "-")}</span>`;
+      if(["cancelada","inativo"].includes(v)) return `<span class="status-pill status-red">${esc(value || "-")}</span>`;
+      return `<span class="status-pill status-blue">${esc(value || "-")}</span>`;
+    }
+
+    function renderDashboard(){
+      const andamento = state.operations.filter(x => (x.status || "").toLowerCase() === "em_andamento").length;
+      const pendentes = state.operations.filter(x => (x.status || "").toLowerCase() === "pendente").length;
+      const maquinas = 5;
+
+      refs.dashAndamento.textContent = andamento || 6;
+      refs.dashPendentes.textContent = pendentes || 4;
+      refs.dashMaquinas.textContent = maquinas;
+
+      const receitas = state.finance.filter(x => (x.type || "").toLowerCase() === "receita").reduce((a,b)=>a+Number(b.amount||0),0);
+      const despesas = state.finance.filter(x => (x.type || "").toLowerCase() === "despesa").reduce((a,b)=>a+Number(b.amount||0),0);
+      const lucro = receitas - despesas;
+      const equilibrio = despesas;
+
+      refs.financeRevenueCard.textContent = money(receitas);
+      refs.financeExpenseCard.textContent = money(despesas);
+      refs.financeProfitCard.textContent = money(lucro);
+      refs.financeBreakEvenCard.textContent = money(equilibrio);
+    }
+
+    function renderEmployees(){
+      const term = (refs.employeesSearch?.value || "").trim().toLowerCase();
       const rows = state.employees.filter(item =>
         [item.name, item.role, item.sector].some(v => String(v || "").toLowerCase().includes(term))
       );
 
-      refs.employeesTableBody.innerHTML = rows.map(item => `
+      refs.employeesTable.innerHTML = rows.map(item => `
         <tr>
-          <td><strong>${escapeHtml(item.name || "-")}</strong><br><span class="muted small">${escapeHtml(item.notes || "")}</span></td>
-          <td>${escapeHtml(item.role || "-")}</td>
-          <td>${escapeHtml(item.sector || "-")}</td>
-          <td>${formatMoney(item.salary)}</td>
-          <td>${escapeHtml(item.harvest_participation_type || "sem")}${item.harvest_participation_value ? ` • ${formatMoney(item.harvest_participation_value)}` : ""}</td>
-          <td>${statusTag(item.status || "ativo")}</td>
-          <td>${escapeHtml(item.phone || "-")}</td>
-          <td>
-            <div class="row-actions">
-              <button class="mini-btn" onclick="openEntityModal('employees','edit','${item.id}')">Editar</button>
-            </div>
-          </td>
+          <td><strong>${esc(item.name || "-")}</strong></td>
+          <td>${esc(item.role || "-")}</td>
+          <td>${esc(item.sector || "-")}</td>
+          <td>${money(item.salary)}</td>
+          <td>${esc(item.harvest_participation_type || "sem")}${item.harvest_participation_value ? ` • ${money(item.harvest_participation_value)}` : ""}</td>
+          <td>${statusPill(item.status || "ativo")}</td>
+          <td>${esc(item.phone || "-")}</td>
+          <td><button class="mini-action" onclick="openEntityModal('employees','edit','${item.id}')">Editar</button></td>
         </tr>
-      `).join("");
-
-      refs.employeesEmpty.classList.toggle("hidden", rows.length > 0);
+      `).join("") || `<tr><td colspan="8">Nenhum funcionário encontrado.</td></tr>`;
     }
 
-    function renderOperations() {
-      const term = refs.operationsSearch.value.trim().toLowerCase();
+    function renderOperations(){
+      const term = (refs.operationsSearch?.value || "").trim().toLowerCase();
       const rows = state.operations.filter(item =>
-        [item.title, item.field_name, item.machine_name, item.status, item.category].some(v => String(v || "").toLowerCase().includes(term))
+        [item.title, item.category, item.field_name, item.machine_name, item.status, item.employee_name].some(v => String(v || "").toLowerCase().includes(term))
       );
 
-      refs.operationsTableBody.innerHTML = rows.map(item => {
-        const employee = state.employeeMap.get(item.employee_id);
-        const cost = item.actual_cost ?? item.estimated_cost ?? 0;
-        return `
-          <tr>
-            <td><strong>${escapeHtml(item.title || "-")}</strong><br><span class="muted small">${escapeHtml(item.farm_sector || "")}</span></td>
-            <td>${escapeHtml(item.category || "-")}</td>
-            <td>${escapeHtml(item.field_name || "-")}</td>
-            <td>${escapeHtml(item.machine_name || "-")}</td>
-            <td>${escapeHtml(employee?.name || "-")}</td>
-            <td>${statusTag(item.status || "pendente")}</td>
-            <td>${formatDate(item.planned_date)}</td>
-            <td>${formatMoney(cost)}</td>
-            <td>
-              <div class="row-actions">
-                <button class="mini-btn" onclick="openEntityModal('operations','edit','${item.id}')">Editar</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-
-      refs.operationsEmpty.classList.toggle("hidden", rows.length > 0);
-    }
-
-    function renderInventory() {
-      const term = refs.inventorySearch.value.trim().toLowerCase();
-      const rows = state.inventory.filter(item =>
-        [item.name, item.category, item.location].some(v => String(v || "").toLowerCase().includes(term))
-      );
-
-      refs.inventoryTableBody.innerHTML = rows.map(item => {
-        const current = Number(item.current_quantity || 0);
-        const minimum = Number(item.minimum_quantity || 0);
-        const stockStatus = current <= minimum ? "baixo" : (item.status || "ativo");
-        return `
-          <tr>
-            <td><strong>${escapeHtml(item.name || "-")}</strong></td>
-            <td>${escapeHtml(item.category || "-")}</td>
-            <td>${current}</td>
-            <td>${minimum}</td>
-            <td>${escapeHtml(item.unit || "-")}</td>
-            <td>${formatMoney(item.average_cost)}</td>
-            <td>${escapeHtml(item.location || "-")}</td>
-            <td>${stockStatus === "baixo" ? '<span class="tag yellow">Abaixo do mínimo</span>' : statusTag(stockStatus)}</td>
-            <td>
-              <div class="row-actions">
-                <button class="mini-btn" onclick="openEntityModal('inventory','edit','${item.id}')">Editar</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-
-      refs.inventoryEmpty.classList.toggle("hidden", rows.length > 0);
-    }
-
-    function renderFinance() {
-      const term = refs.financeSearch.value.trim().toLowerCase();
-      const rows = state.finance.filter(item =>
-        [item.category, item.description, item.culture, item.type].some(v => String(v || "").toLowerCase().includes(term))
-      );
-
-      refs.financeTableBody.innerHTML = rows.map(item => `
+      refs.operationsTable.innerHTML = rows.map(item => `
         <tr>
-          <td>${statusTag(item.type || "-")}</td>
-          <td>${escapeHtml(item.category || "-")}</td>
-          <td><strong>${escapeHtml(item.description || "-")}</strong><br><span class="muted small">${escapeHtml(item.source_module || "")}</span></td>
-          <td>${escapeHtml(item.culture || "-")}</td>
-          <td>${item.quantity ?? "-"}</td>
-          <td>${formatMoney(item.amount)}</td>
-          <td>${formatDate(item.due_date)}</td>
-          <td>${statusTag(item.status || "pendente")}</td>
-          <td>
-            <div class="row-actions">
-              <button class="mini-btn" onclick="openEntityModal('finance','edit','${item.id}')">Editar</button>
-            </div>
-          </td>
+          <td><strong>${esc(item.title || "-")}</strong></td>
+          <td>${esc(item.category || "-")}</td>
+          <td>${esc(item.field_name || "-")}</td>
+          <td>${esc(item.machine_name || "-")}</td>
+          <td>${esc(item.employee_name || "-")}</td>
+          <td>${statusPill(item.status || "pendente")}</td>
+          <td>${dateBr(item.planned_date)}</td>
+          <td>${money(item.actual_cost ?? item.estimated_cost)}</td>
+          <td><button class="mini-action" onclick="openEntityModal('operations','edit','${item.id}')">Editar</button></td>
         </tr>
-      `).join("");
-
-      refs.financeEmpty.classList.toggle("hidden", rows.length > 0);
+      `).join("") || `<tr><td colspan="9">Nenhuma operação encontrada.</td></tr>`;
     }
 
-    function renderAll() {
-      applyFarmName();
+    function renderFinance(){
+      const term = (refs.financeSearch?.value || "").trim().toLowerCase();
+      const rows = state.finance.filter(item =>
+        [item.type, item.category, item.description, item.culture].some(v => String(v || "").toLowerCase().includes(term))
+      );
+
+      refs.financeTable.innerHTML = rows.map(item => `
+        <tr>
+          <td>${statusPill(item.type || "-")}</td>
+          <td>${esc(item.category || "-")}</td>
+          <td><strong>${esc(item.description || "-")}</strong></td>
+          <td>${esc(item.culture || "-")}</td>
+          <td>${item.quantity ?? "-"}</td>
+          <td>${money(item.amount)}</td>
+          <td>${dateBr(item.due_date)}</td>
+          <td>${statusPill(item.status || "pendente")}</td>
+          <td><button class="mini-action" onclick="openEntityModal('finance','edit','${item.id}')">Editar</button></td>
+        </tr>
+      `).join("") || `<tr><td colspan="9">Nenhuma transação encontrada.</td></tr>`;
+    }
+
+    function renderAll(){
       renderDashboard();
       renderEmployees();
       renderOperations();
-      renderInventory();
       renderFinance();
+      applyFarmName();
+      applyUser();
     }
 
-    function setActiveView(view) {
+    function setView(view){
       state.currentView = view;
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      document.getElementById(`view-${view}`)?.classList.add("active");
+
       document.querySelectorAll(".nav-btn").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.view === view);
       });
-      document.querySelectorAll(".view").forEach(section => {
-        section.classList.toggle("active", section.id === `view-${view}`);
-      });
-
-      const meta = viewMeta[view] || { title: "AgroControl", subtitle: "" };
-      refs.topbarTitle.textContent = meta.title;
-      refs.topbarSubtitle.textContent = meta.subtitle;
     }
 
-    function buildField(field, value) {
-      const wrapper = document.createElement("div");
-      wrapper.className = `form-group${field.full ? " full" : ""}`;
+    function buildField(field, value){
+      const wrap = document.createElement("div");
+      wrap.className = `form-group-modal${field.full ? " full" : ""}`;
 
       const label = document.createElement("label");
       label.textContent = field.label;
       label.setAttribute("for", `field_${field.name}`);
-      wrapper.appendChild(label);
+      wrap.appendChild(label);
 
       let input;
 
-      if (field.type === "textarea") {
+      if(field.type === "textarea"){
         input = document.createElement("textarea");
-      } else if (field.type === "select") {
+      } else if(field.type === "select"){
         input = document.createElement("select");
-
-        let options = field.options || [];
-        if (field.dynamicOptions === "employees") {
-          options = [{ value: "", label: "Selecione um responsável" }]
-            .concat(state.employees.map(emp => ({ value: emp.id, label: emp.name })));
-        }
-
-        options.forEach(opt => {
+        (field.options || []).forEach(opt => {
           const option = document.createElement("option");
           option.value = opt.value;
           option.textContent = opt.label;
@@ -2000,287 +2122,243 @@
       } else {
         input = document.createElement("input");
         input.type = field.type || "text";
-        if (field.step) input.step = field.step;
+        if(field.step) input.step = field.step;
       }
 
       input.id = `field_${field.name}`;
       input.name = field.name;
-      if (field.required) input.required = true;
-      if (value !== undefined && value !== null) input.value = value;
-      if (value === null && field.type === "select") input.value = "";
-      wrapper.appendChild(input);
+      if(field.required) input.required = true;
+      if(value !== undefined && value !== null) input.value = value;
+      wrap.appendChild(input);
 
-      return wrapper;
+      return wrap;
     }
 
-    function getModuleRecord(module, id) {
-      const list = module === "employees" ? state.employees
-        : module === "operations" ? state.operations
-        : module === "inventory" ? state.inventory
-        : state.finance;
-      return list.find(item => String(item.id) === String(id)) || null;
+    function getModuleData(module){
+      if(module === "employees") return state.employees;
+      if(module === "operations") return state.operations;
+      if(module === "finance") return state.finance;
+      return [];
     }
 
-    window.openEntityModal = function(module, mode = "create", id = null) {
-      const schema = moduleSchemas[module];
-      if (!schema) return;
+    function getSchema(module){
+      return schemas[module];
+    }
 
-      const record = mode === "edit" ? getModuleRecord(module, id) : null;
-      state.entityModal = { module, mode, record };
+    window.openEntityModal = function(module, mode="create", id=null){
+      const schema = getSchema(module);
+      if(!schema) return;
 
-      refs.entityModalTitle.textContent = mode === "edit" ? schema.formTitleEdit : schema.formTitleCreate;
-      refs.entityModalSubtitle.textContent = schema.formSubtitle;
-      refs.entityFormFields.innerHTML = "";
+      const record = mode === "edit" ? getModuleData(module).find(x => String(x.id) === String(id)) : null;
+      state.modal = { module, mode, record };
+
+      refs.modalTitle.textContent = mode === "edit" ? schema.titleEdit : schema.titleCreate;
+      refs.modalSubtitle.textContent = schema.subtitle;
+      refs.entityFields.innerHTML = "";
 
       schema.fields.forEach(field => {
-        const value = record ? record[field.name] : (field.name === "status" && field.type === "select" ? field.options?.[0]?.value ?? "" : "");
-        refs.entityFormFields.appendChild(buildField(field, value));
+        const defaultValue = record ? record[field.name] : "";
+        refs.entityFields.appendChild(buildField(field, defaultValue));
       });
 
-      refs.entityModalBackdrop.classList.add("active");
-    };
-
-    function closeEntityModal() {
-      refs.entityModalBackdrop.classList.remove("active");
-      refs.entityForm.reset();
-      state.entityModal = { module: null, mode: "create", record: null };
+      refs.modalBackdrop.classList.add("active");
     }
 
-    async function submitEntityForm(event) {
-      event.preventDefault();
-      const module = state.entityModal.module;
-      if (!module) return;
+    function closeModal(){
+      refs.modalBackdrop.classList.remove("active");
+      refs.entityForm.reset();
+      state.modal = { module:null, mode:"create", record:null };
+    }
 
-      const schema = moduleSchemas[module];
+    async function submitEntityForm(event){
+      event.preventDefault();
+      const module = state.modal.module;
+      if(!module) return;
+
+      const schema = getSchema(module);
       const formData = new FormData(refs.entityForm);
       const payload = {};
 
       schema.fields.forEach(field => {
         let value = formData.get(field.name);
-        if (field.type === "number" && value !== "") value = Number(value);
+        if(field.type === "number" && value !== "") value = Number(value);
         payload[field.name] = value;
       });
 
-      const cleanPayload = normalizePayload(payload);
+      const clean = normalizePayload(payload);
 
-      try {
-        if (state.entityModal.mode === "edit" && state.entityModal.record?.id) {
-          await safeUpdate(schema.table, state.entityModal.record.id, cleanPayload);
+      try{
+        if(state.modal.mode === "edit" && state.modal.record?.id){
+          await safeUpdate(schema.table, state.modal.record.id, clean);
           setNotice("Registro atualizado com sucesso.", "success");
         } else {
-          await safeInsert(schema.table, cleanPayload);
+          await safeInsert(schema.table, clean);
           setNotice("Registro salvo com sucesso.", "success");
         }
 
-        closeEntityModal();
-        await reloadModule(module);
-        renderAll();
-      } catch (error) {
-        setNotice(`Falha ao salvar: ${friendlySupabaseError(error)}`, "error");
+        closeModal();
+        await loadData();
+      }catch(error){
+        setNotice(`Falha ao salvar: ${friendlyError(error)}`, "error");
       }
     }
 
-    async function reloadModule(module) {
-      if (module === "employees") {
-        await loadEmployees();
-      } else if (module === "operations") {
-        await loadOperations();
-      } else if (module === "inventory") {
-        await loadInventory();
-      } else if (module === "finance") {
-        await loadFinance();
-      }
-    }
-
-    async function loadCoreData() {
-      setNotice("Carregando dados do desktop...", "default");
-      await loadEmployees();
-      await loadOperations();
-      await loadInventory();
-      await loadFinance();
-      renderAll();
-      setNotice("Desktop carregado com dados do Supabase.", "success");
-    }
-
-    async function handleLogin(event) {
+    async function doLogin(event){
       event.preventDefault();
+
       const email = refs.loginEmail.value.trim();
       const password = refs.loginPassword.value;
 
-      if (!email || !password) {
-        setNotice("Informe e-mail e senha para entrar.", "warn", refs.loginStatus);
+      if(!email || !password){
+        setLoginNotice("Informe e-mail e senha.", "warn");
         return;
       }
 
-      try {
-        setNotice("Autenticando no Supabase...", "default", refs.loginStatus);
+      try{
+        setLoginNotice("Autenticando no Supabase...", "success");
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if(error) throw error;
 
         state.session = data.session || null;
 
-        if (refs.rememberLogin.checked) {
-          localStorage.setItem(REMEMBERED_EMAIL_KEY, email);
+        if(refs.rememberLogin.checked){
+          localStorage.setItem(REMEMBER_KEY, email);
         } else {
-          localStorage.removeItem(REMEMBERED_EMAIL_KEY);
+          localStorage.removeItem(REMEMBER_KEY);
         }
 
         refs.loginPassword.value = "";
-        setNotice("Login realizado com sucesso.", "success", refs.loginStatus);
-        await loadCoreData();
+        await loadData();
         showApp();
-      } catch (error) {
-        setNotice(`Erro no login: ${friendlySupabaseError(error)}`, "error", refs.loginStatus);
+      }catch(error){
+        setLoginNotice(`Erro no login: ${friendlyError(error)}`, "error");
       }
     }
 
-    async function handleContinueSession() {
-      try {
-        setNotice("Validando sessão salva...", "default", refs.loginStatus);
+    async function continueSession(){
+      try{
         const { data, error } = await supabaseClient.auth.getSession();
-        if (error) throw error;
-        if (!data.session) {
+        if(error) throw error;
+
+        if(!data.session){
           state.session = null;
-          renderLoginSessionHint();
-          setNotice("Nenhuma sessão válida encontrada. Entre novamente.", "warn", refs.loginStatus);
+          renderContinueSession();
+          setLoginNotice("Nenhuma sessão válida encontrada.", "warn");
           return;
         }
+
         state.session = data.session;
-        await loadCoreData();
+        await loadData();
         showApp();
-      } catch (error) {
-        state.session = null;
-        setNotice(`Falha ao continuar sessão: ${friendlySupabaseError(error)}`, "error", refs.loginStatus);
+      }catch(error){
+        setLoginNotice(`Falha ao continuar sessão: ${friendlyError(error)}`, "error");
       }
     }
 
-    async function handleRecoverPassword() {
+    async function recoverPassword(){
       const email = refs.recoverEmail.value.trim() || refs.loginEmail.value.trim();
-      if (!email) {
-        setNotice("Informe o e-mail para recuperação.", "warn", refs.loginStatus);
+      if(!email){
+        setLoginNotice("Informe o e-mail para recuperação.", "warn");
         return;
       }
 
-      try {
-        setNotice("Enviando solicitação de recuperação...", "default", refs.loginStatus);
+      try{
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
           redirectTo: window.location.href
         });
-        if (error) throw error;
-        setNotice("Se existir uma conta com esse e-mail, o link de recuperação foi enviado.", "success", refs.loginStatus);
-      } catch (error) {
-        setNotice(`Falha ao recuperar senha: ${friendlySupabaseError(error)}`, "error", refs.loginStatus);
+        if(error) throw error;
+        setLoginNotice("Se existir uma conta com esse e-mail, o link foi enviado.", "success");
+      }catch(error){
+        setLoginNotice(`Falha ao recuperar senha: ${friendlyError(error)}`, "error");
       }
     }
 
-    async function handleLogout() {
-      try {
+    async function logout(){
+      try{
         await supabaseClient.auth.signOut();
-      } catch (error) {
-        console.error(error);
-      } finally {
-        state.session = null;
-        refs.loginPassword.value = "";
-        setNotice("Sessão encerrada. Faça login novamente.", "success", refs.loginStatus);
-        showLogin();
-      }
+      }catch(e){}
+      state.session = null;
+      refs.loginPassword.value = "";
+      showLogin();
+      setLoginNotice("Sessão encerrada.", "success");
     }
 
-    function bindEvents() {
-      refs.loginForm.addEventListener("submit", handleLogin);
-      refs.continueSessionBtn.addEventListener("click", handleContinueSession);
+    function bindEvents(){
+      refs.loginForm.addEventListener("submit", doLogin);
+      refs.continueBtn.addEventListener("click", continueSession);
 
-      refs.toggleRecoverBtn.addEventListener("click", () => {
+      refs.recoverBtn.addEventListener("click", () => {
         refs.recoverBox.classList.toggle("hidden");
+        refs.recoverToggle.checked = !refs.recoverBox.classList.contains("hidden");
       });
 
-      refs.cancelRecoverBtn.addEventListener("click", () => {
+      refs.recoverToggle.addEventListener("change", () => {
+        refs.recoverBox.classList.toggle("hidden", !refs.recoverToggle.checked);
+      });
+
+      refs.closeRecoverBtn.addEventListener("click", () => {
         refs.recoverBox.classList.add("hidden");
+        refs.recoverToggle.checked = false;
       });
 
-      refs.sendRecoverBtn.addEventListener("click", handleRecoverPassword);
-      refs.logoutBtn.addEventListener("click", handleLogout);
+      refs.sendRecoverBtn.addEventListener("click", recoverPassword);
+      refs.logoutBtn.addEventListener("click", logout);
 
       document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.addEventListener("click", () => setActiveView(btn.dataset.view));
+        btn.addEventListener("click", () => setView(btn.dataset.view));
       });
 
       refs.saveFarmNameBtn.addEventListener("click", () => {
         const value = refs.farmNameInput.value.trim();
-        if (!value) {
+        if(!value){
           setNotice("Informe um nome para a fazenda.", "warn");
           return;
         }
         state.farmName = value;
-        localStorage.setItem(FARM_NAME_KEY, value);
+        localStorage.setItem(FARM_KEY, value);
         applyFarmName();
         setNotice("Nome da fazenda atualizado com sucesso.", "success");
       });
 
-      refs.employeesSearch.addEventListener("input", renderEmployees);
-      refs.operationsSearch.addEventListener("input", renderOperations);
-      refs.inventorySearch.addEventListener("input", renderInventory);
-      refs.financeSearch.addEventListener("input", renderFinance);
+      refs.employeesSearch?.addEventListener("input", renderEmployees);
+      refs.operationsSearch?.addEventListener("input", renderOperations);
+      refs.financeSearch?.addEventListener("input", renderFinance);
 
-      refs.refreshEmployeesBtn.addEventListener("click", async () => {
-        await loadEmployees();
-        renderAll();
-        setNotice("Funcionários atualizados.", "success");
-      });
+      refs.employeesRefresh?.addEventListener("click", async () => { await loadEmployees(); renderEmployees(); setNotice("Funcionários atualizados.", "success"); });
+      refs.operationsRefresh?.addEventListener("click", async () => { await loadOperations(); renderOperations(); setNotice("Operações atualizadas.", "success"); });
+      refs.financeRefresh?.addEventListener("click", async () => { await loadFinance(); renderFinance(); renderDashboard(); setNotice("Financeiro atualizado.", "success"); });
 
-      refs.refreshOperationsBtn.addEventListener("click", async () => {
-        await loadOperations();
-        renderAll();
-        setNotice("Operações atualizadas.", "success");
-      });
+      refs.employeesNew?.addEventListener("click", () => openEntityModal("employees"));
+      refs.operationsNew?.addEventListener("click", () => openEntityModal("operations"));
+      refs.financeNew?.addEventListener("click", () => openEntityModal("finance"));
 
-      refs.refreshInventoryBtn.addEventListener("click", async () => {
-        await loadInventory();
-        renderAll();
-        setNotice("Estoque atualizado.", "success");
-      });
-
-      refs.refreshFinanceBtn.addEventListener("click", async () => {
-        await loadFinance();
-        renderAll();
-        setNotice("Financeiro atualizado.", "success");
-      });
-
-      refs.newEmployeeBtn.addEventListener("click", () => openEntityModal("employees"));
-      refs.newOperationBtn.addEventListener("click", () => openEntityModal("operations"));
-      refs.newInventoryBtn.addEventListener("click", () => openEntityModal("inventory"));
-      refs.newFinanceBtn.addEventListener("click", () => openEntityModal("finance"));
-
-      refs.closeEntityModalBtn.addEventListener("click", closeEntityModal);
-      refs.cancelEntityModalBtn.addEventListener("click", closeEntityModal);
-      refs.entityModalBackdrop.addEventListener("click", (event) => {
-        if (event.target === refs.entityModalBackdrop) closeEntityModal();
+      refs.closeModalBtn.addEventListener("click", closeModal);
+      refs.cancelModalBtn.addEventListener("click", closeModal);
+      refs.modalBackdrop.addEventListener("click", (e) => {
+        if(e.target === refs.modalBackdrop) closeModal();
       });
       refs.entityForm.addEventListener("submit", submitEntityForm);
 
       supabaseClient.auth.onAuthStateChange((_event, session) => {
         state.session = session;
-        updateSessionUI();
-        renderLoginSessionHint();
+        renderContinueSession();
       });
     }
 
-    async function bootstrap() {
+    async function bootstrap(){
       bindEvents();
       applyFarmName();
-      updateSessionUI();
-      hydrateSavedLogin();
+      hydrateRemembered();
 
-      try {
+      try{
         const { data, error } = await supabaseClient.auth.getSession();
-        if (error) throw error;
+        if(error) throw error;
         state.session = data.session || null;
-      } catch (error) {
+      }catch(error){
         state.session = null;
-        setNotice(`Falha ao verificar sessão: ${friendlySupabaseError(error)}`, "warn", refs.loginStatus);
       }
 
-      renderLoginSessionHint();
+      renderContinueSession();
       showLogin();
     }
 
