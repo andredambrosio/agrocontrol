@@ -20,6 +20,7 @@
       --yellow:#d7a24d;
       --orange:#df8a4f;
       --red:#cf5f5f;
+      --blue:#6a92d8;
       --shadow:0 18px 50px rgba(0,0,0,.35);
       --radius:18px;
       --radius-lg:24px;
@@ -37,13 +38,12 @@
     .app{display:none;height:100vh;width:100vw;background:#0b0f0d}
     .app.active{display:block}
 
-    /* LOGIN */
     .login-screen{
       position:fixed;
       inset:0;
       background:
         linear-gradient(90deg, rgba(0,0,0,.68) 0%, rgba(0,0,0,.38) 34%, rgba(0,0,0,.18) 62%, rgba(0,0,0,.22) 100%),
-        url("hero_bg_crop.png") center center / cover no-repeat;
+        url("imagens/hero_bg_crop.png") center center / cover no-repeat;
       display:flex;
       align-items:flex-start;
       justify-content:flex-start;
@@ -103,8 +103,7 @@
     .login-card{
       width:390px;
       min-height:470px;
-      background:
-        linear-gradient(180deg, rgba(23,27,29,.80), rgba(15,17,19,.84));
+      background:linear-gradient(180deg, rgba(23,27,29,.80), rgba(15,17,19,.84));
       border:1px solid rgba(255,255,255,.10);
       border-radius:20px;
       box-shadow:var(--shadow);
@@ -128,9 +127,7 @@
     .login-brand .logo-mark:before{width:22px;left:3px;top:12px}
     .login-brand .logo-mark:after{width:15px;left:9px;top:17px}
 
-    .login-status{
-      margin:0 0 14px;
-    }
+    .login-status{margin:0 0 14px}
 
     .notice{
       border-radius:16px;
@@ -140,15 +137,19 @@
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.04);
       color:#dce6df;
+      margin-bottom:12px;
     }
+
     .notice.success{
       background:linear-gradient(180deg, rgba(73,155,81,.18), rgba(41,92,47,.18));
       border-color:rgba(97,194,106,.25);
     }
+
     .notice.error{
       background:rgba(176,68,68,.16);
       border-color:rgba(207,95,95,.25);
     }
+
     .notice.warn{
       background:rgba(196,140,62,.14);
       border-color:rgba(215,162,77,.25);
@@ -163,9 +164,7 @@
       display:block;
     }
 
-    .input-wrap{
-      position:relative;
-    }
+    .input-wrap{position:relative}
 
     .input-wrap input{
       width:100%;
@@ -179,9 +178,7 @@
       font-size:18px;
     }
 
-    .input-wrap input::placeholder{
-      color:#b7c0ba;
-    }
+    .input-wrap input::placeholder{color:#b7c0ba}
 
     .input-wrap input:focus{
       border-color:rgba(97,194,106,.42);
@@ -324,7 +321,6 @@
       opacity:.88;
     }
 
-    /* DASHBOARD */
     .dashboard{
       display:grid;
       grid-template-columns:var(--sidebar-w) 1fr;
@@ -360,6 +356,7 @@
     .sidebar-brand .logo-mark{
       width:32px;height:32px;border-width:3px
     }
+
     .sidebar-brand .logo-mark:before{width:20px;left:3px;top:11px}
     .sidebar-brand .logo-mark:after{width:14px;left:8px;top:16px}
 
@@ -455,9 +452,7 @@
       font-weight:800;
     }
 
-    .user-text{
-      min-width:0;
-    }
+    .user-text{min-width:0}
 
     .user-name{
       font-weight:700;
@@ -486,8 +481,7 @@
       grid-column:2;
       grid-row:1;
       border-bottom:1px solid var(--line);
-      background:
-        linear-gradient(90deg, rgba(31,37,34,.92), rgba(18,21,20,.94) 44%, rgba(12,14,14,.96));
+      background:linear-gradient(90deg, rgba(31,37,34,.92), rgba(18,21,20,.94) 44%, rgba(12,14,14,.96));
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -506,6 +500,7 @@
       overflow:auto;
       scrollbar-width:none;
     }
+
     .topbar-left::-webkit-scrollbar{display:none}
 
     .top-item{
@@ -575,8 +570,7 @@
 
     .metric-card,
     .panel{
-      background:
-        linear-gradient(180deg, rgba(23,29,27,.98), rgba(16,20,18,.98));
+      background:linear-gradient(180deg, rgba(23,29,27,.98), rgba(16,20,18,.98));
       border:1px solid rgba(255,255,255,.08);
       border-radius:14px;
       box-shadow:var(--shadow);
@@ -639,7 +633,7 @@
       position:relative;
       background:
         linear-gradient(90deg, rgba(14,17,16,.68), rgba(14,17,16,.38)),
-        url("small_climate_crop.png") center center / cover no-repeat;
+        url("imagens/small_climate_crop.png") center center / cover no-repeat;
     }
 
     .weather-card::before{
@@ -718,9 +712,7 @@
       font-weight:800;
     }
 
-    .panel-title .ic{
-      color:#7ecb6c;
-    }
+    .panel-title .ic{color:#7ecb6c}
 
     .panel-meta{
       color:#8d9792;
@@ -798,9 +790,7 @@
       font-weight:800;
     }
 
-    .table-wrap{
-      overflow:auto;
-    }
+    .table-wrap{overflow:auto}
 
     table{
       width:100%;
@@ -889,7 +879,6 @@
       margin-top:1px;
     }
 
-    /* VIEWS */
     .view{display:none}
     .view.active{display:block}
 
@@ -965,7 +954,6 @@
       font-size:15px;
     }
 
-    /* MODAL */
     .modal-backdrop{
       position:fixed;
       inset:0;
@@ -1077,43 +1065,48 @@
         align-items:center;
         background-position:center;
       }
+
       .login-logo-top{
         left:18px;
         top:18px;
         font-size:30px;
       }
+
       .login-card{
         margin-top:50px;
         width:min(430px,100%);
       }
+
       .dashboard{
         grid-template-columns:1fr;
         grid-template-rows:auto auto 1fr;
         height:auto;
         min-height:100vh;
       }
+
       .sidebar{
         grid-row:1;
         grid-column:1;
         width:100%;
         min-height:auto;
       }
+
       .topbar{
         grid-row:2;
         grid-column:1;
       }
+
       .content{
         grid-row:3;
         grid-column:1;
       }
+
       .cards-row{grid-template-columns:1fr}
       .form-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-
-  <!-- LOGIN -->
   <section id="loginScreen" class="login-screen">
     <div class="login-logo-top">
       <div class="logo-mark"></div>
@@ -1183,7 +1176,6 @@
     </div>
   </section>
 
-  <!-- APP -->
   <section id="app" class="app">
     <div class="dashboard">
       <aside class="sidebar">
@@ -1244,7 +1236,6 @@
       <main class="content">
         <div id="globalNotice"></div>
 
-        <!-- DASHBOARD -->
         <section id="view-dashboard" class="view active">
           <div class="cards-row">
             <div class="metric-card greenish">
@@ -1411,7 +1402,6 @@
           </div>
         </section>
 
-        <!-- OPERATIONS -->
         <section id="view-operations" class="view">
           <h2 class="section-title-page">Operações</h2>
           <p class="section-subtitle-page">Tarefas, execução, máquina, responsável e custo operacional.</p>
@@ -1444,7 +1434,6 @@
           </div>
         </section>
 
-        <!-- FIELDS -->
         <section id="view-fields" class="view">
           <h2 class="section-title-page">Talhões</h2>
           <p class="section-subtitle-page">Visão geral dos talhões e suas culturas.</p>
@@ -1471,7 +1460,6 @@
           </div>
         </section>
 
-        <!-- MACHINES -->
         <section id="view-machines" class="view">
           <h2 class="section-title-page">Máquinas</h2>
           <p class="section-subtitle-page">Controle base de máquinas e situação operacional.</p>
@@ -1498,7 +1486,6 @@
           </div>
         </section>
 
-        <!-- EMPLOYEES -->
         <section id="view-employees" class="view">
           <h2 class="section-title-page">Funcionários</h2>
           <p class="section-subtitle-page">Equipe, salário, participação e status.</p>
@@ -1530,7 +1517,6 @@
           </div>
         </section>
 
-        <!-- MARKET -->
         <section id="view-market" class="view">
           <h2 class="section-title-page">Mercado</h2>
           <p class="section-subtitle-page">Área reservada para cotações futuras e integração externa.</p>
@@ -1547,7 +1533,6 @@
           </div>
         </section>
 
-        <!-- FINANCE -->
         <section id="view-finance" class="view">
           <h2 class="section-title-page">Financeiro</h2>
           <p class="section-subtitle-page">Receitas, despesas, saldo, lucro e ponto de equilíbrio base.</p>
@@ -1599,7 +1584,6 @@
           </div>
         </section>
 
-        <!-- PRODUCTIVITY -->
         <section id="view-productivity" class="view">
           <h2 class="section-title-page">Produtividade</h2>
           <p class="section-subtitle-page">Visão base da performance da safra.</p>
@@ -1616,7 +1600,6 @@
           </div>
         </section>
 
-        <!-- SETTINGS -->
         <section id="view-settings" class="view">
           <h2 class="section-title-page">Configurações</h2>
           <p class="section-subtitle-page">Ajustes gerais do AgroControl Desktop.</p>
@@ -1635,7 +1618,6 @@
     </div>
   </section>
 
-  <!-- MODAL -->
   <div id="modalBackdrop" class="modal-backdrop">
     <div class="modal">
       <div class="modal-header">
@@ -1841,12 +1823,10 @@
     function setNotice(msg, type="success"){
       if(!msg){
         refs.globalNotice.innerHTML = "";
-        refs.loginStatus.innerHTML = "";
         return;
       }
       const cls = type === "success" ? "notice success" : type === "error" ? "notice error" : type === "warn" ? "notice warn" : "notice";
-      const html = `<div class="${cls}">${esc(msg)}</div>`;
-      refs.globalNotice.innerHTML = html;
+      refs.globalNotice.innerHTML = `<div class="${cls}">${esc(msg)}</div>`;
     }
 
     function setLoginNotice(msg, type="success"){
@@ -2324,9 +2304,24 @@
       refs.operationsSearch?.addEventListener("input", renderOperations);
       refs.financeSearch?.addEventListener("input", renderFinance);
 
-      refs.employeesRefresh?.addEventListener("click", async () => { await loadEmployees(); renderEmployees(); setNotice("Funcionários atualizados.", "success"); });
-      refs.operationsRefresh?.addEventListener("click", async () => { await loadOperations(); renderOperations(); setNotice("Operações atualizadas.", "success"); });
-      refs.financeRefresh?.addEventListener("click", async () => { await loadFinance(); renderFinance(); renderDashboard(); setNotice("Financeiro atualizado.", "success"); });
+      refs.employeesRefresh?.addEventListener("click", async () => {
+        await loadEmployees();
+        renderEmployees();
+        setNotice("Funcionários atualizados.", "success");
+      });
+
+      refs.operationsRefresh?.addEventListener("click", async () => {
+        await loadOperations();
+        renderOperations();
+        setNotice("Operações atualizadas.", "success");
+      });
+
+      refs.financeRefresh?.addEventListener("click", async () => {
+        await loadFinance();
+        renderFinance();
+        renderDashboard();
+        setNotice("Financeiro atualizado.", "success");
+      });
 
       refs.employeesNew?.addEventListener("click", () => openEntityModal("employees"));
       refs.operationsNew?.addEventListener("click", () => openEntityModal("operations"));
