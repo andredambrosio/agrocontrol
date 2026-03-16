@@ -106,8 +106,8 @@
     }
 
     .login-card{
-      width:392px;
-      min-height:486px;
+      width:360px;
+      min-height:440px;
       margin-top:82px;
       background:linear-gradient(180deg, rgba(23,27,29,.82), rgba(16,18,20,.88));
       border:1px solid rgba(255,255,255,.10);
@@ -116,16 +116,16 @@
       backdrop-filter:blur(12px);
       -webkit-backdrop-filter:blur(12px);
       position:relative;
-      padding:34px 32px 24px;
+      padding:28px 26px 20px;
     }
 
     .login-brand{
       display:flex;
       align-items:center;
       gap:12px;
-      font-size:28px;
+      font-size:25px;
       font-weight:900;
-      margin-bottom:26px;
+      margin-bottom:20px;
     }
 
     .login-brand .logo-mark{
@@ -185,7 +185,7 @@
       outline:none;
       background:rgba(13,16,17,.60);
       color:#fff;
-      font-size:18px;
+      font-size:17px;
     }
     .input-wrap input::placeholder{color:#b8c1bb}
     .input-wrap input:focus{
@@ -307,9 +307,9 @@
 
     .login-footer{
       position:absolute;
-      left:32px;
-      right:32px;
-      bottom:18px;
+      left:26px;
+      right:26px;
+      bottom:16px;
       color:#c3cbc6;
       font-size:13px;
       opacity:.86;
@@ -442,6 +442,10 @@
       border:1px solid rgba(255,255,255,.12);
       font-weight:900;
       flex:none;
+      overflow:hidden;
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
     }
 
     .user-text{min-width:0}
@@ -536,6 +540,11 @@
       border-radius:999px;
       background:rgba(255,255,255,.04);
       border:1px solid rgba(255,255,255,.08);
+      color:#fff;
+    }
+
+    .profile-pill:hover{
+      background:rgba(255,255,255,.08);
     }
 
     .profile-pill .avatar{
@@ -1083,7 +1092,7 @@
           <label class="label" for="loginEmail">E-mail</label>
           <div class="input-wrap">
             <span class="input-icon-left">👤</span>
-            <input id="loginEmail" type="email" placeholder="gustavo@gmail.com" autocomplete="username" required />
+            <input id="loginEmail" type="email" placeholder="Digite seu e-mail" autocomplete="username" required />
             <span class="input-icon-right">👤</span>
           </div>
         </div>
@@ -1092,7 +1101,7 @@
           <label class="label" for="loginPassword">Senha</label>
           <div class="input-wrap">
             <span class="input-icon-left">•</span>
-            <input id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password" required />
+            <input id="loginPassword" type="password" placeholder="Digite sua senha" autocomplete="current-password" required />
             <span class="input-icon-right">🔒</span>
           </div>
         </div>
@@ -1102,12 +1111,12 @@
         <div class="login-checks">
           <label class="check-row">
             <input id="rememberLogin" type="checkbox" />
-            <span>Memorizar senha</span>
+            <span>Memorizar login</span>
           </label>
 
           <div class="check-row">
             <input id="recoverToggle" type="checkbox" />
-            <button type="button" id="recoverBtn" class="recover-link">Esqueci minha senha</button>
+            <button type="button" id="recoverBtn" class="recover-link">Recuperar minha senha</button>
           </div>
         </div>
 
@@ -1118,7 +1127,7 @@
           <p>Informe o e-mail para receber o link de recuperação.</p>
           <div class="input-wrap">
             <span class="input-icon-left">✉</span>
-            <input id="recoverEmail" type="email" placeholder="seuemail@fazenda.com" />
+            <input id="recoverEmail" type="email" placeholder="Digite seu e-mail" />
           </div>
           <div class="recover-actions">
             <button type="button" id="closeRecoverBtn" class="sub-btn">Fechar</button>
@@ -1142,7 +1151,7 @@
         </div>
 
         <nav class="sidebar-nav">
-          <button class="nav-btn active" data-view="dashboard"><span class="nav-icon">🧭</span>Dashboard</button>
+          <button class="nav-btn active" data-view="central"><span class="nav-icon">🧭</span>Central de Comando</button>
           <button class="nav-btn" data-view="operations"><span class="nav-icon">🚜</span>Operações</button>
           <button class="nav-btn" data-view="fields"><span class="nav-icon">🌾</span>Talhões</button>
           <button class="nav-btn" data-view="machines"><span class="nav-icon">⚙</span>Máquinas</button>
@@ -1172,7 +1181,7 @@
 
       <header class="topbar">
         <div class="topbar-left">
-          <div class="top-item">🏠 <span id="farmNameTop">Granja Boijink</span></div>
+          <div class="top-item">🏠 <span id="farmNameTop">Minha Fazenda</span></div>
           <div class="top-item"><span id="userNameTop">dono</span></div>
           <div class="top-item">Vento 6 km/h</div>
           <div class="top-item">★ Soja R$ 128,50</div>
@@ -1183,34 +1192,35 @@
         <div class="topbar-right">
           <button class="top-icon-btn">🔔</button>
           <button class="top-icon-btn">⚙</button>
-          <div class="profile-pill">
+
+          <button id="profileOpenBtn" class="profile-pill" type="button">
             <div class="avatar" id="profileAvatar">D</div>
             <div id="profileName">dono</div>
-          </div>
+          </button>
         </div>
       </header>
 
       <main class="content">
         <div id="globalNotice"></div>
 
-        <section id="view-dashboard" class="view active">
+        <section id="view-central" class="view active">
           <div class="cards-row">
             <div class="metric-card greenish">
               <div class="metric-title">Tarefas em Andamento</div>
-              <div class="metric-sub">📋 <span id="dashAndamentoText">4 tarefas</span></div>
-              <div class="metric-value" id="dashAndamento">6</div>
+              <div class="metric-sub">📋 <span id="dashAndamentoText">0 tarefas</span></div>
+              <div class="metric-value" id="dashAndamento">0</div>
             </div>
 
             <div class="metric-card">
               <div class="metric-title">Tarefas Pendentes</div>
-              <div class="metric-sub">📋 <span id="dashPendentesText">4 tarefas</span></div>
-              <div class="metric-value orange" id="dashPendentes">4</div>
+              <div class="metric-sub">📋 <span id="dashPendentesText">0 tarefas</span></div>
+              <div class="metric-value orange" id="dashPendentes">0</div>
             </div>
 
             <div class="metric-card">
               <div class="metric-title">Máquinas Operando</div>
-              <div class="metric-sub">🚜 <span id="dashMaquinasText">5 máquinas</span></div>
-              <div class="metric-value red" id="dashMaquinas">5</div>
+              <div class="metric-sub">🚜 <span id="dashMaquinasText">Base inicial</span></div>
+              <div class="metric-value red" id="dashMaquinas">0</div>
             </div>
 
             <div class="weather-card">
@@ -1234,7 +1244,7 @@
               <div class="panel">
                 <div class="panel-header">
                   <div class="panel-title"><span class="ic">🌿</span>Mercado</div>
-                  <div class="panel-meta">Atualização base</div>
+                  <div class="panel-meta">Base visual</div>
                 </div>
 
                 <div class="market-grid">
@@ -1274,16 +1284,16 @@
                         <th>Situação</th>
                       </tr>
                     </thead>
-                    <tbody id="fieldsDashTable">
+                    <tbody>
                       <tr>
-                        <td>Soja</td>
+                        <td>Talhão 1</td>
                         <td><strong>Soja</strong></td>
                         <td>35 ha</td>
                         <td>59 sc/ha</td>
                         <td class="orange-text">Atenção</td>
                       </tr>
                       <tr>
-                        <td>Milho</td>
+                        <td>Talhão 2</td>
                         <td><strong>Milho</strong></td>
                         <td>36 ha</td>
                         <td>59 sc/ha</td>
@@ -1337,10 +1347,10 @@
                 </div>
 
                 <ul class="ai-list">
-                  <li><span class="check-green">✓</span><span>O custo de areia cobre despesas para 12 dias.</span></li>
-                  <li><span class="check-green">✓</span><span>Faltam BOs sociais 26-463 para fechar o ciclo atual da safra.</span></li>
-                  <li><span class="check-green">✓</span><span>O Talhão 4 tem 15% menos produtividade que a média.</span></li>
-                  <li><span class="check-green">✓</span><span>O investimento em defensivos subiu neste mês.</span></li>
+                  <li><span class="check-green">✓</span><span>O custo operacional de campo deve ser revisado nesta semana.</span></li>
+                  <li><span class="check-green">✓</span><span>As operações pendentes estão prontas para virar centro de acompanhamento real.</span></li>
+                  <li><span class="check-green">✓</span><span>O financeiro agora já pode ser conectado em nuvem sem retrabalho de estrutura.</span></li>
+                  <li><span class="check-green">✓</span><span>O AgroControl está pronto para a próxima fase de uso real.</span></li>
                 </ul>
               </div>
             </div>
@@ -1381,7 +1391,7 @@
 
         <section id="view-fields" class="view">
           <h2 class="section-title-page">Talhões</h2>
-          <p class="section-subtitle-page">Visão geral dos talhões e suas culturas.</p>
+          <p class="section-subtitle-page">Área reservada para expansão com a tabela de talhões já existente no projeto.</p>
 
           <div class="panel">
             <div class="table-wrap">
@@ -1407,7 +1417,7 @@
 
         <section id="view-machines" class="view">
           <h2 class="section-title-page">Máquinas</h2>
-          <p class="section-subtitle-page">Controle base de máquinas e situação operacional.</p>
+          <p class="section-subtitle-page">Área reservada para integração com a tabela de máquinas já existente no projeto.</p>
 
           <div class="panel">
             <div class="table-wrap">
@@ -1480,7 +1490,7 @@
 
         <section id="view-finance" class="view">
           <h2 class="section-title-page">Financeiro</h2>
-          <p class="section-subtitle-page">Receitas, despesas, saldo, lucro e ponto de equilíbrio base.</p>
+          <p class="section-subtitle-page">Receitas, despesas, saldo, lucro e ponto de equilíbrio.</p>
 
           <div class="crud-toolbar">
             <input id="financeSearch" type="text" placeholder="Buscar por categoria, descrição ou cultura" />
@@ -1552,7 +1562,7 @@
           <div class="panel" style="max-width:700px">
             <div class="form-group-modal">
               <label for="farmNameInput">Nome da fazenda</label>
-              <input id="farmNameInput" type="text" placeholder="Ex.: Granja Boijink" />
+              <input id="farmNameInput" type="text" placeholder="Ex.: Minha Fazenda" />
             </div>
             <div class="modal-actions" style="justify-content:flex-start">
               <button id="saveFarmNameBtn" class="crud-btn primary">Salvar nome</button>
@@ -1583,33 +1593,69 @@
     </div>
   </div>
 
+  <div id="profileModalBackdrop" class="modal-backdrop">
+    <div class="modal" style="max-width:680px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Meu Perfil</h3>
+          <p class="modal-subtitle">Edite seus dados de exibição no sistema.</p>
+        </div>
+        <button id="closeProfileModalBtn" class="modal-close">×</button>
+      </div>
+
+      <form id="profileForm">
+        <div class="form-grid">
+          <div class="form-group-modal">
+            <label for="profileEditName">Nome completo</label>
+            <input id="profileEditName" type="text" placeholder="Seu nome" />
+          </div>
+
+          <div class="form-group-modal">
+            <label for="profileEditEmail">E-mail</label>
+            <input id="profileEditEmail" type="email" placeholder="seuemail@fazenda.com" />
+          </div>
+
+          <div class="form-group-modal full">
+            <label for="profileEditPhoto">Foto de perfil (URL da imagem)</label>
+            <input id="profileEditPhoto" type="text" placeholder="https://..." />
+          </div>
+
+          <div class="form-group-modal">
+            <label for="profileEditRole">Função</label>
+            <input id="profileEditRole" type="text" placeholder="Ex.: Dono / Gerente" />
+          </div>
+
+          <div class="form-group-modal">
+            <label for="profileEditFarmName">Nome da fazenda</label>
+            <input id="profileEditFarmName" type="text" placeholder="Nome da fazenda" />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelProfileModalBtn" class="crud-btn">Cancelar</button>
+          <button type="submit" class="crud-btn primary">Salvar perfil</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
-    const CONFIG = {
-      appMode: "local",
-      supabaseUrl: "https://xksllcfagvpccvuzwqmg.supabase.co",
-      supabaseKey: "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy"
-    };
+    const SUPABASE_URL = "https://xksllcfagvpccvuzwqmg.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy";
 
     const KEYS = {
-      remember: "agrocontrol_desktop_remember_email",
-      farmName: "agrocontrol_desktop_farm_name",
-      localSession: "agrocontrol_desktop_local_session",
-      employees: "agrocontrol_desktop_employees",
-      operations: "agrocontrol_desktop_operations",
-      finance: "agrocontrol_desktop_finance"
+      remember: "agrocontrol_desktop_remember_email"
     };
 
-    const supabaseClient = window.supabase?.createClient
-      ? window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey)
-      : null;
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const state = {
       session: null,
-      farmName: localStorage.getItem(KEYS.farmName) || "Granja Boijink",
-      currentView: "dashboard",
+      profile: null,
       employees: [],
       operations: [],
       finance: [],
+      currentView: "central",
       modal: { module: null, mode: "create", record: null }
     };
 
@@ -1659,6 +1705,9 @@
       dashAndamento: document.getElementById("dashAndamento"),
       dashPendentes: document.getElementById("dashPendentes"),
       dashMaquinas: document.getElementById("dashMaquinas"),
+      dashAndamentoText: document.getElementById("dashAndamentoText"),
+      dashPendentesText: document.getElementById("dashPendentesText"),
+      dashMaquinasText: document.getElementById("dashMaquinasText"),
 
       financeRevenueCard: document.getElementById("financeRevenueCard"),
       financeExpenseCard: document.getElementById("financeExpenseCard"),
@@ -1671,12 +1720,22 @@
       closeModalBtn: document.getElementById("closeModalBtn"),
       cancelModalBtn: document.getElementById("cancelModalBtn"),
       entityForm: document.getElementById("entityForm"),
-      entityFields: document.getElementById("entityFields")
+      entityFields: document.getElementById("entityFields"),
+
+      profileOpenBtn: document.getElementById("profileOpenBtn"),
+      profileModalBackdrop: document.getElementById("profileModalBackdrop"),
+      closeProfileModalBtn: document.getElementById("closeProfileModalBtn"),
+      cancelProfileModalBtn: document.getElementById("cancelProfileModalBtn"),
+      profileForm: document.getElementById("profileForm"),
+      profileEditName: document.getElementById("profileEditName"),
+      profileEditEmail: document.getElementById("profileEditEmail"),
+      profileEditPhoto: document.getElementById("profileEditPhoto"),
+      profileEditRole: document.getElementById("profileEditRole"),
+      profileEditFarmName: document.getElementById("profileEditFarmName")
     };
 
     const schemas = {
       employees: {
-        storageKey: KEYS.employees,
         table: "employees",
         titleCreate: "Novo funcionário",
         titleEdit: "Editar funcionário",
@@ -1701,7 +1760,6 @@
         ]
       },
       operations: {
-        storageKey: KEYS.operations,
         table: "operations",
         titleCreate: "Nova operação",
         titleEdit: "Editar operação",
@@ -1727,7 +1785,6 @@
         ]
       },
       finance: {
-        storageKey: KEYS.finance,
         table: "financial_transactions",
         titleCreate: "Nova transação",
         titleEdit: "Editar transação",
@@ -1753,21 +1810,6 @@
           {name:"reference_id", label:"ID referência", type:"text"}
         ]
       }
-    };
-
-    const demoData = {
-      employees: [
-        { id: crypto.randomUUID(), name:"Carlos Souza", role:"Operador", sector:"Máquinas", salary:3200, harvest_participation_type:"percentual", harvest_participation_value:2, status:"ativo", phone:"(53) 99999-1111", notes:"Responsável pela colheitadeira.", created_at:new Date().toISOString() },
-        { id: crypto.randomUUID(), name:"Paulo Lima", role:"Capataz", sector:"Campo", salary:4200, harvest_participation_type:"valor_fixo", harvest_participation_value:1800, status:"ativo", phone:"(53) 99999-2222", notes:"Coordena operações de campo.", created_at:new Date().toISOString() }
-      ],
-      operations: [
-        { id: crypto.randomUUID(), title:"Pulverização Talhão 4", category:"Pulverização", farm_sector:"Lavoura Norte", field_name:"Talhão 4", machine_name:"Pulverizador", employee_name:"Paulo Lima", status:"em_andamento", planned_date:"2026-03-20", completed_date:null, estimated_cost:4500, actual_cost:null, notes:"Aplicação em janela climática favorável.", created_at:new Date().toISOString() },
-        { id: crypto.randomUUID(), title:"Colheita Soja Sul", category:"Colheita", farm_sector:"Lavoura Sul", field_name:"Talhão 2", machine_name:"Colheitadeira 01", employee_name:"Carlos Souza", status:"pendente", planned_date:"2026-03-22", completed_date:null, estimated_cost:7800, actual_cost:null, notes:"Aguardar sequência do clima.", created_at:new Date().toISOString() }
-      ],
-      finance: [
-        { id: crypto.randomUUID(), type:"receita", category:"Venda Soja", description:"Venda parcial safra soja", culture:"Soja", quantity:240, amount:30840, due_date:"2026-03-25", payment_date:null, status:"recebido", source_module:"mercado", reference_id:"SOJ-001", created_at:new Date().toISOString() },
-        { id: crypto.randomUUID(), type:"despesa", category:"Diesel", description:"Abastecimento da operação", culture:"", quantity:900, amount:5526, due_date:"2026-03-18", payment_date:null, status:"pago", source_module:"operações", reference_id:"DIE-001", created_at:new Date().toISOString() }
-      ]
     };
 
     function money(v){
@@ -1808,32 +1850,33 @@
       refs.loginStatus.innerHTML = `<div class="${cls}">${esc(msg)}</div>`;
     }
 
-    function initials(email){
-      if(!email) return "D";
-      return email.trim().charAt(0).toUpperCase();
+    function initials(text){
+      if(!text) return "D";
+      return String(text).trim().charAt(0).toUpperCase();
     }
 
-    function displayName(email){
-      if(!email) return "dono";
-      return email.split("@")[0];
-    }
+    function applyProfileUI(){
+      const profile = state.profile || {};
+      const email = profile.email || state.session?.user?.email || "dono@agrocontrol.com";
+      const fullName = profile.full_name || email.split("@")[0] || "dono";
+      const farmName = profile.farm_name || "Minha Fazenda";
+      const photo = profile.avatar_url || "";
 
-    function applyFarmName(){
-      refs.farmNameTop.textContent = state.farmName;
-      refs.farmNameInput.value = state.farmName;
-    }
-
-    function applyUser(){
-      const email = state.session?.user?.email || state.session?.email || "dono@agrocontrol.com";
-      const name = displayName(email);
-      const ini = initials(email);
-
-      refs.userName.textContent = name;
+      refs.userName.textContent = fullName;
       refs.userEmail.textContent = email;
-      refs.userNameTop.textContent = name;
-      refs.profileName.textContent = name;
-      refs.userAvatar.textContent = ini;
-      refs.profileAvatar.textContent = ini;
+      refs.userNameTop.textContent = fullName;
+      refs.profileName.textContent = fullName;
+      refs.farmNameTop.textContent = farmName;
+      refs.farmNameInput.value = farmName;
+
+      [refs.userAvatar, refs.profileAvatar].forEach(el => {
+        el.textContent = initials(fullName);
+        el.style.backgroundImage = "";
+        if(photo){
+          el.textContent = "";
+          el.style.backgroundImage = `url("${photo}")`;
+        }
+      });
     }
 
     function showLogin(){
@@ -1846,8 +1889,7 @@
     function showApp(){
       refs.loginScreen.classList.add("hidden");
       refs.app.classList.add("active");
-      applyFarmName();
-      applyUser();
+      applyProfileUI();
       renderAll();
     }
 
@@ -1859,8 +1901,8 @@
     }
 
     function renderContinueSession(){
-      if(state.session?.user?.email || state.session?.email){
-        const email = state.session?.user?.email || state.session?.email;
+      const email = state.session?.user?.email;
+      if(email){
         refs.continueBtn.classList.remove("hidden");
         setLoginNotice(`Sessão encontrada para ${email}. A tela de login continua obrigatória.`, "success");
       } else {
@@ -1873,90 +1915,106 @@
       }
     }
 
-    function localGet(key, fallback){
-      try{
-        const raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : fallback;
-      }catch{
-        return fallback;
+    async function loadProfile(){
+      const userId = state.session?.user?.id;
+      if(!userId){
+        state.profile = null;
+        return;
       }
-    }
 
-    function localSet(key, value){
-      localStorage.setItem(key, JSON.stringify(value));
-    }
+      const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
 
-    function ensureLocalSeed(){
-      if(!localStorage.getItem(KEYS.employees)) localSet(KEYS.employees, demoData.employees);
-      if(!localStorage.getItem(KEYS.operations)) localSet(KEYS.operations, demoData.operations);
-      if(!localStorage.getItem(KEYS.finance)) localSet(KEYS.finance, demoData.finance);
+      if(error){
+        throw error;
+      }
+
+      state.profile = data;
     }
 
     async function loadEmployees(){
-      if(CONFIG.appMode === "local"){
-        state.employees = localGet(KEYS.employees, []);
+      const userId = state.session?.user?.id;
+      if(!userId){
+        state.employees = [];
         return;
       }
-      try{
-        const { data, error } = await supabaseClient.from("employees").select("*").order("created_at",{ascending:false});
-        if(error) throw error;
-        state.employees = data || [];
-      }catch{
-        state.employees = [];
-      }
+
+      const { data, error } = await supabaseClient
+        .from("employees")
+        .select("*")
+        .eq("owner_id", userId)
+        .order("created_at", { ascending: false });
+
+      if(error) throw error;
+      state.employees = data || [];
     }
 
     async function loadOperations(){
-      if(CONFIG.appMode === "local"){
-        state.operations = localGet(KEYS.operations, []);
+      const userId = state.session?.user?.id;
+      if(!userId){
+        state.operations = [];
         return;
       }
-      try{
-        const { data, error } = await supabaseClient.from("operations").select("*").order("created_at",{ascending:false});
-        if(error) throw error;
-        state.operations = data || [];
-      }catch{
-        state.operations = [];
-      }
+
+      const { data, error } = await supabaseClient
+        .from("operations")
+        .select("*")
+        .eq("owner_id", userId)
+        .order("created_at", { ascending: false });
+
+      if(error) throw error;
+      state.operations = data || [];
     }
 
     async function loadFinance(){
-      if(CONFIG.appMode === "local"){
-        state.finance = localGet(KEYS.finance, []);
+      const userId = state.session?.user?.id;
+      if(!userId){
+        state.finance = [];
         return;
       }
-      try{
-        const { data, error } = await supabaseClient.from("financial_transactions").select("*").order("created_at",{ascending:false});
-        if(error) throw error;
-        state.finance = data || [];
-      }catch{
-        state.finance = [];
-      }
+
+      const { data, error } = await supabaseClient
+        .from("financial_transactions")
+        .select("*")
+        .eq("owner_id", userId)
+        .order("created_at", { ascending: false });
+
+      if(error) throw error;
+      state.finance = data || [];
     }
 
     async function loadData(){
-      await loadEmployees();
-      await loadOperations();
-      await loadFinance();
+      await Promise.all([
+        loadProfile(),
+        loadEmployees(),
+        loadOperations(),
+        loadFinance()
+      ]);
       renderAll();
+      applyProfileUI();
     }
 
     function statusPill(value){
       const v = String(value || "").toLowerCase();
       if(["ativo","concluida","pago","recebido"].includes(v)) return `<span class="status-pill status-green">${esc(value || "-")}</span>`;
-      if(["pendente"].includes(v)) return `<span class="status-pill status-yellow">${esc(value || "-")}</span>`;
+      if(["pendente","em_andamento"].includes(v)) return `<span class="status-pill status-yellow">${esc(value || "-")}</span>`;
       if(["cancelada","inativo"].includes(v)) return `<span class="status-pill status-red">${esc(value || "-")}</span>`;
       return `<span class="status-pill status-blue">${esc(value || "-")}</span>`;
     }
 
-    function renderDashboard(){
+    function renderCentral(){
       const andamento = state.operations.filter(x => (x.status || "").toLowerCase() === "em_andamento").length;
       const pendentes = state.operations.filter(x => (x.status || "").toLowerCase() === "pendente").length;
-      const maquinas = 5;
 
-      refs.dashAndamento.textContent = andamento || 0;
-      refs.dashPendentes.textContent = pendentes || 0;
-      refs.dashMaquinas.textContent = maquinas;
+      refs.dashAndamento.textContent = andamento;
+      refs.dashPendentes.textContent = pendentes;
+      refs.dashMaquinas.textContent = 0;
+      refs.dashAndamentoText.textContent = `${andamento} tarefa${andamento === 1 ? "" : "s"}`;
+      refs.dashPendentesText.textContent = `${pendentes} tarefa${pendentes === 1 ? "" : "s"}`;
+      refs.dashMaquinasText.textContent = "Integração futura";
 
       const receitas = state.finance.filter(x => (x.type || "").toLowerCase() === "receita").reduce((a,b)=>a+Number(b.amount||0),0);
       const despesas = state.finance.filter(x => (x.type || "").toLowerCase() === "despesa").reduce((a,b)=>a+Number(b.amount||0),0);
@@ -2032,12 +2090,10 @@
     }
 
     function renderAll(){
-      renderDashboard();
+      renderCentral();
       renderEmployees();
       renderOperations();
       renderFinance();
-      applyFarmName();
-      applyUser();
     }
 
     function setView(view){
@@ -2117,23 +2173,22 @@
 
     async function saveModuleRecord(module, payload){
       const schema = schemas[module];
-      if(CONFIG.appMode === "local"){
-        const list = localGet(schema.storageKey, []);
-        if(state.modal.mode === "edit" && state.modal.record?.id){
-          const next = list.map(item => item.id === state.modal.record.id ? { ...item, ...payload } : item);
-          localSet(schema.storageKey, next);
-        }else{
-          const next = [{ id: crypto.randomUUID(), created_at: new Date().toISOString(), ...payload }, ...list];
-          localSet(schema.storageKey, next);
-        }
-        return;
-      }
+      const ownerId = state.session?.user?.id;
+      if(!ownerId) throw new Error("Sessão inválida.");
 
       if(state.modal.mode === "edit" && state.modal.record?.id){
-        const { error } = await supabaseClient.from(schema.table).update(payload).eq("id", state.modal.record.id);
+        const { error } = await supabaseClient
+          .from(schema.table)
+          .update(payload)
+          .eq("id", state.modal.record.id)
+          .eq("owner_id", ownerId);
+
         if(error) throw error;
-      }else{
-        const { error } = await supabaseClient.from(schema.table).insert(payload);
+      } else {
+        const { error } = await supabaseClient
+          .from(schema.table)
+          .insert([{ ...payload, owner_id: ownerId }]);
+
         if(error) throw error;
       }
     }
@@ -2175,14 +2230,10 @@
       }
 
       try{
-        if(CONFIG.appMode === "local"){
-          state.session = { email };
-          localStorage.setItem(KEYS.localSession, JSON.stringify(state.session));
-        }else{
-          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-          if(error) throw error;
-          state.session = data.session || null;
-        }
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if(error) throw error;
+
+        state.session = data.session || null;
 
         if(refs.rememberLogin.checked){
           localStorage.setItem(KEYS.remember, email);
@@ -2200,23 +2251,15 @@
 
     async function continueSession(){
       try{
-        if(CONFIG.appMode === "local"){
-          const raw = localStorage.getItem(KEYS.localSession);
-          if(!raw){
-            setLoginNotice("Nenhuma sessão válida encontrada.", "warn");
-            return;
-          }
-          state.session = JSON.parse(raw);
-        }else{
-          const { data, error } = await supabaseClient.auth.getSession();
-          if(error) throw error;
-          if(!data.session){
-            setLoginNotice("Nenhuma sessão válida encontrada.", "warn");
-            return;
-          }
-          state.session = data.session;
+        const { data, error } = await supabaseClient.auth.getSession();
+        if(error) throw error;
+
+        if(!data.session){
+          setLoginNotice("Nenhuma sessão válida encontrada.", "warn");
+          return;
         }
 
+        state.session = data.session;
         await loadData();
         showApp();
       }catch(error){
@@ -2228,11 +2271,6 @@
       const email = refs.recoverEmail.value.trim() || refs.loginEmail.value.trim();
       if(!email){
         setLoginNotice("Informe o e-mail para recuperação.", "warn");
-        return;
-      }
-
-      if(CONFIG.appMode === "local"){
-        setLoginNotice("Modo local ativo. A recuperação real será usada quando ligar o Supabase.", "warn");
         return;
       }
 
@@ -2249,16 +2287,91 @@
 
     async function logout(){
       try{
-        if(CONFIG.appMode === "local"){
-          localStorage.removeItem(KEYS.localSession);
-        }else{
-          await supabaseClient.auth.signOut();
-        }
+        await supabaseClient.auth.signOut();
       }catch{}
       state.session = null;
+      state.profile = null;
       refs.loginPassword.value = "";
       showLogin();
       setLoginNotice("Sessão encerrada.", "success");
+    }
+
+    function openProfileModal(){
+      const p = state.profile || {};
+      refs.profileEditName.value = p.full_name || "";
+      refs.profileEditEmail.value = p.email || state.session?.user?.email || "";
+      refs.profileEditPhoto.value = p.avatar_url || "";
+      refs.profileEditRole.value = p.role || "owner";
+      refs.profileEditFarmName.value = p.farm_name || "Minha Fazenda";
+      refs.profileModalBackdrop.classList.add("active");
+    }
+
+    function closeProfileModal(){
+      refs.profileModalBackdrop.classList.remove("active");
+    }
+
+    async function saveProfile(event){
+      event.preventDefault();
+
+      const userId = state.session?.user?.id;
+      if(!userId){
+        setNotice("Sessão inválida para atualizar perfil.", "error");
+        return;
+      }
+
+      const payload = {
+        full_name: refs.profileEditName.value.trim() || null,
+        email: refs.profileEditEmail.value.trim() || state.session?.user?.email || null,
+        avatar_url: refs.profileEditPhoto.value.trim() || null,
+        role: refs.profileEditRole.value.trim() || "owner",
+        farm_name: refs.profileEditFarmName.value.trim() || "Minha Fazenda"
+      };
+
+      try{
+        const { error } = await supabaseClient
+          .from("profiles")
+          .update(payload)
+          .eq("id", userId);
+
+        if(error) throw error;
+
+        await loadProfile();
+        applyProfileUI();
+        closeProfileModal();
+        setNotice("Perfil atualizado com sucesso.", "success");
+      }catch(error){
+        setNotice(`Falha ao atualizar perfil: ${error?.message || "erro desconhecido"}`, "error");
+      }
+    }
+
+    async function saveFarmNameOnly(){
+      const userId = state.session?.user?.id;
+      const farmName = refs.farmNameInput.value.trim();
+
+      if(!userId){
+        setNotice("Sessão inválida.", "error");
+        return;
+      }
+
+      if(!farmName){
+        setNotice("Informe um nome para a fazenda.", "warn");
+        return;
+      }
+
+      try{
+        const { error } = await supabaseClient
+          .from("profiles")
+          .update({ farm_name: farmName })
+          .eq("id", userId);
+
+        if(error) throw error;
+
+        await loadProfile();
+        applyProfileUI();
+        setNotice("Nome da fazenda atualizado com sucesso.", "success");
+      }catch(error){
+        setNotice(`Falha ao salvar nome da fazenda: ${error?.message || "erro desconhecido"}`, "error");
+      }
     }
 
     function bindEvents(){
@@ -2286,17 +2399,7 @@
         btn.addEventListener("click", () => setView(btn.dataset.view));
       });
 
-      refs.saveFarmNameBtn.addEventListener("click", () => {
-        const value = refs.farmNameInput.value.trim();
-        if(!value){
-          setNotice("Informe um nome para a fazenda.", "warn");
-          return;
-        }
-        state.farmName = value;
-        localStorage.setItem(KEYS.farmName, value);
-        applyFarmName();
-        setNotice("Nome da fazenda atualizado com sucesso.", "success");
-      });
+      refs.saveFarmNameBtn.addEventListener("click", saveFarmNameOnly);
 
       refs.employeesSearch.addEventListener("input", renderEmployees);
       refs.operationsSearch.addEventListener("input", renderOperations);
@@ -2317,7 +2420,7 @@
       refs.financeRefresh.addEventListener("click", async () => {
         await loadFinance();
         renderFinance();
-        renderDashboard();
+        renderCentral();
         setNotice("Financeiro atualizado.", "success");
       });
 
@@ -2331,25 +2434,31 @@
         if(e.target === refs.modalBackdrop) closeModal();
       });
       refs.entityForm.addEventListener("submit", submitEntityForm);
+
+      refs.profileOpenBtn.addEventListener("click", openProfileModal);
+      refs.closeProfileModalBtn.addEventListener("click", closeProfileModal);
+      refs.cancelProfileModalBtn.addEventListener("click", closeProfileModal);
+      refs.profileModalBackdrop.addEventListener("click", e => {
+        if(e.target === refs.profileModalBackdrop) closeProfileModal();
+      });
+      refs.profileForm.addEventListener("submit", saveProfile);
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        state.session = session;
+        renderContinueSession();
+      });
     }
 
     async function bootstrap(){
       bindEvents();
-      applyFarmName();
       hydrateRemembered();
 
-      if(CONFIG.appMode === "local"){
-        ensureLocalSeed();
-        const raw = localStorage.getItem(KEYS.localSession);
-        state.session = raw ? JSON.parse(raw) : null;
-      }else{
-        try{
-          const { data, error } = await supabaseClient.auth.getSession();
-          if(error) throw error;
-          state.session = data.session || null;
-        }catch{
-          state.session = null;
-        }
+      try{
+        const { data, error } = await supabaseClient.auth.getSession();
+        if(error) throw error;
+        state.session = data.session || null;
+      }catch{
+        state.session = null;
       }
 
       refs.app.classList.remove("active");
