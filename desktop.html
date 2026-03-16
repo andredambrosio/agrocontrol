@@ -2,2473 +2,2953 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgroControl Desktop</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>AgroControl Desktop v2</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    :root{
-      --bg:#0a0f0d;
-      --bg2:#0e1411;
-      --panel:#121816;
-      --panel2:#151d1a;
-      --line:rgba(255,255,255,.08);
-      --line2:rgba(255,255,255,.12);
-      --text:#f4f7f5;
-      --muted:#aab4ae;
-      --green:#63c66a;
-      --green2:#4eab55;
-      --yellow:#d7a44f;
-      --orange:#eb9a53;
-      --red:#d86a5f;
-      --blue:#6ea0ff;
-      --shadow:0 18px 50px rgba(0,0,0,.35);
-      --sidebar:260px;
-      --topbar:58px;
-      --radius:16px;
-      --radius-lg:22px;
+    :root {
+      --bg: #0d1410;
+      --bg-soft: #121b15;
+      --panel: #172219;
+      --panel-2: #1b291f;
+      --card: rgba(255, 255, 255, 0.06);
+      --card-2: rgba(255, 255, 255, 0.09);
+      --text: #eef6ef;
+      --muted: #afc2b2;
+      --line: rgba(255, 255, 255, 0.08);
+      --accent: #74d27d;
+      --accent-2: #3d8f45;
+      --danger: #ff7070;
+      --warn: #ffca63;
+      --info: #8fc9ff;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --sidebar-width: 280px;
+      --topbar-height: 88px;
     }
 
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
-    body{min-height:100vh;overflow:hidden}
-    button,input,select,textarea{font:inherit}
-    button{cursor:pointer}
-    .hidden{display:none!important}
-
-    .app{
-      display:none;
-      width:100vw;
-      height:100vh;
-      background:var(--bg);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    .app.active{display:block}
 
-    .login-screen{
-      position:fixed;
-      inset:0;
-      z-index:100;
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background:
-        linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.46) 32%, rgba(0,0,0,.20) 62%, rgba(0,0,0,.24) 100%),
-        url("imagens/hero_bg_crop.png") center center / cover no-repeat,
-        linear-gradient(180deg,#12110f,#0b0f0d);
-      display:flex;
-      align-items:flex-start;
-      justify-content:flex-start;
-      padding:88px 0 0 86px;
+        radial-gradient(circle at top right, rgba(116, 210, 125, 0.12), transparent 25%),
+        linear-gradient(180deg, #0d1410 0%, #101813 100%);
+      color: var(--text);
+      overflow: hidden;
     }
 
-    .login-logo-top{
-      position:absolute;
-      left:86px;
-      top:48px;
-      display:flex;
-      align-items:center;
-      gap:14px;
-      font-size:42px;
-      font-weight:900;
-      letter-spacing:-.03em;
-      color:#fff;
-      text-shadow:0 2px 18px rgba(0,0,0,.25);
+    img {
+      max-width: 100%;
+      display: block;
     }
 
-    .logo-mark{
-      width:44px;
-      height:44px;
-      border-radius:50%;
-      border:4px solid var(--green);
-      position:relative;
-      flex:none;
+    button, input, select, textarea {
+      font: inherit;
     }
 
-    .logo-mark::before,
-    .logo-mark::after{
-      content:"";
-      position:absolute;
-      background:var(--green);
-      border-radius:999px;
-      transform-origin:center;
+    button {
+      cursor: pointer;
+      border: none;
+      outline: none;
     }
 
-    .logo-mark::before{
-      width:28px;
-      height:5px;
-      left:4px;
-      top:16px;
-      transform:rotate(34deg);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .logo-mark::after{
-      width:19px;
-      height:5px;
-      left:12px;
-      top:22px;
-      transform:rotate(-32deg);
+    .hidden {
+      display: none !important;
     }
 
-    .login-card{
-      width:360px;
-      min-height:440px;
-      margin-top:82px;
-      background:linear-gradient(180deg, rgba(23,27,29,.82), rgba(16,18,20,.88));
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:22px;
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-      position:relative;
-      padding:28px 26px 20px;
+    .app-shell {
+      width: 100%;
+      height: 100%;
+      display: none;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      grid-template-rows: 100%;
     }
 
-    .login-brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-size:25px;
-      font-weight:900;
-      margin-bottom:20px;
+    .sidebar {
+      background: linear-gradient(180deg, #121a14 0%, #0e1510 100%);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-height: 100vh;
+      box-shadow: var(--shadow);
+      z-index: 20;
     }
 
-    .login-brand .logo-mark{
-      width:34px;height:34px;border-width:3px;
-    }
-    .login-brand .logo-mark::before{
-      width:22px;left:3px;top:12px;
-    }
-    .login-brand .logo-mark::after{
-      width:15px;left:9px;top:17px;
-    }
-
-    .login-status{margin-bottom:12px}
-
-    .notice{
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-      color:#d8e1dc;
-      border-radius:14px;
-      padding:13px 15px;
-      font-size:14px;
-      line-height:1.45;
-      margin-bottom:10px;
-    }
-    .notice.success{
-      background:linear-gradient(180deg, rgba(67,146,74,.18), rgba(37,84,42,.18));
-      border-color:rgba(99,198,106,.22);
-    }
-    .notice.error{
-      background:rgba(168,66,66,.18);
-      border-color:rgba(216,106,95,.22);
-    }
-    .notice.warn{
-      background:rgba(183,128,44,.16);
-      border-color:rgba(215,164,79,.22);
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(116, 210, 125, 0.15), rgba(255,255,255,0.04));
+      border: 1px solid var(--line);
     }
 
-    .form-group{margin-bottom:14px}
-    .label{
-      display:block;
-      margin-bottom:8px;
-      font-size:14px;
-      font-weight:800;
-      color:#eff3f1;
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #79d982, #3d8f45);
+      color: #08210c;
+      font-weight: 900;
+      font-size: 20px;
     }
 
-    .input-wrap{
-      position:relative;
+    .brand h1 {
+      font-size: 20px;
+      line-height: 1.1;
     }
 
-    .input-wrap input{
-      width:100%;
-      height:58px;
-      padding:0 48px 0 44px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.10);
-      outline:none;
-      background:rgba(13,16,17,.60);
-      color:#fff;
-      font-size:17px;
-    }
-    .input-wrap input::placeholder{color:#b8c1bb}
-    .input-wrap input:focus{
-      border-color:rgba(99,198,106,.38);
-      box-shadow:0 0 0 4px rgba(99,198,106,.10);
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
     }
 
-    .input-icon-left,
-    .input-icon-right{
-      position:absolute;
-      top:50%;
-      transform:translateY(-50%);
-      font-size:17px;
-      color:#d2dad5;
-      pointer-events:none;
-    }
-    .input-icon-left{left:14px}
-    .input-icon-right{right:14px}
-
-    .login-btn{
-      display:block;
-      width:126px;
-      height:44px;
-      margin:18px auto 10px;
-      border:none;
-      border-radius:6px;
-      background:linear-gradient(180deg,#58b85e,#409848);
-      color:#fff;
-      font-size:14px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-      box-shadow:0 10px 24px rgba(72,155,80,.24);
+    .nav-group-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8fa692;
+      padding: 0 12px;
+      margin-top: 4px;
     }
 
-    .login-checks{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      margin-top:12px;
-      color:#d7dfda;
-      font-size:15px;
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .check-row{
-      display:flex;
-      align-items:center;
-      gap:10px;
+    .nav-btn {
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 16px;
+      color: var(--text);
+      background: transparent;
+      border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      transition: 0.18s ease;
     }
 
-    .check-row input{
-      width:18px;
-      height:18px;
-      accent-color:var(--green);
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--line);
     }
 
-    .recover-link{
-      background:none;
-      border:none;
-      color:#d7dfda;
-      padding:0;
-      font-size:15px;
-      text-align:left;
-    }
-    .recover-link:hover{color:#fff;text-decoration:underline}
-
-    .continue-btn{
-      width:100%;
-      height:48px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05);
-      color:#f3f5f4;
-      font-weight:800;
-      margin-top:14px;
+    .nav-btn.active {
+      background: linear-gradient(135deg, rgba(116, 210, 125, 0.22), rgba(255,255,255,0.04));
+      border-color: rgba(116, 210, 125, 0.28);
     }
 
-    .recover-box{
-      margin-top:16px;
-      padding:14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
+    .nav-icon {
+      width: 18px;
+      text-align: center;
+      opacity: 0.95;
     }
 
-    .recover-box h4{
-      margin:0 0 8px;
-      font-size:15px;
+    .sidebar-footer {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .recover-box p{
-      margin:0 0 12px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.45;
+    .ghost-btn, .danger-btn, .primary-btn, .soft-btn {
+      border-radius: 14px;
+      padding: 12px 14px;
+      transition: 0.18s ease;
+      font-weight: 700;
     }
 
-    .recover-actions{
-      display:flex;
-      gap:10px;
-      margin-top:10px;
+    .primary-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #09230e;
     }
 
-    .sub-btn{
-      flex:1;
-      height:42px;
-      border:none;
-      border-radius:12px;
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.10);
-      font-weight:800;
+    .primary-btn:hover {
+      filter: brightness(1.04);
     }
 
-    .sub-btn.green{
-      background:linear-gradient(180deg,#58b85e,#409848);
-      border:none;
+    .soft-btn {
+      background: rgba(255,255,255,0.07);
+      color: var(--text);
+      border: 1px solid var(--line);
     }
 
-    .login-footer{
-      position:absolute;
-      left:26px;
-      right:26px;
-      bottom:16px;
-      color:#c3cbc6;
-      font-size:13px;
-      opacity:.86;
+    .soft-btn:hover {
+      background: rgba(255,255,255,0.1);
     }
 
-    .dashboard{
-      display:grid;
-      grid-template-columns:var(--sidebar) 1fr;
-      grid-template-rows:var(--topbar) 1fr;
-      width:100vw;
-      height:100vh;
-      background:#0b0f0d;
+    .ghost-btn {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
     }
 
-    .sidebar{
-      grid-column:1;
-      grid-row:1 / span 2;
+    .ghost-btn:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .danger-btn {
+      background: rgba(255, 112, 112, 0.12);
+      color: #ffc2c2;
+      border: 1px solid rgba(255, 112, 112, 0.2);
+    }
+
+    .danger-btn:hover {
+      background: rgba(255, 112, 112, 0.18);
+    }
+
+    .main {
+      min-width: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .topbar {
+      height: var(--topbar-height);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 22px;
+      background: rgba(10, 16, 11, 0.72);
+      backdrop-filter: blur(12px);
+      position: relative;
+      z-index: 12;
+    }
+
+    .topbar-left h2 {
+      font-size: 24px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .topbar-left p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profile-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      border-radius: 999px;
+      min-width: 220px;
+    }
+
+    .profile-chip img,
+    .avatar-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #2a372c;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .profile-chip-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .profile-chip-info strong,
+    .profile-chip-info span {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-chip-info strong {
+      font-size: 14px;
+    }
+
+    .profile-chip-info span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .content {
+      flex: 1;
+      overflow: auto;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .banner {
+      border-radius: 28px;
+      min-height: 220px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
       background:
-        radial-gradient(circle at top left, rgba(73,155,81,.15), transparent 24%),
-        linear-gradient(180deg,#111613,#0d1210);
-      border-right:1px solid var(--line);
-      display:flex;
-      flex-direction:column;
+        linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.55)),
+        url("imagens/hero_bg_crop.png") center/cover no-repeat;
     }
 
-    .sidebar-brand{
-      height:84px;
-      padding:18px 20px;
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-size:22px;
-      font-weight:900;
-      border-bottom:1px solid var(--line);
-    }
-
-    .sidebar-brand .logo-mark{
-      width:32px;height:32px;border-width:3px;
-    }
-    .sidebar-brand .logo-mark::before{width:20px;left:3px;top:11px}
-    .sidebar-brand .logo-mark::after{width:14px;left:8px;top:16px}
-
-    .sidebar-nav{
-      padding:16px 12px 12px;
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-
-    .nav-title{
-      color:#7e8983;
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      padding:10px 14px 6px;
-    }
-
-    .nav-btn{
-      position:relative;
-      width:100%;
-      height:48px;
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:0 16px 0 18px;
-      border:none;
-      border-radius:10px;
-      background:transparent;
-      color:#ebefed;
-      font-size:17px;
-      text-align:left;
-    }
-
-    .nav-btn.active{
-      background:linear-gradient(90deg, rgba(82,154,65,.44), rgba(82,154,65,.14));
-      box-shadow:inset 0 0 0 1px rgba(99,198,106,.14);
-      color:#fff;
-    }
-
-    .nav-btn.active::before{
-      content:"";
-      position:absolute;
-      left:-12px;
-      top:0;
-      bottom:0;
-      width:6px;
-      border-radius:0 6px 6px 0;
-      background:#52c45a;
-    }
-
-    .nav-icon{
-      width:18px;
-      text-align:center;
-      font-size:16px;
-    }
-
-    .sidebar-user{
-      margin-top:auto;
-      border-top:1px solid var(--line);
-      padding:14px;
-    }
-
-    .user-card{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:12px;
-      border-radius:14px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-    }
-
-    .user-left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
-
-    .avatar{
-      width:42px;
-      height:42px;
-      border-radius:50%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:linear-gradient(180deg,#39403d,#1d221f);
-      border:1px solid rgba(255,255,255,.12);
-      font-weight:900;
-      flex:none;
-      overflow:hidden;
-      background-size:cover;
-      background-position:center;
-      background-repeat:no-repeat;
-    }
-
-    .user-text{min-width:0}
-    .user-name{
-      font-weight:800;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .user-email{
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .logout-mini{
-      background:none;
-      border:none;
-      color:#dbe2dd;
-      font-size:20px;
-    }
-
-    .topbar{
-      grid-column:2;
-      grid-row:1;
-      height:var(--topbar);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:0 18px;
-      border-bottom:1px solid var(--line);
-      background:linear-gradient(90deg, rgba(32,38,35,.94), rgba(17,21,20,.95) 46%, rgba(12,14,14,.97));
-      overflow:hidden;
-    }
-
-    .topbar-left{
-      display:flex;
-      align-items:center;
-      gap:18px;
-      font-size:14px;
-      color:#dde5e0;
-      white-space:nowrap;
-      overflow:auto;
-      scrollbar-width:none;
-    }
-    .topbar-left::-webkit-scrollbar{display:none}
-
-    .top-item{
-      position:relative;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      color:#d9e1dc;
-    }
-
-    .top-item:not(:last-child)::after{
-      content:"";
-      position:absolute;
-      right:-10px;
-      top:50%;
-      transform:translateY(-50%);
-      width:1px;
-      height:18px;
-      background:rgba(255,255,255,.10);
-    }
-
-    .topbar-right{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex:none;
-    }
-
-    .top-icon-btn{
-      width:34px;
-      height:34px;
-      border-radius:50%;
-      border:none;
-      background:none;
-      color:#fff;
-      font-size:15px;
-    }
-
-    .profile-pill{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:6px 10px 6px 6px;
-      border-radius:999px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      color:#fff;
-    }
-
-    .profile-pill:hover{
-      background:rgba(255,255,255,.08);
-    }
-
-    .profile-pill .avatar{
-      width:34px;
-      height:34px;
-      font-size:12px;
-    }
-
-    .content{
-      grid-column:2;
-      grid-row:2;
-      overflow:auto;
-      padding:18px;
-      background:#0c100f;
-    }
-
-    .cards-row{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr 1.08fr;
-      gap:14px;
-      margin-bottom:14px;
-    }
-
-    .panel,
-    .metric-card{
-      background:linear-gradient(180deg, rgba(23,29,27,.98), rgba(16,20,18,.98));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      box-shadow:var(--shadow);
-    }
-
-    .metric-card{
-      min-height:108px;
-      padding:18px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .metric-card.greenish{
+    .banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
       background:
-        radial-gradient(circle at top right, rgba(83,162,87,.20), transparent 24%),
-        linear-gradient(180deg, rgba(26,34,28,.98), rgba(17,21,19,.98));
+        linear-gradient(90deg, rgba(8, 13, 9, 0.85), rgba(8, 13, 9, 0.28) 55%, rgba(8, 13, 9, 0.75));
     }
 
-    .metric-title{
-      font-size:17px;
-      font-weight:800;
-      margin-bottom:10px;
+    .banner-custom-bg {
+      position: absolute;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      z-index: 1;
     }
 
-    .metric-sub{
-      display:flex;
-      align-items:center;
-      gap:6px;
-      color:#bdd8bd;
-      font-size:13px;
+    .banner-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 24px;
     }
 
-    .metric-value{
-      position:absolute;
-      right:18px;
-      bottom:14px;
-      font-size:56px;
-      line-height:1;
-      font-weight:300;
-      color:#7fd164;
+    .banner-main h3 {
+      font-size: 34px;
+      line-height: 1.05;
+      margin-bottom: 10px;
     }
-    .metric-value.orange{color:#efb04d}
-    .metric-value.red{color:#ef8f5d}
 
-    .weather-card{
-      min-height:108px;
-      border-radius:14px;
-      overflow:hidden;
-      position:relative;
+    .banner-main p {
+      color: #d7e7d9;
+      max-width: 720px;
+    }
+
+    .banner-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+
+    .banner-kpis {
+      margin-top: 16px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .mini-kpi {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.09);
+      min-width: 140px;
+      backdrop-filter: blur(10px);
+    }
+
+    .mini-kpi span {
+      display: block;
+      color: #d8e6d9;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .mini-kpi strong {
+      font-size: 18px;
+    }
+
+    .section {
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .section.active {
+      display: flex;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .section-head h3 {
+      font-size: 24px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .section-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .card h4 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .metric-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 135px;
+    }
+
+    .metric-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .metric-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(116, 210, 125, 0.15);
+      color: #baf1be;
+      font-size: 20px;
+    }
+
+    .metric-value {
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .metric-foot {
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status-badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge-green { background: rgba(116, 210, 125, 0.14); color: #bff1c4; }
+    .badge-yellow { background: rgba(255, 202, 99, 0.14); color: #ffe3a3; }
+    .badge-blue { background: rgba(143, 201, 255, 0.15); color: #d0e8ff; }
+    .badge-red { background: rgba(255, 112, 112, 0.14); color: #ffcaca; }
+
+    .table-wrap {
+      overflow: auto;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      background: rgba(255,255,255,0.025);
+    }
+
+    th, td {
+      padding: 14px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    th {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #9eb39f;
+      background: rgba(255,255,255,0.03);
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tiny-btn {
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      background: rgba(255,255,255,0.07);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .tiny-btn:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .market-card {
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+    }
+
+    .market-card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .market-card h5 {
+      font-size: 16px;
+    }
+
+    .market-value {
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .market-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .info-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .list-item {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .list-item small {
+      color: var(--muted);
+    }
+
+    .empty-state {
+      border: 1px dashed rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 24px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .searchbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .searchbar input,
+    .searchbar select,
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 14px;
+      outline: none;
+    }
+
+    .form-group textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .drawer-backdrop,
+    .modal-backdrop,
+    .login-screen {
+      position: fixed;
+      inset: 0;
+    }
+
+    .drawer-backdrop,
+    .modal-backdrop {
+      background: rgba(0,0,0,0.42);
+      backdrop-filter: blur(6px);
+      z-index: 50;
+      display: none;
+    }
+
+    .drawer-backdrop.show,
+    .modal-backdrop.show {
+      display: block;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -460px;
+      width: min(440px, 100vw);
+      height: 100vh;
+      background: linear-gradient(180deg, #101811, #152019);
+      border-left: 1px solid var(--line);
+      z-index: 60;
+      transition: right 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+    }
+
+    .drawer.show {
+      right: 0;
+    }
+
+    .drawer-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .drawer-body {
+      padding: 20px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .avatar-editor {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .avatar-lg {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.08);
+      background: #243026;
+    }
+
+    .dropzone {
+      border: 1px dashed rgba(255,255,255,0.2);
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+      transition: 0.18s ease;
+    }
+
+    .dropzone.dragover {
+      border-color: rgba(116, 210, 125, 0.5);
+      background: rgba(116, 210, 125, 0.08);
+      color: #d8f3db;
+    }
+
+    .avatar-preset-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .avatar-preset {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid transparent;
+      background: rgba(255,255,255,0.04);
+      transition: 0.18s ease;
+    }
+
+    .avatar-preset.active {
+      border-color: var(--accent);
+    }
+
+    .avatar-preset img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(760px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #122016, #101811);
+      box-shadow: var(--shadow);
+    }
+
+    .modal-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-footer {
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .form-grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      color: #bfd0c1;
+      font-weight: 700;
+    }
+
+    .login-screen {
+      z-index: 100;
+      display: flex;
       background:
-        linear-gradient(90deg, rgba(14,17,16,.70), rgba(14,17,16,.40)),
-        url("imagens/small_climate_crop.png") center center / cover no-repeat,
-        #151917;
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
+        linear-gradient(120deg, rgba(8,12,9,0.92), rgba(8,12,9,0.74)),
+        url("imagens/hero_bg_crop.png") center/cover no-repeat;
     }
 
-    .weather-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(180deg, rgba(0,0,0,.14), rgba(0,0,0,.30));
+    .login-left {
+      flex: 1.15;
+      padding: 40px;
+      display: flex;
+      align-items: flex-end;
     }
 
-    .weather-inner{
-      position:relative;
-      z-index:1;
-      height:100%;
-      padding:16px 18px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
+    .login-brand-card {
+      max-width: 700px;
+      padding: 28px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
     }
 
-    .weather-title{
-      font-size:18px;
-      font-weight:800;
-      margin-bottom:12px;
+    .login-brand-card h2 {
+      font-size: 46px;
+      margin-bottom: 14px;
+      line-height: 1.02;
     }
 
-    .weather-lines{
-      font-size:14px;
-      line-height:1.7;
-      color:#eef3f0;
+    .login-brand-card p {
+      color: #d3e0d4;
+      font-size: 16px;
+      max-width: 600px;
     }
 
-    .weather-ok{
-      font-size:15px;
-      font-weight:900;
-      color:#f3be58;
-    }
-    .weather-ok span{
-      color:#86dc76;
-      margin-left:6px;
-    }
-
-    .lower-grid{
-      display:grid;
-      grid-template-columns:1.16fr .84fr 1fr;
-      gap:14px;
+    .login-right {
+      width: min(520px, 100%);
+      background: rgba(12, 18, 13, 0.85);
+      border-left: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      backdrop-filter: blur(14px);
     }
 
-    .left-col,.mid-col,.right-col{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      min-width:0;
+    .login-panel {
+      width: 100%;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      box-shadow: var(--shadow);
     }
 
-    .panel{
-      padding:14px 16px 16px;
+    .login-panel h3 {
+      font-size: 30px;
+      margin-bottom: 8px;
     }
 
-    .panel-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:14px;
+    .login-panel > p {
+      color: var(--muted);
+      margin-bottom: 20px;
     }
 
-    .panel-title{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:18px;
-      font-weight:900;
+    .login-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 4px;
     }
 
-    .panel-title .ic{color:#7ecc69}
-    .panel-meta{
-      color:#8d9792;
-      font-size:12px;
+    .check-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
     }
 
-    .market-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      row-gap:18px;
-      column-gap:10px;
+    .login-saved {
+      margin-top: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .market-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+    .toast-wrap {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .market-name{
-      font-size:19px;
-      color:#eff3f0;
+    .toast {
+      min-width: 260px;
+      max-width: 380px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #152019;
+      color: var(--text);
     }
 
-    .market-price{
-      font-size:18px;
-      font-weight:900;
-      color:#fff;
+    .toast.success { border-color: rgba(116,210,125,0.25); }
+    .toast.error { border-color: rgba(255,112,112,0.25); }
+    .toast.info { border-color: rgba(143,201,255,0.25); }
+
+    .muted {
+      color: var(--muted);
     }
 
-    .market-price.small-green{
-      display:flex;
-      align-items:center;
-      gap:8px;
+    .w-full {
+      width: 100%;
     }
 
-    .green-box{
-      width:16px;
-      height:16px;
-      border-radius:4px;
-      background:#55bd5c;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      font-size:11px;
+    .mb-8 {
+      margin-bottom: 8px;
     }
 
-    .climate-list{
-      display:flex;
-      flex-direction:column;
-      gap:18px;
-      padding-top:4px;
+    @media (max-width: 1360px) {
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .market-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .split { grid-template-columns: 1fr; }
     }
 
-    .climate-item{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      font-size:16px;
-    }
-
-    .climate-item .left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      color:#e7ede8;
-    }
-
-    .climate-item .val{
-      font-size:18px;
-      font-weight:900;
-    }
-
-    .table-wrap{overflow:auto}
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:520px;
-    }
-    th,td{
-      padding:11px 10px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      text-align:left;
-      font-size:15px;
-      white-space:nowrap;
-    }
-    th{
-      font-size:13px;
-      font-weight:800;
-      color:#8d9792;
-      background:rgba(255,255,255,.02);
-    }
-    td strong{font-weight:900}
-    .orange-text{color:#eb9a53}
-
-    .chart{
-      height:190px;
-      display:flex;
-      align-items:flex-end;
-      gap:18px;
-      padding:12px 8px 10px;
-      border-top:1px solid rgba(255,255,255,.05);
-      margin-top:6px;
-      background:
-        linear-gradient(180deg, transparent 24%, rgba(255,255,255,.04) 24%, rgba(255,255,255,.04) 25%, transparent 25%),
-        linear-gradient(180deg, transparent 49%, rgba(255,255,255,.04) 49%, rgba(255,255,255,.04) 50%, transparent 50%),
-        linear-gradient(180deg, transparent 74%, rgba(255,255,255,.04) 74%, rgba(255,255,255,.04) 75%, transparent 75%);
-    }
-
-    .bar-wrap{
-      width:38px;
-      height:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-end;
-      gap:8px;
-    }
-
-    .bar{
-      width:28px;
-      border-radius:4px 4px 0 0;
-      background:linear-gradient(180deg,#72c866,#418d3d);
-      box-shadow:0 8px 20px rgba(83,162,87,.20);
-    }
-
-    .bar-label{
-      font-size:12px;
-      color:#9aa39f;
-    }
-
-    .ai-list{
-      list-style:none;
-      padding:0;
-      margin:8px 0 0;
-      display:flex;
-      flex-direction:column;
-      gap:16px;
-    }
-
-    .ai-list li{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      color:#edf2ef;
-      font-size:16px;
-      line-height:1.5;
-    }
-
-    .check-green{
-      color:#73d060;
-      font-weight:900;
-      margin-top:1px;
-    }
-
-    .view{display:none}
-    .view.active{display:block}
-
-    .crud-toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
-    }
-
-    .crud-toolbar input{
-      min-width:260px;
-      height:46px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.10);
-      outline:none;
-      padding:0 14px;
-      background:#121816;
-      color:#fff;
-    }
-
-    .crud-btn{
-      height:46px;
-      border:none;
-      border-radius:12px;
-      padding:0 16px;
-      background:#1b2320;
-      color:#fff;
-      border:1px solid rgba(255,255,255,.10);
-      font-weight:800;
-    }
-
-    .crud-btn.primary{
-      background:linear-gradient(180deg,#58b85e,#409848);
-      border:none;
-    }
-
-    .status-pill{
-      display:inline-flex;
-      align-items:center;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:900;
-      border:1px solid transparent;
-    }
-    .status-green{background:rgba(73,155,81,.18);color:#dff4e0;border-color:rgba(99,198,106,.22)}
-    .status-yellow{background:rgba(196,140,62,.18);color:#fff0d4;border-color:rgba(215,164,79,.22)}
-    .status-red{background:rgba(176,68,68,.18);color:#ffdcdc;border-color:rgba(216,106,95,.22)}
-    .status-blue{background:rgba(75,127,190,.18);color:#deebff;border-color:rgba(110,154,217,.22)}
-
-    .mini-action{
-      height:34px;
-      padding:0 12px;
-      border-radius:10px;
-      border:none;
-      background:rgba(255,255,255,.05);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.08);
-      font-weight:800;
-    }
-
-    .section-title-page{
-      margin:0 0 6px;
-      font-size:28px;
-      font-weight:900;
-    }
-
-    .section-subtitle-page{
-      margin:0 0 18px;
-      font-size:15px;
-      color:#9da7a2;
-    }
-
-    .modal-backdrop{
-      position:fixed;
-      inset:0;
-      z-index:130;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      background:rgba(0,0,0,.55);
-    }
-    .modal-backdrop.active{display:flex}
-
-    .modal{
-      width:min(860px,100%);
-      max-height:90vh;
-      overflow:auto;
-      padding:20px;
-      border-radius:22px;
-      background:linear-gradient(180deg,#151b18,#101412);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-    }
-
-    .modal-header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom:16px;
-    }
-
-    .modal-title{
-      margin:0 0 6px;
-      font-size:22px;
-      font-weight:900;
-    }
-
-    .modal-subtitle{
-      margin:0;
-      font-size:14px;
-      color:#9da7a2;
-    }
-
-    .modal-close{
-      width:40px;
-      height:40px;
-      border:none;
-      border-radius:12px;
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      font-size:20px;
-    }
-
-    .form-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-    }
-
-    .form-group-modal{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .form-group-modal.full{grid-column:1/-1}
-    .form-group-modal label{
-      font-size:14px;
-      font-weight:800;
-    }
-
-    .form-group-modal input,
-    .form-group-modal select,
-    .form-group-modal textarea{
-      width:100%;
-      min-height:48px;
-      padding:12px 14px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.10);
-      outline:none;
-      background:#131917;
-      color:#fff;
-    }
-
-    .form-group-modal textarea{
-      min-height:100px;
-      resize:vertical;
-    }
-
-    .modal-actions{
-      display:flex;
-      justify-content:flex-end;
-      gap:10px;
-      margin-top:18px;
-    }
-
-    @media (max-width:1200px){
-      .cards-row{grid-template-columns:1fr 1fr}
-      .lower-grid{grid-template-columns:1fr}
-    }
-
-    @media (max-width:980px){
-      body{overflow:auto}
-      .login-screen{
-        padding:30px 18px;
-        align-items:center;
-        justify-content:center;
+    @media (max-width: 980px) {
+      .app-shell {
+        grid-template-columns: 1fr;
       }
-      .login-logo-top{
-        top:18px;
-        left:18px;
-        font-size:30px;
+      .sidebar {
+        display: none;
       }
-      .login-card{
-        width:min(430px,100%);
-        margin-top:50px;
+      .market-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      .dashboard{
-        grid-template-columns:1fr;
-        grid-template-rows:auto auto 1fr;
-        height:auto;
-        min-height:100vh;
+      .grid-3, .grid-2 {
+        grid-template-columns: 1fr;
       }
-      .sidebar{
-        grid-row:1;
-        grid-column:1;
+      .login-left {
+        display: none;
       }
-      .topbar{
-        grid-row:2;
-        grid-column:1;
+      .login-right {
+        width: 100%;
       }
-      .content{
-        grid-row:3;
-        grid-column:1;
+      .banner-content {
+        flex-direction: column;
+        align-items: flex-start;
       }
-      .cards-row{grid-template-columns:1fr}
-      .form-grid{grid-template-columns:1fr}
+      .banner-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .market-grid,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+      .content {
+        padding: 14px;
+      }
+      .topbar {
+        padding: 12px 14px;
+      }
+      .profile-chip {
+        min-width: 0;
+      }
+      .form-grid.cols-2 {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <section id="loginScreen" class="login-screen">
-    <div class="login-logo-top">
-      <div class="logo-mark"></div>
-      <div>AgroControl</div>
-    </div>
-
-    <div class="login-card">
-      <div class="login-brand">
-        <div class="logo-mark"></div>
-        <div>AgroControl</div>
-      </div>
-
-      <div id="loginStatus" class="login-status"></div>
-
-      <form id="loginForm">
-        <div class="form-group">
-          <label class="label" for="loginEmail">E-mail</label>
-          <div class="input-wrap">
-            <span class="input-icon-left">👤</span>
-            <input id="loginEmail" type="email" placeholder="Digite seu e-mail" autocomplete="username" required />
-            <span class="input-icon-right">👤</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="label" for="loginPassword">Senha</label>
-          <div class="input-wrap">
-            <span class="input-icon-left">•</span>
-            <input id="loginPassword" type="password" placeholder="Digite sua senha" autocomplete="current-password" required />
-            <span class="input-icon-right">🔒</span>
-          </div>
-        </div>
-
-        <button type="submit" class="login-btn">Entrar</button>
-
-        <div class="login-checks">
-          <label class="check-row">
-            <input id="rememberLogin" type="checkbox" />
-            <span>Memorizar login</span>
-          </label>
-
-          <div class="check-row">
-            <input id="recoverToggle" type="checkbox" />
-            <button type="button" id="recoverBtn" class="recover-link">Recuperar minha senha</button>
-          </div>
-        </div>
-
-        <button type="button" id="continueBtn" class="continue-btn hidden">Continuar com sessão salva</button>
-
-        <div id="recoverBox" class="recover-box hidden">
-          <h4>Recuperar senha</h4>
-          <p>Informe o e-mail para receber o link de recuperação.</p>
-          <div class="input-wrap">
-            <span class="input-icon-left">✉</span>
-            <input id="recoverEmail" type="email" placeholder="Digite seu e-mail" />
-          </div>
-          <div class="recover-actions">
-            <button type="button" id="closeRecoverBtn" class="sub-btn">Fechar</button>
-            <button type="button" id="sendRecoverBtn" class="sub-btn green">Enviar</button>
-          </div>
-        </div>
-      </form>
-
-      <div class="login-footer">
-        Copyright 2024. AgroControl. Todos os direitos reservados.
+  <!-- LOGIN -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-left">
+      <div class="login-brand-card">
+        <h2>AgroControl Desktop</h2>
+        <p>
+          O centro de comando da fazenda. Controle pessoas, operações, financeiro,
+          mercado e produtividade em uma interface robusta, visual e profissional.
+        </p>
       </div>
     </div>
-  </section>
 
-  <section id="app" class="app">
-    <div class="dashboard">
-      <aside class="sidebar">
-        <div class="sidebar-brand">
-          <div class="logo-mark"></div>
-          <div>AgroControl</div>
-        </div>
+    <div class="login-right">
+      <div class="login-panel">
+        <h3>Entrar</h3>
+        <p>Faça login para acessar a Central de Comando.</p>
 
-        <nav class="sidebar-nav">
-          <button class="nav-btn active" data-view="central"><span class="nav-icon">🧭</span>Central de Comando</button>
-          <button class="nav-btn" data-view="operations"><span class="nav-icon">🚜</span>Operações</button>
-          <button class="nav-btn" data-view="fields"><span class="nav-icon">🌾</span>Talhões</button>
-          <button class="nav-btn" data-view="machines"><span class="nav-icon">⚙</span>Máquinas</button>
-          <button class="nav-btn" data-view="employees"><span class="nav-icon">🧑‍🌾</span>Funcionários</button>
-
-          <div class="nav-title">Gestão Agro</div>
-
-          <button class="nav-btn" data-view="market"><span class="nav-icon">🌿</span>Mercado</button>
-          <button class="nav-btn" data-view="finance"><span class="nav-icon">💰</span>Financeiro</button>
-          <button class="nav-btn" data-view="productivity"><span class="nav-icon">📈</span>Produtividade</button>
-          <button class="nav-btn" data-view="settings"><span class="nav-icon">⚙</span>Configurações</button>
-        </nav>
-
-        <div class="sidebar-user">
-          <div class="user-card">
-            <div class="user-left">
-              <div class="avatar" id="userAvatar">D</div>
-              <div class="user-text">
-                <div class="user-name" id="userName">dono</div>
-                <div class="user-email" id="userEmail">dono@agrocontrol.com</div>
-              </div>
-            </div>
-            <button id="logoutBtn" class="logout-mini" title="Sair">›</button>
+        <form id="loginForm" class="form-grid">
+          <div class="form-group">
+            <label for="loginEmail">E-mail</label>
+            <input id="loginEmail" type="email" placeholder="seu@email.com" required />
           </div>
-        </div>
-      </aside>
 
+          <div class="form-group">
+            <label for="loginPassword">Senha</label>
+            <input id="loginPassword" type="password" placeholder="••••••••" required />
+          </div>
+
+          <div class="login-options">
+            <label class="check-line">
+              <input id="rememberLogin" type="checkbox" />
+              <span>Lembrar login</span>
+            </label>
+
+            <button type="button" id="forgotPasswordBtn" class="ghost-btn">
+              Recuperar senha
+            </button>
+          </div>
+
+          <button type="submit" class="primary-btn w-full">Entrar</button>
+        </form>
+
+        <div id="savedSessionBox" class="login-saved hidden">
+          <p class="muted">Sessão encontrada neste navegador.</p>
+          <button id="continueSessionBtn" class="soft-btn w-full">Continuar sessão</button>
+          <button id="clearSavedSessionBtn" class="ghost-btn w-full">Esquecer sessão salva</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="appShell" class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">A</div>
+        <div>
+          <h1>AgroControl</h1>
+          <p>Desktop v2</p>
+        </div>
+      </div>
+
+      <div class="nav-group-title">Central</div>
+      <nav class="nav">
+        <button class="nav-btn active" data-section="overview">
+          <span class="nav-icon">🏡</span>
+          <span>Central de Comando</span>
+        </button>
+        <button class="nav-btn" data-section="mercado">
+          <span class="nav-icon">📈</span>
+          <span>Mercado</span>
+        </button>
+      </nav>
+
+      <div class="nav-group-title">Operação</div>
+      <nav class="nav">
+        <button class="nav-btn" data-section="employees">
+          <span class="nav-icon">👨‍🌾</span>
+          <span>Funcionários</span>
+        </button>
+        <button class="nav-btn" data-section="operations">
+          <span class="nav-icon">🚜</span>
+          <span>Operações</span>
+        </button>
+        <button class="nav-btn" data-section="financial">
+          <span class="nav-icon">💰</span>
+          <span>Financeiro</span>
+        </button>
+      </nav>
+
+      <div class="nav-group-title">Extras</div>
+      <nav class="nav">
+        <button class="nav-btn" data-section="inteligencia">
+          <span class="nav-icon">🧠</span>
+          <span>IA da Fazenda</span>
+        </button>
+        <button class="nav-btn" data-section="config">
+          <span class="nav-icon">⚙️</span>
+          <span>Configurações</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="openProfileBtnSidebar" class="soft-btn">Perfil do usuário</button>
+        <button id="logoutBtn" class="danger-btn">Sair</button>
+      </div>
+    </aside>
+
+    <main class="main">
       <header class="topbar">
         <div class="topbar-left">
-          <div class="top-item">🏠 <span id="farmNameTop">Minha Fazenda</span></div>
-          <div class="top-item"><span id="userNameTop">dono</span></div>
-          <div class="top-item">Vento 6 km/h</div>
-          <div class="top-item">★ Soja R$ 128,50</div>
-          <div class="top-item">▤ Milho R$ 58,20</div>
-          <div class="top-item">🍃 60 Boi R$ 250,00</div>
+          <h2 id="topbarTitle">Central de Comando</h2>
+          <p id="topbarSubtitle">Gestão integrada da fazenda em tempo real.</p>
         </div>
 
         <div class="topbar-right">
-          <button class="top-icon-btn">🔔</button>
-          <button class="top-icon-btn">⚙</button>
+          <button id="refreshAllBtn" class="ghost-btn">Atualizar dados</button>
 
-          <button id="profileOpenBtn" class="profile-pill" type="button">
-            <div class="avatar" id="profileAvatar">D</div>
-            <div id="profileName">dono</div>
+          <button id="openProfileBtn" class="profile-chip">
+            <img id="topbarAvatar" src="" alt="Avatar" />
+            <div class="profile-chip-info">
+              <strong id="topbarUserName">Carregando...</strong>
+              <span id="topbarFarmName">Fazenda</span>
+            </div>
           </button>
         </div>
       </header>
 
-      <main class="content">
-        <div id="globalNotice"></div>
+      <div class="content">
+        <section class="banner">
+          <div id="bannerCustomBg" class="banner-custom-bg hidden"></div>
 
-        <section id="view-central" class="view active">
-          <div class="cards-row">
-            <div class="metric-card greenish">
-              <div class="metric-title">Tarefas em Andamento</div>
-              <div class="metric-sub">📋 <span id="dashAndamentoText">0 tarefas</span></div>
-              <div class="metric-value" id="dashAndamento">0</div>
+          <div class="banner-content">
+            <div class="banner-main">
+              <h3 id="bannerFarmName">Minha Fazenda</h3>
+              <p>
+                O AgroControl organiza operação, pessoas, custos e decisões da rotina rural
+                em um só lugar.
+              </p>
+
+              <div class="banner-kpis">
+                <div class="mini-kpi">
+                  <span>Funcionários</span>
+                  <strong id="bannerEmployeesCount">0</strong>
+                </div>
+                <div class="mini-kpi">
+                  <span>Operações</span>
+                  <strong id="bannerOperationsCount">0</strong>
+                </div>
+                <div class="mini-kpi">
+                  <span>Lançamentos</span>
+                  <strong id="bannerFinancialCount">0</strong>
+                </div>
+                <div class="mini-kpi">
+                  <span>Usuário</span>
+                  <strong id="bannerUserRole">—</strong>
+                </div>
+              </div>
             </div>
 
-            <div class="metric-card">
-              <div class="metric-title">Tarefas Pendentes</div>
-              <div class="metric-sub">📋 <span id="dashPendentesText">0 tarefas</span></div>
-              <div class="metric-value orange" id="dashPendentes">0</div>
+            <div class="banner-actions">
+              <button id="changeBannerBtn" class="soft-btn">Trocar imagem do banner</button>
+              <button id="removeBannerBtn" class="ghost-btn">Remover banner personalizado</button>
             </div>
+          </div>
+        </section>
 
-            <div class="metric-card">
-              <div class="metric-title">Máquinas Operando</div>
-              <div class="metric-sub">🚜 <span id="dashMaquinasText">Base inicial</span></div>
-              <div class="metric-value red" id="dashMaquinas">0</div>
+        <!-- CENTRAL -->
+        <section id="section-overview" class="section active">
+          <div class="section-head">
+            <div>
+              <h3>Central de Comando</h3>
+              <p>Visão rápida do que está acontecendo na fazenda.</p>
             </div>
+          </div>
 
-            <div class="weather-card">
-              <div class="weather-inner">
+          <div class="grid grid-4">
+            <div class="card metric-card">
+              <div class="metric-top">
                 <div>
-                  <div class="weather-title">Clima para Aplicação</div>
-                  <div class="weather-lines">
-                    Vento: 6 km/h<br>
-                    Rajada: 6 km/h<br>
-                    Umidade: 98%<br>
-                    Temperatura: 29°C
-                  </div>
+                  <p>Tarefas em andamento</p>
                 </div>
-                <div class="weather-ok">Pode Aplicar <span>Sim</span></div>
+                <div class="metric-icon">🛠️</div>
               </div>
+              <div class="metric-value" id="metricOperationsOpen">0</div>
+              <div class="metric-foot">Operações ainda não concluídas.</div>
+            </div>
+
+            <div class="card metric-card">
+              <div class="metric-top">
+                <div>
+                  <p>Tarefas pendentes</p>
+                </div>
+                <div class="metric-icon">📋</div>
+              </div>
+              <div class="metric-value" id="metricOperationsPending">0</div>
+              <div class="metric-foot">Pendências que exigem atenção.</div>
+            </div>
+
+            <div class="card metric-card">
+              <div class="metric-top">
+                <div>
+                  <p>Máquinas operando</p>
+                </div>
+                <div class="metric-icon">🚜</div>
+              </div>
+              <div class="metric-value" id="metricMachinesOperating">3</div>
+              <div class="metric-foot">Valor visual de apoio até integração total.</div>
+            </div>
+
+            <div class="card metric-card">
+              <div class="metric-top">
+                <div>
+                  <p>Fluxo financeiro</p>
+                </div>
+                <div class="metric-icon">💵</div>
+              </div>
+              <div class="metric-value" id="metricFinancialTotal">R$ 0</div>
+              <div class="metric-foot">Total somado dos lançamentos atuais.</div>
             </div>
           </div>
 
-          <div class="lower-grid">
-            <div class="left-col">
-              <div class="panel">
-                <div class="panel-header">
-                  <div class="panel-title"><span class="ic">🌿</span>Mercado</div>
-                  <div class="panel-meta">Base visual</div>
-                </div>
-
-                <div class="market-grid">
-                  <div class="market-row">
-                    <div class="market-name">Soja</div>
-                    <div class="market-price">R$ 128,50</div>
-                  </div>
-                  <div class="market-row">
-                    <div class="market-name">Arroz</div>
-                    <div class="market-price small-green"><span class="green-box">✓</span>1104,30</div>
-                  </div>
-
-                  <div class="market-row">
-                    <div class="market-name">Milho</div>
-                    <div class="market-price">R$ 56,20</div>
-                  </div>
-                  <div class="market-row">
-                    <div class="market-name">@ do Gado</div>
-                    <div class="market-price">R$ 250,00</div>
-                  </div>
+          <div class="split">
+            <div class="card">
+              <div class="section-head mb-8">
+                <div>
+                  <h4>Clima e produtividade</h4>
+                  <p>Bloco visual para apoio operacional.</p>
                 </div>
               </div>
 
-              <div class="panel">
-                <div class="panel-header">
-                  <div class="panel-title"><span class="ic">🌱</span>Visão dos Talhões</div>
+              <div class="grid grid-2">
+                <div class="card" style="padding:16px;">
+                  <h4>Clima</h4>
+                  <p>27°C · Céu parcialmente nublado</p>
+                  <div class="info-strip" style="margin-top:12px;">
+                    <span class="pill">Umidade: 68%</span>
+                    <span class="pill">Vento: 11 km/h</span>
+                    <span class="pill">Chuva: 20%</span>
+                  </div>
                 </div>
 
-                <div class="table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Talhão</th>
-                        <th>Cultura</th>
-                        <th>Área</th>
-                        <th>Produtividade</th>
-                        <th>Situação</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Talhão 1</td>
-                        <td><strong>Soja</strong></td>
-                        <td>35 ha</td>
-                        <td>59 sc/ha</td>
-                        <td class="orange-text">Atenção</td>
-                      </tr>
-                      <tr>
-                        <td>Talhão 2</td>
-                        <td><strong>Milho</strong></td>
-                        <td>36 ha</td>
-                        <td>59 sc/ha</td>
-                        <td class="orange-text">Monitorar</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="card" style="padding:16px;">
+                  <h4>Produtividade</h4>
+                  <p>Indicadores gerais de desempenho do dia.</p>
+                  <div class="info-strip" style="margin-top:12px;">
+                    <span class="pill">Talhões ativos: 4</span>
+                    <span class="pill">Equipe em campo: <span id="overviewEmployeesCount">0</span></span>
+                    <span class="pill">Operações hoje: <span id="overviewOperationsCount">0</span></span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div class="mid-col">
-              <div class="panel">
-                <div class="panel-header">
-                  <div class="panel-title"><span class="ic">🌦</span>Clima</div>
-                  <div class="panel-meta">Resumo</div>
-                </div>
+            <div class="card">
+              <h4>IA da Fazenda</h4>
+              <p style="margin-bottom:14px;">
+                Sugestões rápidas com base nos dados atuais do sistema.
+              </p>
 
-                <div class="climate-list">
-                  <div class="climate-item">
-                    <div class="left">🍃 Vento favorável</div>
-                    <div class="val">R$ 725.800,00</div>
-                  </div>
-                  <div class="climate-item">
-                    <div class="left">🟨 Janela de aplicação</div>
-                    <div class="val">R$ 530.000,00</div>
-                  </div>
-                </div>
+              <div id="aiInsights" class="list"></div>
+            </div>
+          </div>
+
+          <div class="split">
+            <div class="card">
+              <h4>Operações recentes</h4>
+              <div id="recentOperationsList" class="list" style="margin-top:14px;"></div>
+            </div>
+
+            <div class="card">
+              <h4>Financeiro recente</h4>
+              <div id="recentFinancialList" class="list" style="margin-top:14px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MERCADO -->
+        <section id="section-mercado" class="section">
+          <div class="section-head">
+            <div>
+              <h3>Mercado</h3>
+              <p>Layout limpo para referência rápida de preços e cenário.</p>
+            </div>
+            <div class="section-actions">
+              <button id="refreshMarketBtn" class="soft-btn">Atualizar painel</button>
+            </div>
+          </div>
+
+          <div class="market-grid" id="marketGrid"></div>
+
+          <div class="card">
+            <h4>Leitura rápida do mercado</h4>
+            <div id="marketSummary" class="info-strip" style="margin-top:14px;"></div>
+          </div>
+        </section>
+
+        <!-- FUNCIONÁRIOS -->
+        <section id="section-employees" class="section">
+          <div class="section-head">
+            <div>
+              <h3>Funcionários</h3>
+              <p>Cadastro, edição e listagem conectados ao Supabase.</p>
+            </div>
+
+            <div class="section-actions">
+              <button id="addEmployeeBtn" class="primary-btn">Novo funcionário</button>
+            </div>
+          </div>
+
+          <div class="searchbar">
+            <input id="employeesSearch" type="text" placeholder="Pesquisar por nome, cargo, telefone..." />
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Cargo</th>
+                  <th>Telefone</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="employeesTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- OPERAÇÕES -->
+        <section id="section-operations" class="section">
+          <div class="section-head">
+            <div>
+              <h3>Operações</h3>
+              <p>Controle operacional da fazenda com criação e edição.</p>
+            </div>
+
+            <div class="section-actions">
+              <button id="addOperationBtn" class="primary-btn">Nova operação</button>
+            </div>
+          </div>
+
+          <div class="searchbar">
+            <input id="operationsSearch" type="text" placeholder="Pesquisar por título, tipo, status..." />
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Tipo</th>
+                  <th>Status</th>
+                  <th>Data</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="operationsTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- FINANCEIRO -->
+        <section id="section-financial" class="section">
+          <div class="section-head">
+            <div>
+              <h3>Financeiro</h3>
+              <p>Lançamentos conectados ao Supabase para controle de entradas e saídas.</p>
+            </div>
+
+            <div class="section-actions">
+              <button id="addFinancialBtn" class="primary-btn">Novo lançamento</button>
+            </div>
+          </div>
+
+          <div class="searchbar">
+            <input id="financialSearch" type="text" placeholder="Pesquisar por descrição, categoria, tipo..." />
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Descrição</th>
+                  <th>Categoria</th>
+                  <th>Tipo</th>
+                  <th>Valor</th>
+                  <th>Data</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="financialTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- IA -->
+        <section id="section-inteligencia" class="section">
+          <div class="section-head">
+            <div>
+              <h3>IA da Fazenda</h3>
+              <p>Painel de sugestões e leitura operacional.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-3">
+            <div class="card">
+              <h4>Prioridade do dia</h4>
+              <p id="iaPriorityText">Carregando leitura operacional...</p>
+            </div>
+            <div class="card">
+              <h4>Risco financeiro</h4>
+              <p id="iaFinancialText">Carregando leitura financeira...</p>
+            </div>
+            <div class="card">
+              <h4>Equipe</h4>
+              <p id="iaTeamText">Carregando leitura de equipe...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONFIG -->
+        <section id="section-config" class="section">
+          <div class="section-head">
+            <div>
+              <h3>Configurações</h3>
+              <p>Ajustes visuais e preferências locais do Desktop.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="form-grid cols-2">
+              <div class="form-group">
+                <label for="configFarmNameMirror">Nome da fazenda</label>
+                <input id="configFarmNameMirror" type="text" placeholder="Nome da fazenda" />
               </div>
-
-              <div class="panel">
-                <div class="panel-header">
-                  <div class="panel-title"><span class="ic">📈</span>Produtividade da Safra</div>
-                </div>
-
-                <div class="chart">
-                  <div class="bar-wrap"><div class="bar" style="height:112px"></div><div class="bar-label">2a</div></div>
-                  <div class="bar-wrap"><div class="bar" style="height:78px"></div><div class="bar-label">28</div></div>
-                  <div class="bar-wrap"><div class="bar" style="height:72px"></div><div class="bar-label">2aes</div></div>
-                  <div class="bar-wrap"><div class="bar" style="height:70px"></div><div class="bar-label">Sm</div></div>
-                  <div class="bar-wrap"><div class="bar" style="height:106px"></div><div class="bar-label">44f</div></div>
-                  <div class="bar-wrap"><div class="bar" style="height:104px"></div><div class="bar-label">5pm</div></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="right-col">
-              <div class="panel">
-                <div class="panel-header">
-                  <div class="panel-title"><span class="ic">🧠</span>IA da Fazenda</div>
-                </div>
-
-                <ul class="ai-list">
-                  <li><span class="check-green">✓</span><span>O custo operacional de campo deve ser revisado nesta semana.</span></li>
-                  <li><span class="check-green">✓</span><span>As operações pendentes estão prontas para virar centro de acompanhamento real.</span></li>
-                  <li><span class="check-green">✓</span><span>O financeiro agora já pode ser conectado em nuvem sem retrabalho de estrutura.</span></li>
-                  <li><span class="check-green">✓</span><span>O AgroControl está pronto para a próxima fase de uso real.</span></li>
-                </ul>
+              <div class="form-group">
+                <label>Ações</label>
+                <button id="configOpenProfileBtn" class="soft-btn">Abrir perfil para editar</button>
               </div>
             </div>
           </div>
-        </section>
 
-        <section id="view-operations" class="view">
-          <h2 class="section-title-page">Operações</h2>
-          <p class="section-subtitle-page">Tarefas, execução, máquina, responsável e custo operacional.</p>
-
-          <div class="crud-toolbar">
-            <input id="operationsSearch" type="text" placeholder="Buscar por título, talhão, máquina ou status" />
-            <button id="operationsRefresh" class="crud-btn">Atualizar</button>
-            <button id="operationsNew" class="crud-btn primary">Nova operação</button>
-          </div>
-
-          <div class="panel">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Título</th>
-                    <th>Categoria</th>
-                    <th>Talhão</th>
-                    <th>Máquina</th>
-                    <th>Responsável</th>
-                    <th>Status</th>
-                    <th>Prevista</th>
-                    <th>Custo</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="operationsTable"></tbody>
-              </table>
+          <div class="card">
+            <h4>Banner do sistema</h4>
+            <p>Você pode trocar a imagem principal do topo sem quebrar o restante do sistema.</p>
+            <div class="section-actions" style="margin-top:14px;">
+              <button id="configBannerBtn" class="soft-btn">Escolher imagem do banner</button>
+              <button id="configRemoveBannerBtn" class="ghost-btn">Remover imagem personalizada</button>
             </div>
           </div>
         </section>
+      </div>
+    </main>
+  </div>
 
-        <section id="view-fields" class="view">
-          <h2 class="section-title-page">Talhões</h2>
-          <p class="section-subtitle-page">Área reservada para expansão com a tabela de talhões já existente no projeto.</p>
-
-          <div class="panel">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Talhão</th>
-                    <th>Cultura</th>
-                    <th>Área</th>
-                    <th>Produtividade</th>
-                    <th>Situação</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>Talhão 1</td><td>Soja</td><td>42 ha</td><td>61 sc/ha</td><td><span class="status-pill status-green">Bom</span></td></tr>
-                  <tr><td>Talhão 2</td><td>Arroz</td><td>35 ha</td><td>71 sc/ha</td><td><span class="status-pill status-yellow">Atenção</span></td></tr>
-                  <tr><td>Talhão 3</td><td>Milho</td><td>28 ha</td><td>109 sc/ha</td><td><span class="status-pill status-green">Bom</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section id="view-machines" class="view">
-          <h2 class="section-title-page">Máquinas</h2>
-          <p class="section-subtitle-page">Área reservada para integração com a tabela de máquinas já existente no projeto.</p>
-
-          <div class="panel">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Máquina</th>
-                    <th>Modelo</th>
-                    <th>Status</th>
-                    <th>Horas</th>
-                    <th>Local</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>Colheitadeira 01</td><td>S790</td><td><span class="status-pill status-green">Operando</span></td><td>1.420</td><td>Talhão 4</td></tr>
-                  <tr><td>Trator 01</td><td>Valtra 230</td><td><span class="status-pill status-yellow">Parado</span></td><td>2.190</td><td>Galpão</td></tr>
-                  <tr><td>Pulverizador</td><td>Uniport</td><td><span class="status-pill status-blue">Pronto</span></td><td>980</td><td>Pátio</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section id="view-employees" class="view">
-          <h2 class="section-title-page">Funcionários</h2>
-          <p class="section-subtitle-page">Equipe, salário, participação e status.</p>
-
-          <div class="crud-toolbar">
-            <input id="employeesSearch" type="text" placeholder="Buscar por nome, cargo ou setor" />
-            <button id="employeesRefresh" class="crud-btn">Atualizar</button>
-            <button id="employeesNew" class="crud-btn primary">Novo funcionário</button>
-          </div>
-
-          <div class="panel">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Cargo</th>
-                    <th>Setor</th>
-                    <th>Salário</th>
-                    <th>Participação</th>
-                    <th>Status</th>
-                    <th>Telefone</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="employeesTable"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section id="view-market" class="view">
-          <h2 class="section-title-page">Mercado</h2>
-          <p class="section-subtitle-page">Área reservada para cotações futuras e integração externa.</p>
-
-          <div class="panel">
-            <div class="market-grid">
-              <div class="market-row"><div class="market-name">Soja</div><div class="market-price">R$ 128,50</div></div>
-              <div class="market-row"><div class="market-name">Arroz</div><div class="market-price">R$ 104,30</div></div>
-              <div class="market-row"><div class="market-name">Milho</div><div class="market-price">R$ 58,20</div></div>
-              <div class="market-row"><div class="market-name">@ do Gado</div><div class="market-price">R$ 250,00</div></div>
-              <div class="market-row"><div class="market-name">Dólar</div><div class="market-price">R$ 5,38</div></div>
-              <div class="market-row"><div class="market-name">Diesel</div><div class="market-price">R$ 6,14</div></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="view-finance" class="view">
-          <h2 class="section-title-page">Financeiro</h2>
-          <p class="section-subtitle-page">Receitas, despesas, saldo, lucro e ponto de equilíbrio.</p>
-
-          <div class="crud-toolbar">
-            <input id="financeSearch" type="text" placeholder="Buscar por categoria, descrição ou cultura" />
-            <button id="financeRefresh" class="crud-btn">Atualizar</button>
-            <button id="financeNew" class="crud-btn primary">Nova transação</button>
-          </div>
-
-          <div class="cards-row" style="grid-template-columns:repeat(4,1fr); margin-top:6px;">
-            <div class="metric-card">
-              <div class="metric-title">Receitas</div>
-              <div class="metric-value" style="font-size:34px;color:#86d86d;position:static" id="financeRevenueCard">R$ 0,00</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-title">Despesas</div>
-              <div class="metric-value" style="font-size:34px;color:#f0b04d;position:static" id="financeExpenseCard">R$ 0,00</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-title">Lucro / Prejuízo</div>
-              <div class="metric-value" style="font-size:34px;color:#7fcf66;position:static" id="financeProfitCard">R$ 0,00</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-title">Ponto de Equilíbrio</div>
-              <div class="metric-value" style="font-size:34px;color:#d5a14e;position:static" id="financeBreakEvenCard">R$ 0,00</div>
-            </div>
-          </div>
-
-          <div class="panel">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Tipo</th>
-                    <th>Categoria</th>
-                    <th>Descrição</th>
-                    <th>Cultura</th>
-                    <th>Quantidade</th>
-                    <th>Valor</th>
-                    <th>Vencimento</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="financeTable"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section id="view-productivity" class="view">
-          <h2 class="section-title-page">Produtividade</h2>
-          <p class="section-subtitle-page">Visão base da performance da safra.</p>
-
-          <div class="panel">
-            <div class="chart">
-              <div class="bar-wrap"><div class="bar" style="height:120px"></div><div class="bar-label">Jan</div></div>
-              <div class="bar-wrap"><div class="bar" style="height:80px"></div><div class="bar-label">Fev</div></div>
-              <div class="bar-wrap"><div class="bar" style="height:92px"></div><div class="bar-label">Mar</div></div>
-              <div class="bar-wrap"><div class="bar" style="height:68px"></div><div class="bar-label">Abr</div></div>
-              <div class="bar-wrap"><div class="bar" style="height:110px"></div><div class="bar-label">Mai</div></div>
-              <div class="bar-wrap"><div class="bar" style="height:116px"></div><div class="bar-label">Jun</div></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="view-settings" class="view">
-          <h2 class="section-title-page">Configurações</h2>
-          <p class="section-subtitle-page">Ajustes gerais do AgroControl Desktop.</p>
-
-          <div class="panel" style="max-width:700px">
-            <div class="form-group-modal">
-              <label for="farmNameInput">Nome da fazenda</label>
-              <input id="farmNameInput" type="text" placeholder="Ex.: Minha Fazenda" />
-            </div>
-            <div class="modal-actions" style="justify-content:flex-start">
-              <button id="saveFarmNameBtn" class="crud-btn primary">Salvar nome</button>
-            </div>
-          </div>
-        </section>
-      </main>
+  <!-- PROFILE DRAWER -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+  <aside id="profileDrawer" class="drawer">
+    <div class="drawer-header">
+      <div>
+        <h3>Perfil do usuário</h3>
+        <p class="muted">Edite nome, fazenda e foto.</p>
+      </div>
+      <button id="closeProfileDrawerBtn" class="ghost-btn">Fechar</button>
     </div>
-  </section>
 
-  <div id="modalBackdrop" class="modal-backdrop">
-    <div class="modal">
-      <div class="modal-header">
+    <div class="drawer-body">
+      <div class="avatar-editor">
+        <img id="profileAvatarPreview" class="avatar-lg" src="" alt="Avatar" />
         <div>
-          <h3 id="modalTitle" class="modal-title">Novo cadastro</h3>
-          <p id="modalSubtitle" class="modal-subtitle">Preencha os dados abaixo</p>
+          <strong id="profileDrawerName">Usuário</strong>
+          <p id="profileDrawerEmail" class="muted">email@email.com</p>
+          <p id="profileDrawerRole" class="muted">Função</p>
         </div>
-        <button id="closeModalBtn" class="modal-close">×</button>
       </div>
 
-      <form id="entityForm">
-        <div id="entityFields" class="form-grid"></div>
-        <div class="modal-actions">
-          <button type="button" id="cancelModalBtn" class="crud-btn">Cancelar</button>
-          <button type="submit" class="crud-btn primary">Salvar</button>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="profileFullName">Nome</label>
+          <input id="profileFullName" type="text" placeholder="Seu nome" />
         </div>
-      </form>
+
+        <div class="form-group">
+          <label for="profileFarmName">Nome da fazenda</label>
+          <input id="profileFarmName" type="text" placeholder="Nome da fazenda" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Enviar foto</label>
+        <div id="avatarDropzone" class="dropzone">
+          Arraste uma imagem aqui ou use o botão abaixo.
+          <div style="margin-top:12px;">
+            <button id="pickAvatarBtn" class="soft-btn" type="button">Selecionar arquivo</button>
+            <input id="avatarFileInput" type="file" accept="image/*" class="hidden" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Escolher avatar</label>
+        <div id="avatarPresetGrid" class="avatar-preset-grid"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="profileAvatarUrl">URL da foto</label>
+        <input id="profileAvatarUrl" type="text" placeholder="Opcional" />
+      </div>
+
+      <button id="saveProfileBtn" class="primary-btn">Salvar perfil</button>
+    </div>
+  </aside>
+
+  <!-- MODAL -->
+  <div id="modalBackdrop" class="modal-backdrop"></div>
+  <div id="crudModal" class="modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalTitle">Cadastro</h3>
+          <p id="modalSubtitle" class="muted">Preencha os dados abaixo.</p>
+        </div>
+        <button id="closeModalBtn" class="ghost-btn">Fechar</button>
+      </div>
+
+      <div id="modalBody" class="modal-body"></div>
+
+      <div class="modal-footer">
+        <button id="modalCancelBtn" class="ghost-btn">Cancelar</button>
+        <button id="modalSaveBtn" class="primary-btn">Salvar</button>
+      </div>
     </div>
   </div>
 
-  <div id="profileModalBackdrop" class="modal-backdrop">
-    <div class="modal" style="max-width:680px;">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title">Meu Perfil</h3>
-          <p class="modal-subtitle">Edite seus dados de exibição no sistema.</p>
-        </div>
-        <button id="closeProfileModalBtn" class="modal-close">×</button>
-      </div>
+  <!-- FILE INPUT FOR BANNER -->
+  <input id="bannerFileInput" type="file" accept="image/*" class="hidden" />
 
-      <form id="profileForm">
-        <div class="form-grid">
-          <div class="form-group-modal">
-            <label for="profileEditName">Nome completo</label>
-            <input id="profileEditName" type="text" placeholder="Seu nome" />
-          </div>
-
-          <div class="form-group-modal">
-            <label for="profileEditEmail">E-mail</label>
-            <input id="profileEditEmail" type="email" placeholder="seuemail@fazenda.com" />
-          </div>
-
-          <div class="form-group-modal full">
-            <label for="profileEditPhoto">Foto de perfil (URL da imagem)</label>
-            <input id="profileEditPhoto" type="text" placeholder="https://..." />
-          </div>
-
-          <div class="form-group-modal">
-            <label for="profileEditRole">Função</label>
-            <input id="profileEditRole" type="text" placeholder="Ex.: Dono / Gerente" />
-          </div>
-
-          <div class="form-group-modal">
-            <label for="profileEditFarmName">Nome da fazenda</label>
-            <input id="profileEditFarmName" type="text" placeholder="Nome da fazenda" />
-          </div>
-        </div>
-
-        <div class="modal-actions">
-          <button type="button" id="cancelProfileModalBtn" class="crud-btn">Cancelar</button>
-          <button type="submit" class="crud-btn primary">Salvar perfil</button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <div id="toastWrap" class="toast-wrap"></div>
 
   <script>
+    /******************************************************************
+     * CONFIG / SUPABASE
+     ******************************************************************/
     const SUPABASE_URL = "https://xksllcfagvpccvuzwqmg.supabase.co";
     const SUPABASE_KEY = "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy";
-
-    const KEYS = {
-      remember: "agrocontrol_desktop_remember_email"
-    };
-
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    /******************************************************************
+     * ESTADO GLOBAL
+     ******************************************************************/
     const state = {
       session: null,
+      user: null,
       profile: null,
       employees: [],
       operations: [],
-      finance: [],
-      currentView: "central",
-      modal: { module: null, mode: "create", record: null }
+      financial: [],
+      currentSection: "overview",
+      currentModal: null,
+      editingRecord: null,
+      tempAvatarDataUrl: null,
+      selectedPresetAvatar: null,
+      market: [],
+      rememberedEmail: localStorage.getItem("agrocontrol_remembered_email") || "",
+      savedBanner: localStorage.getItem("agrocontrol_desktop_banner") || "",
+      hasSupabaseSession: false
     };
 
-    const refs = {
+    const AVATAR_PRESETS = [
+      "https://api.dicebear.com/7.x/bottts/svg?seed=Agro1",
+      "https://api.dicebear.com/7.x/bottts/svg?seed=Agro2",
+      "https://api.dicebear.com/7.x/bottts/svg?seed=Agro3",
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=Fazenda1",
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=Fazenda2",
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=Fazenda3",
+      "https://api.dicebear.com/7.x/personas/svg?seed=Campo1",
+      "https://api.dicebear.com/7.x/personas/svg?seed=Campo2",
+      "https://api.dicebear.com/7.x/personas/svg?seed=Campo3",
+      "https://api.dicebear.com/7.x/micah/svg?seed=AgroControl"
+    ];
+
+    /******************************************************************
+     * ELEMENTOS
+     ******************************************************************/
+    const el = {
       loginScreen: document.getElementById("loginScreen"),
-      app: document.getElementById("app"),
+      appShell: document.getElementById("appShell"),
       loginForm: document.getElementById("loginForm"),
       loginEmail: document.getElementById("loginEmail"),
       loginPassword: document.getElementById("loginPassword"),
-      loginStatus: document.getElementById("loginStatus"),
       rememberLogin: document.getElementById("rememberLogin"),
-      continueBtn: document.getElementById("continueBtn"),
-      recoverBtn: document.getElementById("recoverBtn"),
-      recoverToggle: document.getElementById("recoverToggle"),
-      recoverBox: document.getElementById("recoverBox"),
-      recoverEmail: document.getElementById("recoverEmail"),
-      closeRecoverBtn: document.getElementById("closeRecoverBtn"),
-      sendRecoverBtn: document.getElementById("sendRecoverBtn"),
+      forgotPasswordBtn: document.getElementById("forgotPasswordBtn"),
+      savedSessionBox: document.getElementById("savedSessionBox"),
+      continueSessionBtn: document.getElementById("continueSessionBtn"),
+      clearSavedSessionBtn: document.getElementById("clearSavedSessionBtn"),
 
-      userAvatar: document.getElementById("userAvatar"),
-      profileAvatar: document.getElementById("profileAvatar"),
-      userName: document.getElementById("userName"),
-      userEmail: document.getElementById("userEmail"),
-      userNameTop: document.getElementById("userNameTop"),
-      profileName: document.getElementById("profileName"),
-      logoutBtn: document.getElementById("logoutBtn"),
-      farmNameTop: document.getElementById("farmNameTop"),
-      farmNameInput: document.getElementById("farmNameInput"),
-      saveFarmNameBtn: document.getElementById("saveFarmNameBtn"),
-      globalNotice: document.getElementById("globalNotice"),
+      topbarTitle: document.getElementById("topbarTitle"),
+      topbarSubtitle: document.getElementById("topbarSubtitle"),
+      topbarAvatar: document.getElementById("topbarAvatar"),
+      topbarUserName: document.getElementById("topbarUserName"),
+      topbarFarmName: document.getElementById("topbarFarmName"),
 
-      operationsSearch: document.getElementById("operationsSearch"),
-      operationsRefresh: document.getElementById("operationsRefresh"),
-      operationsNew: document.getElementById("operationsNew"),
-      operationsTable: document.getElementById("operationsTable"),
+      bannerFarmName: document.getElementById("bannerFarmName"),
+      bannerEmployeesCount: document.getElementById("bannerEmployeesCount"),
+      bannerOperationsCount: document.getElementById("bannerOperationsCount"),
+      bannerFinancialCount: document.getElementById("bannerFinancialCount"),
+      bannerUserRole: document.getElementById("bannerUserRole"),
+      bannerCustomBg: document.getElementById("bannerCustomBg"),
+
+      metricOperationsOpen: document.getElementById("metricOperationsOpen"),
+      metricOperationsPending: document.getElementById("metricOperationsPending"),
+      metricMachinesOperating: document.getElementById("metricMachinesOperating"),
+      metricFinancialTotal: document.getElementById("metricFinancialTotal"),
+
+      overviewEmployeesCount: document.getElementById("overviewEmployeesCount"),
+      overviewOperationsCount: document.getElementById("overviewOperationsCount"),
+
+      aiInsights: document.getElementById("aiInsights"),
+      iaPriorityText: document.getElementById("iaPriorityText"),
+      iaFinancialText: document.getElementById("iaFinancialText"),
+      iaTeamText: document.getElementById("iaTeamText"),
+
+      recentOperationsList: document.getElementById("recentOperationsList"),
+      recentFinancialList: document.getElementById("recentFinancialList"),
+
+      marketGrid: document.getElementById("marketGrid"),
+      marketSummary: document.getElementById("marketSummary"),
+      refreshMarketBtn: document.getElementById("refreshMarketBtn"),
+      refreshAllBtn: document.getElementById("refreshAllBtn"),
 
       employeesSearch: document.getElementById("employeesSearch"),
-      employeesRefresh: document.getElementById("employeesRefresh"),
-      employeesNew: document.getElementById("employeesNew"),
-      employeesTable: document.getElementById("employeesTable"),
+      operationsSearch: document.getElementById("operationsSearch"),
+      financialSearch: document.getElementById("financialSearch"),
+      employeesTableBody: document.getElementById("employeesTableBody"),
+      operationsTableBody: document.getElementById("operationsTableBody"),
+      financialTableBody: document.getElementById("financialTableBody"),
 
-      financeSearch: document.getElementById("financeSearch"),
-      financeRefresh: document.getElementById("financeRefresh"),
-      financeNew: document.getElementById("financeNew"),
-      financeTable: document.getElementById("financeTable"),
+      addEmployeeBtn: document.getElementById("addEmployeeBtn"),
+      addOperationBtn: document.getElementById("addOperationBtn"),
+      addFinancialBtn: document.getElementById("addFinancialBtn"),
 
-      dashAndamento: document.getElementById("dashAndamento"),
-      dashPendentes: document.getElementById("dashPendentes"),
-      dashMaquinas: document.getElementById("dashMaquinas"),
-      dashAndamentoText: document.getElementById("dashAndamentoText"),
-      dashPendentesText: document.getElementById("dashPendentesText"),
-      dashMaquinasText: document.getElementById("dashMaquinasText"),
+      openProfileBtn: document.getElementById("openProfileBtn"),
+      openProfileBtnSidebar: document.getElementById("openProfileBtnSidebar"),
+      closeProfileDrawerBtn: document.getElementById("closeProfileDrawerBtn"),
+      drawerBackdrop: document.getElementById("drawerBackdrop"),
+      profileDrawer: document.getElementById("profileDrawer"),
 
-      financeRevenueCard: document.getElementById("financeRevenueCard"),
-      financeExpenseCard: document.getElementById("financeExpenseCard"),
-      financeProfitCard: document.getElementById("financeProfitCard"),
-      financeBreakEvenCard: document.getElementById("financeBreakEvenCard"),
+      profileAvatarPreview: document.getElementById("profileAvatarPreview"),
+      profileDrawerName: document.getElementById("profileDrawerName"),
+      profileDrawerEmail: document.getElementById("profileDrawerEmail"),
+      profileDrawerRole: document.getElementById("profileDrawerRole"),
+      profileFullName: document.getElementById("profileFullName"),
+      profileFarmName: document.getElementById("profileFarmName"),
+      profileAvatarUrl: document.getElementById("profileAvatarUrl"),
+      saveProfileBtn: document.getElementById("saveProfileBtn"),
+      avatarDropzone: document.getElementById("avatarDropzone"),
+      pickAvatarBtn: document.getElementById("pickAvatarBtn"),
+      avatarFileInput: document.getElementById("avatarFileInput"),
+      avatarPresetGrid: document.getElementById("avatarPresetGrid"),
 
+      changeBannerBtn: document.getElementById("changeBannerBtn"),
+      removeBannerBtn: document.getElementById("removeBannerBtn"),
+      configBannerBtn: document.getElementById("configBannerBtn"),
+      configRemoveBannerBtn: document.getElementById("configRemoveBannerBtn"),
+      bannerFileInput: document.getElementById("bannerFileInput"),
+
+      configFarmNameMirror: document.getElementById("configFarmNameMirror"),
+      configOpenProfileBtn: document.getElementById("configOpenProfileBtn"),
+
+      logoutBtn: document.getElementById("logoutBtn"),
+
+      crudModal: document.getElementById("crudModal"),
       modalBackdrop: document.getElementById("modalBackdrop"),
       modalTitle: document.getElementById("modalTitle"),
       modalSubtitle: document.getElementById("modalSubtitle"),
+      modalBody: document.getElementById("modalBody"),
       closeModalBtn: document.getElementById("closeModalBtn"),
-      cancelModalBtn: document.getElementById("cancelModalBtn"),
-      entityForm: document.getElementById("entityForm"),
-      entityFields: document.getElementById("entityFields"),
+      modalCancelBtn: document.getElementById("modalCancelBtn"),
+      modalSaveBtn: document.getElementById("modalSaveBtn"),
 
-      profileOpenBtn: document.getElementById("profileOpenBtn"),
-      profileModalBackdrop: document.getElementById("profileModalBackdrop"),
-      closeProfileModalBtn: document.getElementById("closeProfileModalBtn"),
-      cancelProfileModalBtn: document.getElementById("cancelProfileModalBtn"),
-      profileForm: document.getElementById("profileForm"),
-      profileEditName: document.getElementById("profileEditName"),
-      profileEditEmail: document.getElementById("profileEditEmail"),
-      profileEditPhoto: document.getElementById("profileEditPhoto"),
-      profileEditRole: document.getElementById("profileEditRole"),
-      profileEditFarmName: document.getElementById("profileEditFarmName")
+      toastWrap: document.getElementById("toastWrap")
     };
 
-    const schemas = {
-      employees: {
-        table: "employees",
-        titleCreate: "Novo funcionário",
-        titleEdit: "Editar funcionário",
-        subtitle: "Cadastro da equipe com salário e participação.",
-        fields: [
-          {name:"name", label:"Nome", type:"text", required:true},
-          {name:"role", label:"Cargo", type:"text"},
-          {name:"sector", label:"Setor", type:"text"},
-          {name:"salary", label:"Salário", type:"number", step:"0.01"},
-          {name:"harvest_participation_type", label:"Tipo de participação", type:"select", options:[
-            {value:"", label:"Sem participação"},
-            {value:"percentual", label:"Percentual"},
-            {value:"valor_fixo", label:"Valor fixo"}
-          ]},
-          {name:"harvest_participation_value", label:"Valor da participação", type:"number", step:"0.01"},
-          {name:"status", label:"Status", type:"select", options:[
-            {value:"ativo", label:"Ativo"},
-            {value:"inativo", label:"Inativo"}
-          ]},
-          {name:"phone", label:"Telefone", type:"text"},
-          {name:"notes", label:"Observações", type:"textarea", full:true}
-        ]
-      },
-      operations: {
-        table: "operations",
-        titleCreate: "Nova operação",
-        titleEdit: "Editar operação",
-        subtitle: "Planejamento e execução operacional.",
-        fields: [
-          {name:"title", label:"Título", type:"text", required:true},
-          {name:"category", label:"Categoria", type:"text"},
-          {name:"farm_sector", label:"Setor da fazenda", type:"text"},
-          {name:"field_name", label:"Talhão", type:"text"},
-          {name:"machine_name", label:"Máquina", type:"text"},
-          {name:"employee_name", label:"Responsável", type:"text"},
-          {name:"status", label:"Status", type:"select", options:[
-            {value:"pendente", label:"Pendente"},
-            {value:"em_andamento", label:"Em andamento"},
-            {value:"concluida", label:"Concluída"},
-            {value:"cancelada", label:"Cancelada"}
-          ]},
-          {name:"planned_date", label:"Data prevista", type:"date"},
-          {name:"completed_date", label:"Data concluída", type:"date"},
-          {name:"estimated_cost", label:"Custo estimado", type:"number", step:"0.01"},
-          {name:"actual_cost", label:"Custo real", type:"number", step:"0.01"},
-          {name:"notes", label:"Observações", type:"textarea", full:true}
-        ]
-      },
-      finance: {
-        table: "financial_transactions",
-        titleCreate: "Nova transação",
-        titleEdit: "Editar transação",
-        subtitle: "Receitas e despesas do financeiro.",
-        fields: [
-          {name:"type", label:"Tipo", type:"select", options:[
-            {value:"receita", label:"Receita"},
-            {value:"despesa", label:"Despesa"}
-          ]},
-          {name:"category", label:"Categoria", type:"text", required:true},
-          {name:"description", label:"Descrição", type:"text"},
-          {name:"culture", label:"Cultura", type:"text"},
-          {name:"quantity", label:"Quantidade", type:"number", step:"0.01"},
-          {name:"amount", label:"Valor", type:"number", step:"0.01", required:true},
-          {name:"due_date", label:"Vencimento", type:"date"},
-          {name:"payment_date", label:"Pagamento", type:"date"},
-          {name:"status", label:"Status", type:"select", options:[
-            {value:"pendente", label:"Pendente"},
-            {value:"pago", label:"Pago"},
-            {value:"recebido", label:"Recebido"}
-          ]},
-          {name:"source_module", label:"Módulo origem", type:"text"},
-          {name:"reference_id", label:"ID referência", type:"text"}
-        ]
-      }
-    };
-
-    function money(v){
-      return new Intl.NumberFormat("pt-BR",{style:"currency", currency:"BRL"}).format(Number(v || 0));
+    /******************************************************************
+     * UTILITÁRIOS
+     ******************************************************************/
+    function showToast(message, type = "info") {
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      el.toastWrap.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(-6px)";
+      }, 2600);
+      setTimeout(() => toast.remove(), 3200);
     }
 
-    function dateBr(v){
-      if(!v) return "-";
-      const d = new Date(v + (String(v).includes("T") ? "" : "T00:00:00"));
-      if(Number.isNaN(d.getTime())) return v;
-      return d.toLocaleDateString("pt-BR");
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    function esc(v){
-      return String(v ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    function formatCurrency(value) {
+      const num = Number(value || 0);
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      }).format(num);
     }
 
-    function setNotice(msg, type="success"){
-      if(!msg){
-        refs.globalNotice.innerHTML = "";
-        return;
-      }
-      const cls = type === "success" ? "notice success" : type === "error" ? "notice error" : type === "warn" ? "notice warn" : "notice";
-      refs.globalNotice.innerHTML = `<div class="${cls}">${esc(msg)}</div>`;
+    function formatDate(value) {
+      if (!value) return "—";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString("pt-BR");
     }
 
-    function setLoginNotice(msg, type="success"){
-      if(!msg){
-        refs.loginStatus.innerHTML = "";
-        return;
-      }
-      const cls = type === "success" ? "notice success" : type === "error" ? "notice error" : type === "warn" ? "notice warn" : "notice";
-      refs.loginStatus.innerHTML = `<div class="${cls}">${esc(msg)}</div>`;
+    function getSafeAvatar(profile) {
+      return (
+        profile?.avatar_url ||
+        state.tempAvatarDataUrl ||
+        "https://api.dicebear.com/7.x/personas/svg?seed=AgroControlUser"
+      );
     }
 
-    function initials(text){
-      if(!text) return "D";
-      return String(text).trim().charAt(0).toUpperCase();
+    function normalizeRoleLabel(role) {
+      if (!role) return "Usuário";
+      return String(role)
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, (m) => m.toUpperCase());
     }
 
-    function applyProfileUI(){
-      const profile = state.profile || {};
-      const email = profile.email || state.session?.user?.email || "dono@agrocontrol.com";
-      const fullName = profile.full_name || email.split("@")[0] || "dono";
-      const farmName = profile.farm_name || "Minha Fazenda";
-      const photo = profile.avatar_url || "";
-
-      refs.userName.textContent = fullName;
-      refs.userEmail.textContent = email;
-      refs.userNameTop.textContent = fullName;
-      refs.profileName.textContent = fullName;
-      refs.farmNameTop.textContent = farmName;
-      refs.farmNameInput.value = farmName;
-
-      [refs.userAvatar, refs.profileAvatar].forEach(el => {
-        el.textContent = initials(fullName);
-        el.style.backgroundImage = "";
-        if(photo){
-          el.textContent = "";
-          el.style.backgroundImage = `url("${photo}")`;
-        }
-      });
-    }
-
-    function showLogin(){
-      refs.app.classList.remove("active");
-      refs.loginScreen.classList.remove("hidden");
-      hydrateRemembered();
-      renderContinueSession();
-    }
-
-    function showApp(){
-      refs.loginScreen.classList.add("hidden");
-      refs.app.classList.add("active");
-      applyProfileUI();
-      renderAll();
-    }
-
-    function hydrateRemembered(){
-      const saved = localStorage.getItem(KEYS.remember) || "";
-      refs.loginEmail.value = saved;
-      refs.recoverEmail.value = saved;
-      refs.rememberLogin.checked = !!saved;
-    }
-
-    function renderContinueSession(){
-      const email = state.session?.user?.email;
-      if(email){
-        refs.continueBtn.classList.remove("hidden");
-        setLoginNotice(`Sessão encontrada para ${email}. A tela de login continua obrigatória.`, "success");
+    function setBannerImage(dataUrlOrUrl) {
+      if (dataUrlOrUrl) {
+        el.bannerCustomBg.style.backgroundImage = `url("${dataUrlOrUrl}")`;
+        el.bannerCustomBg.classList.remove("hidden");
       } else {
-        refs.continueBtn.classList.add("hidden");
-        if(localStorage.getItem(KEYS.remember)){
-          setLoginNotice("Login salvo localmente. O e-mail já foi preenchido.", "success");
-        } else {
-          setLoginNotice("");
-        }
+        el.bannerCustomBg.style.backgroundImage = "";
+        el.bannerCustomBg.classList.add("hidden");
       }
     }
 
-    async function loadProfile(){
-      const userId = state.session?.user?.id;
-      if(!userId){
-        state.profile = null;
+    function updateSavedSessionVisibility() {
+      if (state.hasSupabaseSession) {
+        el.savedSessionBox.classList.remove("hidden");
+      } else {
+        el.savedSessionBox.classList.add("hidden");
+      }
+    }
+
+    function getColumnsFallback(row, preferred = []) {
+      if (!row || typeof row !== "object") return {};
+      const keys = Object.keys(row);
+      const result = {};
+
+      preferred.forEach((pref) => {
+        if (keys.includes(pref)) result[pref] = row[pref];
+      });
+
+      keys.forEach((k) => {
+        if (!(k in result)) result[k] = row[k];
+      });
+
+      return result;
+    }
+
+    /******************************************************************
+     * LOGIN / SESSÃO
+     ******************************************************************/
+    async function checkExistingSession() {
+      const { data, error } = await supabaseClient.auth.getSession();
+      if (error) {
+        console.error("Erro ao verificar sessão:", error);
+        state.hasSupabaseSession = false;
+        updateSavedSessionVisibility();
         return;
       }
+
+      state.hasSupabaseSession = !!data?.session;
+      updateSavedSessionVisibility();
+
+      if (state.rememberedEmail) {
+        el.loginEmail.value = state.rememberedEmail;
+        el.rememberLogin.checked = true;
+      }
+    }
+
+    async function login(email, password) {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        showToast(error.message || "Falha no login.", "error");
+        return false;
+      }
+
+      state.session = data.session;
+      state.user = data.user;
+
+      if (el.rememberLogin.checked) {
+        localStorage.setItem("agrocontrol_remembered_email", email);
+      } else {
+        localStorage.removeItem("agrocontrol_remembered_email");
+      }
+
+      await afterAuthenticated();
+      return true;
+    }
+
+    async function continueSession() {
+      const { data, error } = await supabaseClient.auth.getSession();
+      if (error || !data?.session) {
+        showToast("Não foi possível continuar a sessão.", "error");
+        return;
+      }
+
+      state.session = data.session;
+      state.user = data.session.user;
+      await afterAuthenticated();
+    }
+
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      state.session = null;
+      state.user = null;
+      state.profile = null;
+      showLogin();
+      await checkExistingSession();
+      showToast("Sessão encerrada.", "info");
+    }
+
+    async function forgotPassword() {
+      const email = el.loginEmail.value.trim();
+      if (!email) {
+        showToast("Digite o e-mail para recuperar a senha.", "error");
+        return;
+      }
+
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.href
+      });
+
+      if (error) {
+        showToast(error.message || "Erro ao enviar recuperação.", "error");
+        return;
+      }
+
+      showToast("E-mail de recuperação enviado.", "success");
+    }
+
+    function showLogin() {
+      el.loginScreen.style.display = "flex";
+      el.appShell.style.display = "none";
+    }
+
+    function showApp() {
+      el.loginScreen.style.display = "none";
+      el.appShell.style.display = "grid";
+    }
+
+    /******************************************************************
+     * PERFIL
+     ******************************************************************/
+    async function ensureProfile() {
+      if (!state.user?.id) return;
 
       const { data, error } = await supabaseClient
         .from("profiles")
         .select("*")
-        .eq("id", userId)
+        .eq("id", state.user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Erro ao carregar profile:", error);
+        showToast("Não foi possível carregar o perfil.", "error");
+        return;
+      }
+
+      if (data) {
+        state.profile = data;
+        return;
+      }
+
+      const fallbackProfile = {
+        id: state.user.id,
+        email: state.user.email,
+        full_name: state.user.user_metadata?.full_name || "",
+        farm_name: "Minha Fazenda",
+        avatar_url: "",
+        role: "user"
+      };
+
+      const { data: inserted, error: insertError } = await supabaseClient
+        .from("profiles")
+        .upsert(fallbackProfile)
+        .select()
         .single();
 
-      if(error){
-        throw error;
-      }
-
-      state.profile = data;
-    }
-
-    async function loadEmployees(){
-      const userId = state.session?.user?.id;
-      if(!userId){
-        state.employees = [];
+      if (insertError) {
+        console.error("Erro ao criar profile:", insertError);
+        state.profile = fallbackProfile;
         return;
       }
 
-      const { data, error } = await supabaseClient
-        .from("employees")
-        .select("*")
-        .eq("owner_id", userId)
-        .order("created_at", { ascending: false });
-
-      if(error) throw error;
-      state.employees = data || [];
+      state.profile = inserted;
     }
 
-    async function loadOperations(){
-      const userId = state.session?.user?.id;
-      if(!userId){
-        state.operations = [];
-        return;
+    async function saveProfile() {
+      if (!state.user?.id) return;
+
+      const full_name = el.profileFullName.value.trim();
+      const farm_name = el.profileFarmName.value.trim();
+
+      let avatar_url = el.profileAvatarUrl.value.trim();
+
+      if (state.tempAvatarDataUrl) {
+        avatar_url = state.tempAvatarDataUrl;
       }
 
-      const { data, error } = await supabaseClient
-        .from("operations")
-        .select("*")
-        .eq("owner_id", userId)
-        .order("created_at", { ascending: false });
-
-      if(error) throw error;
-      state.operations = data || [];
-    }
-
-    async function loadFinance(){
-      const userId = state.session?.user?.id;
-      if(!userId){
-        state.finance = [];
-        return;
-      }
-
-      const { data, error } = await supabaseClient
-        .from("financial_transactions")
-        .select("*")
-        .eq("owner_id", userId)
-        .order("created_at", { ascending: false });
-
-      if(error) throw error;
-      state.finance = data || [];
-    }
-
-    async function loadData(){
-      await Promise.all([
-        loadProfile(),
-        loadEmployees(),
-        loadOperations(),
-        loadFinance()
-      ]);
-      renderAll();
-      applyProfileUI();
-    }
-
-    function statusPill(value){
-      const v = String(value || "").toLowerCase();
-      if(["ativo","concluida","pago","recebido"].includes(v)) return `<span class="status-pill status-green">${esc(value || "-")}</span>`;
-      if(["pendente","em_andamento"].includes(v)) return `<span class="status-pill status-yellow">${esc(value || "-")}</span>`;
-      if(["cancelada","inativo"].includes(v)) return `<span class="status-pill status-red">${esc(value || "-")}</span>`;
-      return `<span class="status-pill status-blue">${esc(value || "-")}</span>`;
-    }
-
-    function renderCentral(){
-      const andamento = state.operations.filter(x => (x.status || "").toLowerCase() === "em_andamento").length;
-      const pendentes = state.operations.filter(x => (x.status || "").toLowerCase() === "pendente").length;
-
-      refs.dashAndamento.textContent = andamento;
-      refs.dashPendentes.textContent = pendentes;
-      refs.dashMaquinas.textContent = 0;
-      refs.dashAndamentoText.textContent = `${andamento} tarefa${andamento === 1 ? "" : "s"}`;
-      refs.dashPendentesText.textContent = `${pendentes} tarefa${pendentes === 1 ? "" : "s"}`;
-      refs.dashMaquinasText.textContent = "Integração futura";
-
-      const receitas = state.finance.filter(x => (x.type || "").toLowerCase() === "receita").reduce((a,b)=>a+Number(b.amount||0),0);
-      const despesas = state.finance.filter(x => (x.type || "").toLowerCase() === "despesa").reduce((a,b)=>a+Number(b.amount||0),0);
-      const lucro = receitas - despesas;
-      const equilibrio = despesas;
-
-      refs.financeRevenueCard.textContent = money(receitas);
-      refs.financeExpenseCard.textContent = money(despesas);
-      refs.financeProfitCard.textContent = money(lucro);
-      refs.financeBreakEvenCard.textContent = money(equilibrio);
-    }
-
-    function renderEmployees(){
-      const term = (refs.employeesSearch.value || "").trim().toLowerCase();
-      const rows = state.employees.filter(item =>
-        [item.name, item.role, item.sector].some(v => String(v || "").toLowerCase().includes(term))
-      );
-
-      refs.employeesTable.innerHTML = rows.map(item => `
-        <tr>
-          <td><strong>${esc(item.name || "-")}</strong></td>
-          <td>${esc(item.role || "-")}</td>
-          <td>${esc(item.sector || "-")}</td>
-          <td>${money(item.salary)}</td>
-          <td>${esc(item.harvest_participation_type || "sem")}${item.harvest_participation_value ? ` • ${money(item.harvest_participation_value)}` : ""}</td>
-          <td>${statusPill(item.status || "ativo")}</td>
-          <td>${esc(item.phone || "-")}</td>
-          <td><button class="mini-action" onclick="openEntityModal('employees','edit','${item.id}')">Editar</button></td>
-        </tr>
-      `).join("") || `<tr><td colspan="8">Nenhum funcionário encontrado.</td></tr>`;
-    }
-
-    function renderOperations(){
-      const term = (refs.operationsSearch.value || "").trim().toLowerCase();
-      const rows = state.operations.filter(item =>
-        [item.title, item.category, item.field_name, item.machine_name, item.status, item.employee_name].some(v => String(v || "").toLowerCase().includes(term))
-      );
-
-      refs.operationsTable.innerHTML = rows.map(item => `
-        <tr>
-          <td><strong>${esc(item.title || "-")}</strong></td>
-          <td>${esc(item.category || "-")}</td>
-          <td>${esc(item.field_name || "-")}</td>
-          <td>${esc(item.machine_name || "-")}</td>
-          <td>${esc(item.employee_name || "-")}</td>
-          <td>${statusPill(item.status || "pendente")}</td>
-          <td>${dateBr(item.planned_date)}</td>
-          <td>${money(item.actual_cost ?? item.estimated_cost)}</td>
-          <td><button class="mini-action" onclick="openEntityModal('operations','edit','${item.id}')">Editar</button></td>
-        </tr>
-      `).join("") || `<tr><td colspan="9">Nenhuma operação encontrada.</td></tr>`;
-    }
-
-    function renderFinance(){
-      const term = (refs.financeSearch.value || "").trim().toLowerCase();
-      const rows = state.finance.filter(item =>
-        [item.type, item.category, item.description, item.culture].some(v => String(v || "").toLowerCase().includes(term))
-      );
-
-      refs.financeTable.innerHTML = rows.map(item => `
-        <tr>
-          <td>${statusPill(item.type || "-")}</td>
-          <td>${esc(item.category || "-")}</td>
-          <td><strong>${esc(item.description || "-")}</strong></td>
-          <td>${esc(item.culture || "-")}</td>
-          <td>${item.quantity ?? "-"}</td>
-          <td>${money(item.amount)}</td>
-          <td>${dateBr(item.due_date)}</td>
-          <td>${statusPill(item.status || "pendente")}</td>
-          <td><button class="mini-action" onclick="openEntityModal('finance','edit','${item.id}')">Editar</button></td>
-        </tr>
-      `).join("") || `<tr><td colspan="9">Nenhuma transação encontrada.</td></tr>`;
-    }
-
-    function renderAll(){
-      renderCentral();
-      renderEmployees();
-      renderOperations();
-      renderFinance();
-    }
-
-    function setView(view){
-      state.currentView = view;
-      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-      document.getElementById(`view-${view}`)?.classList.add("active");
-      document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.view === view);
-      });
-    }
-
-    function buildField(field, value){
-      const wrap = document.createElement("div");
-      wrap.className = `form-group-modal${field.full ? " full" : ""}`;
-
-      const label = document.createElement("label");
-      label.textContent = field.label;
-      label.setAttribute("for", `field_${field.name}`);
-      wrap.appendChild(label);
-
-      let input;
-      if(field.type === "textarea"){
-        input = document.createElement("textarea");
-      }else if(field.type === "select"){
-        input = document.createElement("select");
-        (field.options || []).forEach(opt => {
-          const option = document.createElement("option");
-          option.value = opt.value;
-          option.textContent = opt.label;
-          input.appendChild(option);
-        });
-      }else{
-        input = document.createElement("input");
-        input.type = field.type || "text";
-        if(field.step) input.step = field.step;
-      }
-
-      input.id = `field_${field.name}`;
-      input.name = field.name;
-      if(field.required) input.required = true;
-      if(value !== undefined && value !== null) input.value = value;
-      wrap.appendChild(input);
-
-      return wrap;
-    }
-
-    function getModuleData(module){
-      if(module === "employees") return state.employees;
-      if(module === "operations") return state.operations;
-      if(module === "finance") return state.finance;
-      return [];
-    }
-
-    window.openEntityModal = function(module, mode="create", id=null){
-      const schema = schemas[module];
-      if(!schema) return;
-
-      const record = mode === "edit" ? getModuleData(module).find(x => String(x.id) === String(id)) : null;
-      state.modal = { module, mode, record };
-
-      refs.modalTitle.textContent = mode === "edit" ? schema.titleEdit : schema.titleCreate;
-      refs.modalSubtitle.textContent = schema.subtitle;
-      refs.entityFields.innerHTML = "";
-
-      schema.fields.forEach(field => {
-        refs.entityFields.appendChild(buildField(field, record ? record[field.name] : ""));
-      });
-
-      refs.modalBackdrop.classList.add("active");
-    };
-
-    function closeModal(){
-      refs.modalBackdrop.classList.remove("active");
-      refs.entityForm.reset();
-      state.modal = { module:null, mode:"create", record:null };
-    }
-
-    async function saveModuleRecord(module, payload){
-      const schema = schemas[module];
-      const ownerId = state.session?.user?.id;
-      if(!ownerId) throw new Error("Sessão inválida.");
-
-      if(state.modal.mode === "edit" && state.modal.record?.id){
-        const { error } = await supabaseClient
-          .from(schema.table)
-          .update(payload)
-          .eq("id", state.modal.record.id)
-          .eq("owner_id", ownerId);
-
-        if(error) throw error;
-      } else {
-        const { error } = await supabaseClient
-          .from(schema.table)
-          .insert([{ ...payload, owner_id: ownerId }]);
-
-        if(error) throw error;
-      }
-    }
-
-    async function submitEntityForm(event){
-      event.preventDefault();
-      const module = state.modal.module;
-      if(!module) return;
-
-      const schema = schemas[module];
-      const formData = new FormData(refs.entityForm);
-      const payload = {};
-
-      schema.fields.forEach(field => {
-        let value = formData.get(field.name);
-        if(field.type === "number" && value !== "") value = Number(value);
-        payload[field.name] = value === "" ? null : value;
-      });
-
-      try{
-        await saveModuleRecord(module, payload);
-        closeModal();
-        await loadData();
-        setNotice("Registro salvo com sucesso.", "success");
-      }catch(error){
-        setNotice(`Falha ao salvar: ${error?.message || "erro desconhecido"}`, "error");
-      }
-    }
-
-    async function doLogin(event){
-      event.preventDefault();
-
-      const email = refs.loginEmail.value.trim();
-      const password = refs.loginPassword.value.trim();
-
-      if(!email || !password){
-        setLoginNotice("Informe e-mail e senha.", "warn");
-        return;
-      }
-
-      try{
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if(error) throw error;
-
-        state.session = data.session || null;
-
-        if(refs.rememberLogin.checked){
-          localStorage.setItem(KEYS.remember, email);
-        }else{
-          localStorage.removeItem(KEYS.remember);
-        }
-
-        refs.loginPassword.value = "";
-        await loadData();
-        showApp();
-      }catch(error){
-        setLoginNotice(`Erro no login: ${error?.message || "falha ao autenticar"}`, "error");
-      }
-    }
-
-    async function continueSession(){
-      try{
-        const { data, error } = await supabaseClient.auth.getSession();
-        if(error) throw error;
-
-        if(!data.session){
-          setLoginNotice("Nenhuma sessão válida encontrada.", "warn");
-          return;
-        }
-
-        state.session = data.session;
-        await loadData();
-        showApp();
-      }catch(error){
-        setLoginNotice(`Falha ao continuar sessão: ${error?.message || "erro desconhecido"}`, "error");
-      }
-    }
-
-    async function recoverPassword(){
-      const email = refs.recoverEmail.value.trim() || refs.loginEmail.value.trim();
-      if(!email){
-        setLoginNotice("Informe o e-mail para recuperação.", "warn");
-        return;
-      }
-
-      try{
-        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.href
-        });
-        if(error) throw error;
-        setLoginNotice("Se existir uma conta com esse e-mail, o link foi enviado.", "success");
-      }catch(error){
-        setLoginNotice(`Falha ao recuperar senha: ${error?.message || "erro desconhecido"}`, "error");
-      }
-    }
-
-    async function logout(){
-      try{
-        await supabaseClient.auth.signOut();
-      }catch{}
-      state.session = null;
-      state.profile = null;
-      refs.loginPassword.value = "";
-      showLogin();
-      setLoginNotice("Sessão encerrada.", "success");
-    }
-
-    function openProfileModal(){
-      const p = state.profile || {};
-      refs.profileEditName.value = p.full_name || "";
-      refs.profileEditEmail.value = p.email || state.session?.user?.email || "";
-      refs.profileEditPhoto.value = p.avatar_url || "";
-      refs.profileEditRole.value = p.role || "owner";
-      refs.profileEditFarmName.value = p.farm_name || "Minha Fazenda";
-      refs.profileModalBackdrop.classList.add("active");
-    }
-
-    function closeProfileModal(){
-      refs.profileModalBackdrop.classList.remove("active");
-    }
-
-    async function saveProfile(event){
-      event.preventDefault();
-
-      const userId = state.session?.user?.id;
-      if(!userId){
-        setNotice("Sessão inválida para atualizar perfil.", "error");
-        return;
+      if (state.selectedPresetAvatar) {
+        avatar_url = state.selectedPresetAvatar;
       }
 
       const payload = {
-        full_name: refs.profileEditName.value.trim() || null,
-        email: refs.profileEditEmail.value.trim() || state.session?.user?.email || null,
-        avatar_url: refs.profileEditPhoto.value.trim() || null,
-        role: refs.profileEditRole.value.trim() || "owner",
-        farm_name: refs.profileEditFarmName.value.trim() || "Minha Fazenda"
+        id: state.user.id,
+        full_name,
+        farm_name,
+        avatar_url
       };
 
-      try{
-        const { error } = await supabaseClient
-          .from("profiles")
-          .update(payload)
-          .eq("id", userId);
+      const { data, error } = await supabaseClient
+        .from("profiles")
+        .update(payload)
+        .eq("id", state.user.id)
+        .select()
+        .single();
 
-        if(error) throw error;
-
-        await loadProfile();
-        applyProfileUI();
-        closeProfileModal();
-        setNotice("Perfil atualizado com sucesso.", "success");
-      }catch(error){
-        setNotice(`Falha ao atualizar perfil: ${error?.message || "erro desconhecido"}`, "error");
-      }
-    }
-
-    async function saveFarmNameOnly(){
-      const userId = state.session?.user?.id;
-      const farmName = refs.farmNameInput.value.trim();
-
-      if(!userId){
-        setNotice("Sessão inválida.", "error");
+      if (error) {
+        console.error("Erro ao salvar perfil:", error);
+        if (String(error.message || "").includes("profiles_role_check")) {
+          showToast("Não foi possível salvar: o campo de função possui restrição no banco.", "error");
+        } else {
+          showToast(error.message || "Erro ao salvar perfil.", "error");
+        }
         return;
       }
 
-      if(!farmName){
-        setNotice("Informe um nome para a fazenda.", "warn");
+      state.profile = {
+        ...state.profile,
+        ...data
+      };
+
+      renderProfile();
+      closeProfileDrawer();
+      showToast("Perfil salvo com sucesso.", "success");
+    }
+
+    function renderProfile() {
+      const profile = state.profile || {};
+      const userEmail = profile.email || state.user?.email || "—";
+      const name = profile.full_name || state.user?.user_metadata?.full_name || "Usuário";
+      const farm = profile.farm_name || "Minha Fazenda";
+      const role = normalizeRoleLabel(profile.role);
+      const avatar = getSafeAvatar(profile);
+
+      el.topbarAvatar.src = avatar;
+      el.topbarUserName.textContent = name;
+      el.topbarFarmName.textContent = farm;
+
+      el.profileAvatarPreview.src = avatar;
+      el.profileDrawerName.textContent = name;
+      el.profileDrawerEmail.textContent = userEmail;
+      el.profileDrawerRole.textContent = role;
+
+      el.profileFullName.value = profile.full_name || "";
+      el.profileFarmName.value = farm;
+      el.profileAvatarUrl.value = profile.avatar_url || "";
+
+      el.bannerFarmName.textContent = farm;
+      el.bannerUserRole.textContent = role;
+      el.configFarmNameMirror.value = farm;
+    }
+
+    function openProfileDrawer() {
+      renderProfile();
+      el.drawerBackdrop.classList.add("show");
+      el.profileDrawer.classList.add("show");
+    }
+
+    function closeProfileDrawer() {
+      el.drawerBackdrop.classList.remove("show");
+      el.profileDrawer.classList.remove("show");
+    }
+
+    function buildAvatarPresets() {
+      el.avatarPresetGrid.innerHTML = "";
+      AVATAR_PRESETS.forEach((url) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "avatar-preset";
+        button.innerHTML = `<img src="${url}" alt="Avatar" />`;
+        button.addEventListener("click", () => {
+          state.selectedPresetAvatar = url;
+          state.tempAvatarDataUrl = null;
+          el.profileAvatarUrl.value = url;
+          el.profileAvatarPreview.src = url;
+
+          [...el.avatarPresetGrid.querySelectorAll(".avatar-preset")].forEach((item) => {
+            item.classList.remove("active");
+          });
+          button.classList.add("active");
+        });
+        el.avatarPresetGrid.appendChild(button);
+      });
+    }
+
+    function readImageFile(file, callback) {
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        showToast("Selecione uma imagem válida.", "error");
         return;
       }
 
-      try{
-        const { error } = await supabaseClient
-          .from("profiles")
-          .update({ farm_name: farmName })
-          .eq("id", userId);
+      const reader = new FileReader();
+      reader.onload = () => callback(reader.result);
+      reader.readAsDataURL(file);
+    }
 
-        if(error) throw error;
-
-        await loadProfile();
-        applyProfileUI();
-        setNotice("Nome da fazenda atualizado com sucesso.", "success");
-      }catch(error){
-        setNotice(`Falha ao salvar nome da fazenda: ${error?.message || "erro desconhecido"}`, "error");
+    /******************************************************************
+     * BANNER
+     ******************************************************************/
+    function saveBannerLocally(dataUrl) {
+      state.savedBanner = dataUrl || "";
+      if (dataUrl) {
+        localStorage.setItem("agrocontrol_desktop_banner", dataUrl);
+      } else {
+        localStorage.removeItem("agrocontrol_desktop_banner");
       }
+      setBannerImage(dataUrl);
     }
 
-    function bindEvents(){
-      refs.loginForm.addEventListener("submit", doLogin);
-      refs.continueBtn.addEventListener("click", continueSession);
+    /******************************************************************
+     * MERCADO
+     ******************************************************************/
+    function buildMarketData() {
+      state.market = [
+        { name: "Soja", value: "R$ 132,40", trend: "+1,8%", type: "green", note: "Saca 60 kg" },
+        { name: "Milho", value: "R$ 66,90", trend: "-0,7%", type: "yellow", note: "Saca 60 kg" },
+        { name: "Arroz", value: "R$ 96,30", trend: "+0,9%", type: "green", note: "Saca 50 kg" },
+        { name: "Arroba do Gado", value: "R$ 321,50", trend: "+1,2%", type: "green", note: "@ boi gordo" },
+        { name: "Dólar", value: "R$ 5,08", trend: "-0,3%", type: "blue", note: "Comercial" },
+        { name: "Diesel", value: "R$ 6,19", trend: "+0,4%", type: "red", note: "Referência regional" }
+      ];
+    }
 
-      refs.recoverBtn.addEventListener("click", () => {
-        refs.recoverBox.classList.toggle("hidden");
-        refs.recoverToggle.checked = !refs.recoverBox.classList.contains("hidden");
+    function renderMarket() {
+      el.marketGrid.innerHTML = "";
+      state.market.forEach((item) => {
+        const badgeClass = item.type === "green"
+          ? "badge-green"
+          : item.type === "yellow"
+            ? "badge-yellow"
+            : item.type === "red"
+              ? "badge-red"
+              : "badge-blue";
+
+        const card = document.createElement("div");
+        card.className = "market-card";
+        card.innerHTML = `
+          <div class="market-card-top">
+            <div>
+              <h5>${escapeHtml(item.name)}</h5>
+              <div class="market-meta">${escapeHtml(item.note)}</div>
+            </div>
+            <span class="status-badge ${badgeClass}">${escapeHtml(item.trend)}</span>
+          </div>
+          <div class="market-value">${escapeHtml(item.value)}</div>
+          <div class="market-meta">Painel visual da versão 2</div>
+        `;
+        el.marketGrid.appendChild(card);
       });
 
-      refs.recoverToggle.addEventListener("change", () => {
-        refs.recoverBox.classList.toggle("hidden", !refs.recoverToggle.checked);
+      el.marketSummary.innerHTML = `
+        <span class="pill">Soja e arroba sustentadas</span>
+        <span class="pill">Diesel exige atenção</span>
+        <span class="pill">Milho com leve pressão</span>
+        <span class="pill">Dólar influencia insumos</span>
+      `;
+    }
+
+    /******************************************************************
+     * DADOS SUPABASE
+     ******************************************************************/
+    async function loadEmployees() {
+      const { data, error } = await supabaseClient
+        .from("employees")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Erro employees:", error);
+        state.employees = [];
+        showToast("Falha ao carregar funcionários.", "error");
+        return;
+      }
+
+      state.employees = data || [];
+    }
+
+    async function loadOperations() {
+      const { data, error } = await supabaseClient
+        .from("operations")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Erro operations:", error);
+        state.operations = [];
+        showToast("Falha ao carregar operações.", "error");
+        return;
+      }
+
+      state.operations = data || [];
+    }
+
+    async function loadFinancial() {
+      const { data, error } = await supabaseClient
+        .from("financial_transactions")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Erro financial:", error);
+        state.financial = [];
+        showToast("Falha ao carregar financeiro.", "error");
+        return;
+      }
+
+      state.financial = data || [];
+    }
+
+    async function refreshAllData(showMessage = false) {
+      await Promise.all([
+        loadEmployees(),
+        loadOperations(),
+        loadFinancial()
+      ]);
+
+      renderEmployeesTable();
+      renderOperationsTable();
+      renderFinancialTable();
+      renderOverview();
+      renderBannerKpis();
+      renderIA();
+      if (showMessage) showToast("Dados atualizados.", "success");
+    }
+
+    /******************************************************************
+     * RENDER DADOS
+     ******************************************************************/
+    function renderBannerKpis() {
+      el.bannerEmployeesCount.textContent = state.employees.length;
+      el.bannerOperationsCount.textContent = state.operations.length;
+      el.bannerFinancialCount.textContent = state.financial.length;
+    }
+
+    function renderOverview() {
+      const openOps = state.operations.filter((op) => {
+        const status = String(op.status || "").toLowerCase();
+        return !["concluída", "concluido", "concluída", "finalizada", "done", "completed"].includes(status);
       });
 
-      refs.closeRecoverBtn.addEventListener("click", () => {
-        refs.recoverBox.classList.add("hidden");
-        refs.recoverToggle.checked = false;
+      const pendingOps = state.operations.filter((op) => {
+        const status = String(op.status || "").toLowerCase();
+        return ["pendente", "pending", "aguardando"].includes(status);
       });
 
-      refs.sendRecoverBtn.addEventListener("click", recoverPassword);
-      refs.logoutBtn.addEventListener("click", logout);
+      const totalFinancial = state.financial.reduce((sum, item) => {
+        const value = Number(item.amount ?? item.value ?? 0);
+        return sum + (Number.isFinite(value) ? value : 0);
+      }, 0);
 
-      document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.addEventListener("click", () => setView(btn.dataset.view));
-      });
+      el.metricOperationsOpen.textContent = openOps.length;
+      el.metricOperationsPending.textContent = pendingOps.length;
+      el.metricFinancialTotal.textContent = formatCurrency(totalFinancial);
+      el.overviewEmployeesCount.textContent = state.employees.length;
+      el.overviewOperationsCount.textContent = state.operations.length;
 
-      refs.saveFarmNameBtn.addEventListener("click", saveFarmNameOnly);
+      renderRecentOperations();
+      renderRecentFinancial();
+      renderAiInsightsList();
+    }
 
-      refs.employeesSearch.addEventListener("input", renderEmployees);
-      refs.operationsSearch.addEventListener("input", renderOperations);
-      refs.financeSearch.addEventListener("input", renderFinance);
+    function renderRecentOperations() {
+      el.recentOperationsList.innerHTML = "";
+      const recent = state.operations.slice(0, 5);
 
-      refs.employeesRefresh.addEventListener("click", async () => {
-        await loadEmployees();
-        renderEmployees();
-        setNotice("Funcionários atualizados.", "success");
-      });
+      if (!recent.length) {
+        el.recentOperationsList.innerHTML = `<div class="empty-state">Nenhuma operação cadastrada ainda.</div>`;
+        return;
+      }
 
-      refs.operationsRefresh.addEventListener("click", async () => {
-        await loadOperations();
-        renderOperations();
-        setNotice("Operações atualizadas.", "success");
-      });
+      recent.forEach((op) => {
+        const title = op.title || op.nome || op.name || "Operação";
+        const status = op.status || "Sem status";
+        const type = op.type || op.tipo || "Geral";
 
-      refs.financeRefresh.addEventListener("click", async () => {
-        await loadFinance();
-        renderFinance();
-        renderCentral();
-        setNotice("Financeiro atualizado.", "success");
-      });
-
-      refs.employeesNew.addEventListener("click", () => openEntityModal("employees"));
-      refs.operationsNew.addEventListener("click", () => openEntityModal("operations"));
-      refs.financeNew.addEventListener("click", () => openEntityModal("finance"));
-
-      refs.closeModalBtn.addEventListener("click", closeModal);
-      refs.cancelModalBtn.addEventListener("click", closeModal);
-      refs.modalBackdrop.addEventListener("click", e => {
-        if(e.target === refs.modalBackdrop) closeModal();
-      });
-      refs.entityForm.addEventListener("submit", submitEntityForm);
-
-      refs.profileOpenBtn.addEventListener("click", openProfileModal);
-      refs.closeProfileModalBtn.addEventListener("click", closeProfileModal);
-      refs.cancelProfileModalBtn.addEventListener("click", closeProfileModal);
-      refs.profileModalBackdrop.addEventListener("click", e => {
-        if(e.target === refs.profileModalBackdrop) closeProfileModal();
-      });
-      refs.profileForm.addEventListener("submit", saveProfile);
-
-      supabaseClient.auth.onAuthStateChange((_event, session) => {
-        state.session = session;
-        renderContinueSession();
+        const item = document.createElement("div");
+        item.className = "list-item";
+        item.innerHTML = `
+          <div>
+            <strong>${escapeHtml(title)}</strong><br />
+            <small>${escapeHtml(type)} · ${escapeHtml(status)}</small>
+          </div>
+          <small>${escapeHtml(formatDate(op.date || op.created_at))}</small>
+        `;
+        el.recentOperationsList.appendChild(item);
       });
     }
 
-    async function bootstrap(){
+    function renderRecentFinancial() {
+      el.recentFinancialList.innerHTML = "";
+      const recent = state.financial.slice(0, 5);
+
+      if (!recent.length) {
+        el.recentFinancialList.innerHTML = `<div class="empty-state">Nenhum lançamento financeiro ainda.</div>`;
+        return;
+      }
+
+      recent.forEach((itemData) => {
+        const description = itemData.description || itemData.descricao || itemData.title || "Lançamento";
+        const value = itemData.amount ?? itemData.value ?? 0;
+        const type = itemData.type || itemData.tipo || "geral";
+
+        const item = document.createElement("div");
+        item.className = "list-item";
+        item.innerHTML = `
+          <div>
+            <strong>${escapeHtml(description)}</strong><br />
+            <small>${escapeHtml(type)}</small>
+          </div>
+          <strong>${escapeHtml(formatCurrency(value))}</strong>
+        `;
+        el.recentFinancialList.appendChild(item);
+      });
+    }
+
+    function renderAiInsightsList() {
+      const opsPending = state.operations.filter((op) =>
+        ["pendente", "pending", "aguardando"].includes(String(op.status || "").toLowerCase())
+      ).length;
+
+      const output = [
+        opsPending > 0
+          ? `Existem ${opsPending} operações pendentes exigindo priorização no campo.`
+          : "As operações pendentes estão sob controle no momento.",
+
+        state.financial.length > 0
+          ? "O módulo financeiro já possui movimentações suficientes para leitura operacional inicial."
+          : "Ainda faltam lançamentos financeiros para leitura mais precisa de custos.",
+
+        state.employees.length > 0
+          ? `A equipe cadastrada atualmente possui ${state.employees.length} registro(s).`
+          : "Nenhum funcionário foi cadastrado ainda no sistema."
+      ];
+
+      el.aiInsights.innerHTML = output.map((text) => `
+        <div class="list-item">
+          <div>${escapeHtml(text)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderIA() {
+      const opsTotal = state.operations.length;
+      const finTotal = state.financial.reduce((sum, item) => sum + Number(item.amount ?? item.value ?? 0), 0);
+      const teamTotal = state.employees.length;
+
+      el.iaPriorityText.textContent =
+        opsTotal > 0
+          ? `Há ${opsTotal} operação(ões) cadastrada(s). A recomendação é concentrar atenção primeiro nas que estiverem pendentes ou em andamento.`
+          : "Ainda não existem operações cadastradas. O próximo passo é iniciar o controle operacional.";
+
+      el.iaFinancialText.textContent =
+        state.financial.length > 0
+          ? `O total registrado está em ${formatCurrency(finTotal)}. Vale revisar tipos e categorias para separar custos e receitas com mais precisão.`
+          : "Ainda não há base financeira suficiente. Cadastre entradas e saídas para destravar análises reais.";
+
+      el.iaTeamText.textContent =
+        teamTotal > 0
+          ? `A equipe possui ${teamTotal} colaborador(es) registrado(s). Use cargos e status para organizar melhor a operação.`
+          : "Ainda não existem funcionários cadastrados. Essa base é importante para gestão diária.";
+    }
+
+    function renderEmployeesTable() {
+      const query = el.employeesSearch.value.trim().toLowerCase();
+      const rows = state.employees.filter((item) => {
+        const raw = JSON.stringify(item).toLowerCase();
+        return raw.includes(query);
+      });
+
+      el.employeesTableBody.innerHTML = "";
+
+      if (!rows.length) {
+        el.employeesTableBody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">Nenhum funcionário encontrado.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      rows.forEach((item) => {
+        const name = item.name || item.full_name || item.nome || "Sem nome";
+        const role = item.role || item.position || item.cargo || "—";
+        const phone = item.phone || item.telefone || item.contact || "—";
+        const status = item.status || "Ativo";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(name)}</td>
+          <td>${escapeHtml(role)}</td>
+          <td>${escapeHtml(phone)}</td>
+          <td><span class="status-badge badge-green">${escapeHtml(status)}</span></td>
+          <td>
+            <div class="row-actions">
+              <button class="tiny-btn" data-edit-employee="${item.id}">Editar</button>
+            </div>
+          </td>
+        `;
+        el.employeesTableBody.appendChild(tr);
+      });
+    }
+
+    function renderOperationsTable() {
+      const query = el.operationsSearch.value.trim().toLowerCase();
+      const rows = state.operations.filter((item) => {
+        const raw = JSON.stringify(item).toLowerCase();
+        return raw.includes(query);
+      });
+
+      el.operationsTableBody.innerHTML = "";
+
+      if (!rows.length) {
+        el.operationsTableBody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">Nenhuma operação encontrada.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      rows.forEach((item) => {
+        const title = item.title || item.name || item.nome || "Sem título";
+        const type = item.type || item.tipo || "Geral";
+        const status = item.status || "Pendente";
+        const date = item.date || item.created_at || "";
+
+        const badgeClass = /concl/i.test(status)
+          ? "badge-green"
+          : /andamento|progress/i.test(status)
+            ? "badge-blue"
+            : /pend/i.test(status)
+              ? "badge-yellow"
+              : "badge-red";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(title)}</td>
+          <td>${escapeHtml(type)}</td>
+          <td><span class="status-badge ${badgeClass}">${escapeHtml(status)}</span></td>
+          <td>${escapeHtml(formatDate(date))}</td>
+          <td>
+            <div class="row-actions">
+              <button class="tiny-btn" data-edit-operation="${item.id}">Editar</button>
+            </div>
+          </td>
+        `;
+        el.operationsTableBody.appendChild(tr);
+      });
+    }
+
+    function renderFinancialTable() {
+      const query = el.financialSearch.value.trim().toLowerCase();
+      const rows = state.financial.filter((item) => {
+        const raw = JSON.stringify(item).toLowerCase();
+        return raw.includes(query);
+      });
+
+      el.financialTableBody.innerHTML = "";
+
+      if (!rows.length) {
+        el.financialTableBody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">Nenhum lançamento financeiro encontrado.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      rows.forEach((item) => {
+        const description = item.description || item.descricao || item.title || "Sem descrição";
+        const category = item.category || item.categoria || "Geral";
+        const type = item.type || item.tipo || "geral";
+        const amount = item.amount ?? item.value ?? 0;
+        const date = item.date || item.created_at || "";
+
+        const badgeClass = /receita|entrada|income/i.test(type)
+          ? "badge-green"
+          : /despesa|saida|expense/i.test(type)
+            ? "badge-red"
+            : "badge-blue";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(description)}</td>
+          <td>${escapeHtml(category)}</td>
+          <td><span class="status-badge ${badgeClass}">${escapeHtml(type)}</span></td>
+          <td>${escapeHtml(formatCurrency(amount))}</td>
+          <td>${escapeHtml(formatDate(date))}</td>
+          <td>
+            <div class="row-actions">
+              <button class="tiny-btn" data-edit-financial="${item.id}">Editar</button>
+            </div>
+          </td>
+        `;
+        el.financialTableBody.appendChild(tr);
+      });
+    }
+
+    /******************************************************************
+     * MODAL CRUD
+     ******************************************************************/
+    function openModal(type, record = null) {
+      state.currentModal = type;
+      state.editingRecord = record || null;
+
+      el.modalBody.innerHTML = "";
+
+      if (type === "employee") {
+        el.modalTitle.textContent = record ? "Editar funcionário" : "Novo funcionário";
+        el.modalSubtitle.textContent = "Cadastro de equipe conectado ao Supabase.";
+
+        const data = record || {};
+        el.modalBody.innerHTML = `
+          <div class="form-grid cols-2">
+            <div class="form-group">
+              <label>Nome</label>
+              <input id="modalEmployeeName" type="text" value="${escapeHtml(data.name || data.full_name || data.nome || "")}" />
+            </div>
+            <div class="form-group">
+              <label>Cargo</label>
+              <input id="modalEmployeeRole" type="text" value="${escapeHtml(data.role || data.position || data.cargo || "")}" />
+            </div>
+            <div class="form-group">
+              <label>Telefone</label>
+              <input id="modalEmployeePhone" type="text" value="${escapeHtml(data.phone || data.telefone || "")}" />
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="modalEmployeeStatus">
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+                <option value="Férias">Férias</option>
+              </select>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("modalEmployeeStatus").value = data.status || "Ativo";
+      }
+
+      if (type === "operation") {
+        el.modalTitle.textContent = record ? "Editar operação" : "Nova operação";
+        el.modalSubtitle.textContent = "Controle operacional da fazenda.";
+
+        const data = record || {};
+        el.modalBody.innerHTML = `
+          <div class="form-grid cols-2">
+            <div class="form-group">
+              <label>Título</label>
+              <input id="modalOperationTitle" type="text" value="${escapeHtml(data.title || data.name || data.nome || "")}" />
+            </div>
+            <div class="form-group">
+              <label>Tipo</label>
+              <input id="modalOperationType" type="text" value="${escapeHtml(data.type || data.tipo || "")}" />
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="modalOperationStatus">
+                <option value="Pendente">Pendente</option>
+                <option value="Em andamento">Em andamento</option>
+                <option value="Concluída">Concluída</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Data</label>
+              <input id="modalOperationDate" type="date" value="${escapeHtml((data.date || "").slice(0, 10))}" />
+            </div>
+            <div class="form-group" style="grid-column:1/-1;">
+              <label>Descrição</label>
+              <textarea id="modalOperationDescription">${escapeHtml(data.description || data.descricao || "")}</textarea>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("modalOperationStatus").value = data.status || "Pendente";
+      }
+
+      if (type === "financial") {
+        el.modalTitle.textContent = record ? "Editar lançamento" : "Novo lançamento";
+        el.modalSubtitle.textContent = "Entradas e saídas da operação.";
+
+        const data = record || {};
+        el.modalBody.innerHTML = `
+          <div class="form-grid cols-2">
+            <div class="form-group">
+              <label>Descrição</label>
+              <input id="modalFinancialDescription" type="text" value="${escapeHtml(data.description || data.descricao || "")}" />
+            </div>
+            <div class="form-group">
+              <label>Categoria</label>
+              <input id="modalFinancialCategory" type="text" value="${escapeHtml(data.category || data.categoria || "")}" />
+            </div>
+            <div class="form-group">
+              <label>Tipo</label>
+              <select id="modalFinancialType">
+                <option value="Receita">Receita</option>
+                <option value="Despesa">Despesa</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Valor</label>
+              <input id="modalFinancialAmount" type="number" step="0.01" value="${escapeHtml(data.amount ?? data.value ?? "")}" />
+            </div>
+            <div class="form-group">
+              <label>Data</label>
+              <input id="modalFinancialDate" type="date" value="${escapeHtml((data.date || "").slice(0, 10))}" />
+            </div>
+          </div>
+        `;
+
+        document.getElementById("modalFinancialType").value = data.type || data.tipo || "Despesa";
+      }
+
+      el.modalBackdrop.classList.add("show");
+      el.crudModal.classList.add("show");
+    }
+
+    function closeModal() {
+      state.currentModal = null;
+      state.editingRecord = null;
+      el.modalBackdrop.classList.remove("show");
+      el.crudModal.classList.remove("show");
+    }
+
+    async function saveModalRecord() {
+      if (state.currentModal === "employee") {
+        const payload = {
+          name: document.getElementById("modalEmployeeName").value.trim(),
+          role: document.getElementById("modalEmployeeRole").value.trim(),
+          phone: document.getElementById("modalEmployeePhone").value.trim(),
+          status: document.getElementById("modalEmployeeStatus").value
+        };
+
+        let response;
+        if (state.editingRecord?.id) {
+          response = await supabaseClient
+            .from("employees")
+            .update(payload)
+            .eq("id", state.editingRecord.id);
+        } else {
+          response = await supabaseClient
+            .from("employees")
+            .insert(payload);
+        }
+
+        if (response.error) {
+          console.error(response.error);
+          showToast(response.error.message || "Erro ao salvar funcionário.", "error");
+          return;
+        }
+
+        showToast("Funcionário salvo com sucesso.", "success");
+      }
+
+      if (state.currentModal === "operation") {
+        const payload = {
+          title: document.getElementById("modalOperationTitle").value.trim(),
+          type: document.getElementById("modalOperationType").value.trim(),
+          status: document.getElementById("modalOperationStatus").value,
+          date: document.getElementById("modalOperationDate").value || null,
+          description: document.getElementById("modalOperationDescription").value.trim()
+        };
+
+        let response;
+        if (state.editingRecord?.id) {
+          response = await supabaseClient
+            .from("operations")
+            .update(payload)
+            .eq("id", state.editingRecord.id);
+        } else {
+          response = await supabaseClient
+            .from("operations")
+            .insert(payload);
+        }
+
+        if (response.error) {
+          console.error(response.error);
+          showToast(response.error.message || "Erro ao salvar operação.", "error");
+          return;
+        }
+
+        showToast("Operação salva com sucesso.", "success");
+      }
+
+      if (state.currentModal === "financial") {
+        const payload = {
+          description: document.getElementById("modalFinancialDescription").value.trim(),
+          category: document.getElementById("modalFinancialCategory").value.trim(),
+          type: document.getElementById("modalFinancialType").value,
+          amount: Number(document.getElementById("modalFinancialAmount").value || 0),
+          date: document.getElementById("modalFinancialDate").value || null
+        };
+
+        let response;
+        if (state.editingRecord?.id) {
+          response = await supabaseClient
+            .from("financial_transactions")
+            .update(payload)
+            .eq("id", state.editingRecord.id);
+        } else {
+          response = await supabaseClient
+            .from("financial_transactions")
+            .insert(payload);
+        }
+
+        if (response.error) {
+          console.error(response.error);
+          showToast(response.error.message || "Erro ao salvar lançamento.", "error");
+          return;
+        }
+
+        showToast("Lançamento salvo com sucesso.", "success");
+      }
+
+      closeModal();
+      await refreshAllData();
+    }
+
+    /******************************************************************
+     * NAVEGAÇÃO
+     ******************************************************************/
+    function setActiveSection(section) {
+      state.currentSection = section;
+
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.section === section);
+      });
+
+      document.querySelectorAll(".section").forEach((sec) => {
+        sec.classList.remove("active");
+      });
+
+      const sectionEl = document.getElementById(`section-${section}`);
+      if (sectionEl) sectionEl.classList.add("active");
+
+      const map = {
+        overview: {
+          title: "Central de Comando",
+          subtitle: "Gestão integrada da fazenda em tempo real."
+        },
+        mercado: {
+          title: "Mercado",
+          subtitle: "Acompanhamento visual do cenário agro."
+        },
+        employees: {
+          title: "Funcionários",
+          subtitle: "Equipe cadastrada e gestão de pessoas."
+        },
+        operations: {
+          title: "Operações",
+          subtitle: "Execução e acompanhamento operacional."
+        },
+        financial: {
+          title: "Financeiro",
+          subtitle: "Entradas, saídas e organização de custos."
+        },
+        inteligencia: {
+          title: "IA da Fazenda",
+          subtitle: "Leitura e sugestão operacional."
+        },
+        config: {
+          title: "Configurações",
+          subtitle: "Ajustes do Desktop e visual do sistema."
+        }
+      };
+
+      el.topbarTitle.textContent = map[section]?.title || "AgroControl";
+      el.topbarSubtitle.textContent = map[section]?.subtitle || "";
+    }
+
+    /******************************************************************
+     * FLUXO PÓS-AUTENTICAÇÃO
+     ******************************************************************/
+    async function afterAuthenticated() {
+      showApp();
+      await ensureProfile();
+      buildMarketData();
+      renderMarket();
+      buildAvatarPresets();
+      renderProfile();
+      setBannerImage(state.savedBanner);
+      await refreshAllData();
+    }
+
+    /******************************************************************
+     * EVENTOS
+     ******************************************************************/
+    function bindEvents() {
+      el.loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = el.loginEmail.value.trim();
+        const password = el.loginPassword.value.trim();
+        if (!email || !password) {
+          showToast("Preencha e-mail e senha.", "error");
+          return;
+        }
+        await login(email, password);
+      });
+
+      el.continueSessionBtn.addEventListener("click", continueSession);
+      el.clearSavedSessionBtn.addEventListener("click", async () => {
+        await supabaseClient.auth.signOut();
+        state.hasSupabaseSession = false;
+        updateSavedSessionVisibility();
+        showToast("Sessão salva removida deste navegador.", "info");
+      });
+
+      el.forgotPasswordBtn.addEventListener("click", forgotPassword);
+      el.logoutBtn.addEventListener("click", logout);
+      el.refreshAllBtn.addEventListener("click", () => refreshAllData(true));
+      el.refreshMarketBtn.addEventListener("click", () => {
+        buildMarketData();
+        renderMarket();
+        showToast("Painel de mercado atualizado.", "success");
+      });
+
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.addEventListener("click", () => setActiveSection(btn.dataset.section));
+      });
+
+      el.openProfileBtn.addEventListener("click", openProfileDrawer);
+      el.openProfileBtnSidebar.addEventListener("click", openProfileDrawer);
+      el.closeProfileDrawerBtn.addEventListener("click", closeProfileDrawer);
+      el.drawerBackdrop.addEventListener("click", closeProfileDrawer);
+      el.saveProfileBtn.addEventListener("click", saveProfile);
+
+      el.pickAvatarBtn.addEventListener("click", () => el.avatarFileInput.click());
+      el.avatarFileInput.addEventListener("change", (e) => {
+        const file = e.target.files?.[0];
+        readImageFile(file, (dataUrl) => {
+          state.tempAvatarDataUrl = dataUrl;
+          state.selectedPresetAvatar = null;
+          el.profileAvatarPreview.src = dataUrl;
+          el.profileAvatarUrl.value = "";
+          [...el.avatarPresetGrid.querySelectorAll(".avatar-preset")].forEach((item) => item.classList.remove("active"));
+        });
+      });
+
+      ["dragenter", "dragover"].forEach((evt) => {
+        el.avatarDropzone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          el.avatarDropzone.classList.add("dragover");
+        });
+      });
+
+      ["dragleave", "drop"].forEach((evt) => {
+        el.avatarDropzone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          el.avatarDropzone.classList.remove("dragover");
+        });
+      });
+
+      el.avatarDropzone.addEventListener("drop", (e) => {
+        const file = e.dataTransfer?.files?.[0];
+        readImageFile(file, (dataUrl) => {
+          state.tempAvatarDataUrl = dataUrl;
+          state.selectedPresetAvatar = null;
+          el.profileAvatarPreview.src = dataUrl;
+          el.profileAvatarUrl.value = "";
+          [...el.avatarPresetGrid.querySelectorAll(".avatar-preset")].forEach((item) => item.classList.remove("active"));
+        });
+      });
+
+      const triggerBannerPicker = () => el.bannerFileInput.click();
+      el.changeBannerBtn.addEventListener("click", triggerBannerPicker);
+      el.configBannerBtn.addEventListener("click", triggerBannerPicker);
+
+      const removeBanner = () => {
+        saveBannerLocally("");
+        showToast("Banner personalizado removido.", "info");
+      };
+
+      el.removeBannerBtn.addEventListener("click", removeBanner);
+      el.configRemoveBannerBtn.addEventListener("click", removeBanner);
+
+      el.bannerFileInput.addEventListener("change", (e) => {
+        const file = e.target.files?.[0];
+        readImageFile(file, (dataUrl) => {
+          saveBannerLocally(dataUrl);
+          showToast("Banner atualizado.", "success");
+        });
+      });
+
+      el.configOpenProfileBtn.addEventListener("click", openProfileDrawer);
+
+      el.configFarmNameMirror.addEventListener("change", () => {
+        el.profileFarmName.value = el.configFarmNameMirror.value;
+      });
+
+      el.employeesSearch.addEventListener("input", renderEmployeesTable);
+      el.operationsSearch.addEventListener("input", renderOperationsTable);
+      el.financialSearch.addEventListener("input", renderFinancialTable);
+
+      el.addEmployeeBtn.addEventListener("click", () => openModal("employee"));
+      el.addOperationBtn.addEventListener("click", () => openModal("operation"));
+      el.addFinancialBtn.addEventListener("click", () => openModal("financial"));
+
+      el.closeModalBtn.addEventListener("click", closeModal);
+      el.modalCancelBtn.addEventListener("click", closeModal);
+      el.modalBackdrop.addEventListener("click", closeModal);
+      el.modalSaveBtn.addEventListener("click", saveModalRecord);
+
+      el.employeesTableBody.addEventListener("click", (e) => {
+        const id = e.target?.dataset?.editEmployee;
+        if (!id) return;
+        const record = state.employees.find((item) => String(item.id) === String(id));
+        openModal("employee", record);
+      });
+
+      el.operationsTableBody.addEventListener("click", (e) => {
+        const id = e.target?.dataset?.editOperation;
+        if (!id) return;
+        const record = state.operations.find((item) => String(item.id) === String(id));
+        openModal("operation", record);
+      });
+
+      el.financialTableBody.addEventListener("click", (e) => {
+        const id = e.target?.dataset?.editFinancial;
+        if (!id) return;
+        const record = state.financial.find((item) => String(item.id) === String(id));
+        openModal("financial", record);
+      });
+    }
+
+    /******************************************************************
+     * INIT
+     ******************************************************************/
+    async function init() {
       bindEvents();
-      hydrateRemembered();
-
-      try{
-        const { data, error } = await supabaseClient.auth.getSession();
-        if(error) throw error;
-        state.session = data.session || null;
-      }catch{
-        state.session = null;
-      }
-
-      refs.app.classList.remove("active");
-      refs.loginScreen.classList.remove("hidden");
-      renderContinueSession();
+      buildMarketData();
+      renderMarket();
+      buildAvatarPresets();
       showLogin();
-      setNotice("");
+      await checkExistingSession();
+
+      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        state.hasSupabaseSession = !!session;
+        updateSavedSessionVisibility();
+
+        if (event === "SIGNED_OUT") {
+          showLogin();
+        }
+      });
     }
 
-    bootstrap();
+    init();
   </script>
 </body>
 </html>
