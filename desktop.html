@@ -7,21 +7,25 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
-      --bg:#0b0f0d;
+      --bg:#0a0f0d;
+      --bg2:#0e1411;
       --panel:#121816;
-      --panel-2:#171e1b;
+      --panel2:#151d1a;
       --line:rgba(255,255,255,.08);
-      --text:#f3f6f4;
-      --muted:#aeb7b2;
-      --green:#61c26a;
-      --green-2:#4dae58;
-      --yellow:#d7a24d;
-      --orange:#df8a4f;
-      --red:#cf5f5f;
-      --blue:#6a92d8;
+      --line2:rgba(255,255,255,.12);
+      --text:#f4f7f5;
+      --muted:#aab4ae;
+      --green:#63c66a;
+      --green2:#4eab55;
+      --yellow:#d7a44f;
+      --orange:#eb9a53;
+      --red:#d86a5f;
+      --blue:#6ea0ff;
       --shadow:0 18px 50px rgba(0,0,0,.35);
-      --sidebar-w:260px;
-      --topbar-h:54px;
+      --sidebar:260px;
+      --topbar:58px;
+      --radius:16px;
+      --radius-lg:22px;
     }
 
     *{box-sizing:border-box}
@@ -31,35 +35,40 @@
     button{cursor:pointer}
     .hidden{display:none!important}
 
-    .app{display:none;height:100vh;width:100vw;background:#0b0f0d}
+    .app{
+      display:none;
+      width:100vw;
+      height:100vh;
+      background:var(--bg);
+    }
     .app.active{display:block}
 
     .login-screen{
       position:fixed;
       inset:0;
+      z-index:100;
       background:
-        linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.44) 34%, rgba(0,0,0,.18) 62%, rgba(0,0,0,.22) 100%),
+        linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.46) 32%, rgba(0,0,0,.20) 62%, rgba(0,0,0,.24) 100%),
         url("imagens/hero_bg_crop.png") center center / cover no-repeat,
-        #0b0f0d;
+        linear-gradient(180deg,#12110f,#0b0f0d);
       display:flex;
       align-items:flex-start;
       justify-content:flex-start;
       padding:88px 0 0 86px;
-      z-index:100;
     }
 
     .login-logo-top{
       position:absolute;
-      top:54px;
-      left:84px;
+      left:86px;
+      top:48px;
       display:flex;
       align-items:center;
       gap:14px;
-      font-weight:800;
       font-size:42px;
-      letter-spacing:-.02em;
+      font-weight:900;
+      letter-spacing:-.03em;
       color:#fff;
-      text-shadow:0 2px 20px rgba(0,0,0,.28);
+      text-shadow:0 2px 18px rgba(0,0,0,.25);
     }
 
     .logo-mark{
@@ -69,19 +78,18 @@
       border:4px solid var(--green);
       position:relative;
       flex:none;
-      box-shadow:0 0 0 2px rgba(0,0,0,.2) inset;
     }
 
-    .logo-mark:before,
-    .logo-mark:after{
+    .logo-mark::before,
+    .logo-mark::after{
       content:"";
       position:absolute;
-      border-radius:999px;
       background:var(--green);
+      border-radius:999px;
       transform-origin:center;
     }
 
-    .logo-mark:before{
+    .logo-mark::before{
       width:28px;
       height:5px;
       left:4px;
@@ -89,26 +97,26 @@
       transform:rotate(34deg);
     }
 
-    .logo-mark:after{
-      width:20px;
+    .logo-mark::after{
+      width:19px;
       height:5px;
-      left:11px;
+      left:12px;
       top:22px;
       transform:rotate(-32deg);
     }
 
     .login-card{
-      width:390px;
-      min-height:470px;
-      background:linear-gradient(180deg, rgba(23,27,29,.82), rgba(15,17,19,.86));
+      width:392px;
+      min-height:486px;
+      margin-top:82px;
+      background:linear-gradient(180deg, rgba(23,27,29,.82), rgba(16,18,20,.88));
       border:1px solid rgba(255,255,255,.10);
-      border-radius:20px;
+      border-radius:22px;
       box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      padding:36px 32px 24px;
-      margin-top:88px;
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
       position:relative;
+      padding:34px 32px 24px;
     }
 
     .login-brand{
@@ -116,70 +124,73 @@
       align-items:center;
       gap:12px;
       font-size:28px;
-      font-weight:800;
-      margin-bottom:28px;
+      font-weight:900;
+      margin-bottom:26px;
     }
 
-    .login-brand .logo-mark{width:34px;height:34px;border-width:3px}
-    .login-brand .logo-mark:before{width:22px;left:3px;top:12px}
-    .login-brand .logo-mark:after{width:15px;left:9px;top:17px}
+    .login-brand .logo-mark{
+      width:34px;height:34px;border-width:3px;
+    }
+    .login-brand .logo-mark::before{
+      width:22px;left:3px;top:12px;
+    }
+    .login-brand .logo-mark::after{
+      width:15px;left:9px;top:17px;
+    }
 
-    .login-status{margin:0 0 14px}
+    .login-status{margin-bottom:12px}
 
     .notice{
-      border-radius:16px;
-      padding:14px 16px;
-      font-size:14px;
-      line-height:1.45;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.04);
-      color:#dce6df;
-      margin-bottom:12px;
+      color:#d8e1dc;
+      border-radius:14px;
+      padding:13px 15px;
+      font-size:14px;
+      line-height:1.45;
+      margin-bottom:10px;
     }
-
     .notice.success{
-      background:linear-gradient(180deg, rgba(73,155,81,.18), rgba(41,92,47,.18));
-      border-color:rgba(97,194,106,.25);
+      background:linear-gradient(180deg, rgba(67,146,74,.18), rgba(37,84,42,.18));
+      border-color:rgba(99,198,106,.22);
     }
-
     .notice.error{
-      background:rgba(176,68,68,.16);
-      border-color:rgba(207,95,95,.25);
+      background:rgba(168,66,66,.18);
+      border-color:rgba(216,106,95,.22);
     }
-
     .notice.warn{
-      background:rgba(196,140,62,.14);
-      border-color:rgba(215,162,77,.25);
+      background:rgba(183,128,44,.16);
+      border-color:rgba(215,164,79,.22);
     }
 
     .form-group{margin-bottom:14px}
     .label{
-      font-weight:700;
-      font-size:14px;
-      color:#eef2ef;
-      margin:0 0 8px;
       display:block;
+      margin-bottom:8px;
+      font-size:14px;
+      font-weight:800;
+      color:#eff3f1;
     }
 
-    .input-wrap{position:relative}
+    .input-wrap{
+      position:relative;
+    }
 
     .input-wrap input{
       width:100%;
       height:58px;
-      background:rgba(14,17,18,.58);
-      color:#fff;
+      padding:0 48px 0 44px;
+      border-radius:10px;
       border:1px solid rgba(255,255,255,.10);
       outline:none;
-      border-radius:10px;
-      padding:0 48px 0 44px;
+      background:rgba(13,16,17,.60);
+      color:#fff;
       font-size:18px;
     }
-
-    .input-wrap input::placeholder{color:#b7c0ba}
-
+    .input-wrap input::placeholder{color:#b8c1bb}
     .input-wrap input:focus{
-      border-color:rgba(97,194,106,.42);
-      box-shadow:0 0 0 4px rgba(97,194,106,.10);
+      border-color:rgba(99,198,106,.38);
+      box-shadow:0 0 0 4px rgba(99,198,106,.10);
     }
 
     .input-icon-left,
@@ -187,91 +198,77 @@
       position:absolute;
       top:50%;
       transform:translateY(-50%);
-      color:#d6ddd8;
-      opacity:.95;
-      font-size:18px;
-      line-height:1;
+      font-size:17px;
+      color:#d2dad5;
       pointer-events:none;
     }
-
     .input-icon-left{left:14px}
     .input-icon-right{right:14px}
 
     .login-btn{
-      width:124px;
-      height:44px;
-      margin:18px auto 12px;
       display:block;
+      width:126px;
+      height:44px;
+      margin:18px auto 10px;
       border:none;
       border-radius:6px;
-      background:linear-gradient(180deg, #57b85f, #419c49);
-      color:white;
-      font-weight:800;
+      background:linear-gradient(180deg,#58b85e,#409848);
+      color:#fff;
       font-size:14px;
-      letter-spacing:.04em;
-      box-shadow:0 8px 24px rgba(73,155,81,.28);
+      font-weight:900;
       text-transform:uppercase;
+      letter-spacing:.05em;
+      box-shadow:0 10px 24px rgba(72,155,80,.24);
     }
 
-    .login-btn:hover{filter:brightness(1.05)}
-
     .login-checks{
-      margin-top:14px;
       display:flex;
       flex-direction:column;
       gap:12px;
+      margin-top:12px;
+      color:#d7dfda;
       font-size:15px;
-      color:#d8dfda;
     }
 
     .check-row{
       display:flex;
       align-items:center;
       gap:10px;
-      user-select:none;
     }
 
     .check-row input{
       width:18px;
       height:18px;
       accent-color:var(--green);
-      cursor:pointer;
     }
 
     .recover-link{
       background:none;
       border:none;
-      color:#d8dfda;
+      color:#d7dfda;
       padding:0;
       font-size:15px;
       text-align:left;
-      font-weight:500;
     }
-
-    .recover-link:hover{
-      color:#fff;
-      text-decoration:underline;
-    }
+    .recover-link:hover{color:#fff;text-decoration:underline}
 
     .continue-btn{
       width:100%;
       height:48px;
-      margin-top:14px;
-      background:rgba(255,255,255,.06);
-      color:#f4f6f5;
-      border:1px solid rgba(255,255,255,.12);
       border-radius:14px;
-      font-weight:700;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:#f3f5f4;
+      font-weight:800;
+      margin-top:14px;
     }
-
-    .continue-btn:hover{background:rgba(255,255,255,.10)}
 
     .recover-box{
       margin-top:16px;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:14px;
-      background:rgba(255,255,255,.04);
       padding:14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
     }
 
     .recover-box h4{
@@ -295,15 +292,16 @@
     .sub-btn{
       flex:1;
       height:42px;
+      border:none;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
+      background:rgba(255,255,255,.06);
       color:#fff;
-      font-weight:700;
+      border:1px solid rgba(255,255,255,.10);
+      font-weight:800;
     }
 
     .sub-btn.green{
-      background:linear-gradient(180deg, #57b85f, #419c49);
+      background:linear-gradient(180deg,#58b85e,#409848);
       border:none;
     }
 
@@ -312,31 +310,29 @@
       left:32px;
       right:32px;
       bottom:18px;
-      text-align:left;
-      color:#c6cec9;
+      color:#c3cbc6;
       font-size:13px;
-      opacity:.88;
+      opacity:.86;
     }
 
     .dashboard{
       display:grid;
-      grid-template-columns:var(--sidebar-w) 1fr;
-      grid-template-rows:var(--topbar-h) 1fr;
-      height:100vh;
+      grid-template-columns:var(--sidebar) 1fr;
+      grid-template-rows:var(--topbar) 1fr;
       width:100vw;
+      height:100vh;
       background:#0b0f0d;
     }
 
     .sidebar{
-      grid-row:1 / span 2;
       grid-column:1;
+      grid-row:1 / span 2;
       background:
-        radial-gradient(circle at top left, rgba(73,155,81,.16), transparent 24%),
-        linear-gradient(180deg, #111613, #0e1311);
+        radial-gradient(circle at top left, rgba(73,155,81,.15), transparent 24%),
+        linear-gradient(180deg,#111613,#0d1210);
       border-right:1px solid var(--line);
       display:flex;
       flex-direction:column;
-      min-width:0;
     }
 
     .sidebar-brand{
@@ -345,17 +341,16 @@
       display:flex;
       align-items:center;
       gap:12px;
-      font-size:23px;
-      font-weight:800;
+      font-size:22px;
+      font-weight:900;
       border-bottom:1px solid var(--line);
     }
 
     .sidebar-brand .logo-mark{
-      width:32px;height:32px;border-width:3px
+      width:32px;height:32px;border-width:3px;
     }
-
-    .sidebar-brand .logo-mark:before{width:20px;left:3px;top:11px}
-    .sidebar-brand .logo-mark:after{width:14px;left:8px;top:16px}
+    .sidebar-brand .logo-mark::before{width:20px;left:3px;top:11px}
+    .sidebar-brand .logo-mark::after{width:14px;left:8px;top:16px}
 
     .sidebar-nav{
       padding:16px 12px 12px;
@@ -365,11 +360,11 @@
     }
 
     .nav-title{
-      color:#7f8a84;
+      color:#7e8983;
       font-size:12px;
-      font-weight:700;
-      text-transform:uppercase;
+      font-weight:800;
       letter-spacing:.08em;
+      text-transform:uppercase;
       padding:10px 14px 6px;
     }
 
@@ -377,22 +372,22 @@
       position:relative;
       width:100%;
       height:48px;
-      border:none;
-      border-radius:10px;
-      background:transparent;
-      color:#e9efeb;
-      text-align:left;
-      padding:0 16px 0 18px;
-      font-size:17px;
       display:flex;
       align-items:center;
       gap:12px;
+      padding:0 16px 0 18px;
+      border:none;
+      border-radius:10px;
+      background:transparent;
+      color:#ebefed;
+      font-size:17px;
+      text-align:left;
     }
 
     .nav-btn.active{
-      background:linear-gradient(90deg, rgba(82,154,65,.46), rgba(82,154,65,.16));
+      background:linear-gradient(90deg, rgba(82,154,65,.44), rgba(82,154,65,.14));
+      box-shadow:inset 0 0 0 1px rgba(99,198,106,.14);
       color:#fff;
-      box-shadow:inset 0 0 0 1px rgba(97,194,106,.16);
     }
 
     .nav-btn.active::before{
@@ -403,31 +398,30 @@
       bottom:0;
       width:6px;
       border-radius:0 6px 6px 0;
-      background:#54c15b;
+      background:#52c45a;
     }
 
     .nav-icon{
       width:18px;
       text-align:center;
-      opacity:.95;
       font-size:16px;
     }
 
     .sidebar-user{
       margin-top:auto;
       border-top:1px solid var(--line);
-      padding:14px 14px 16px;
+      padding:14px;
     }
 
     .user-card{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      padding:12px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
+      padding:12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
     }
 
     .user-left{
@@ -441,49 +435,48 @@
       width:42px;
       height:42px;
       border-radius:50%;
-      background:linear-gradient(180deg,#3a403d,#1d221f);
-      border:1px solid rgba(255,255,255,.12);
       display:flex;
       align-items:center;
       justify-content:center;
-      font-weight:800;
+      background:linear-gradient(180deg,#39403d,#1d221f);
+      border:1px solid rgba(255,255,255,.12);
+      font-weight:900;
+      flex:none;
     }
 
     .user-text{min-width:0}
-
     .user-name{
-      font-weight:700;
+      font-weight:800;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
     }
-
     .user-email{
-      font-size:12px;
       color:var(--muted);
+      font-size:12px;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
     }
 
     .logout-mini{
+      background:none;
       border:none;
-      background:transparent;
-      color:#d9e1dc;
-      font-size:18px;
-      opacity:.9;
+      color:#dbe2dd;
+      font-size:20px;
     }
 
     .topbar{
       grid-column:2;
       grid-row:1;
-      border-bottom:1px solid var(--line);
-      background:linear-gradient(90deg, rgba(31,37,34,.92), rgba(18,21,20,.94) 44%, rgba(12,14,14,.96));
+      height:var(--topbar);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:0 18px;
       gap:12px;
+      padding:0 18px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(90deg, rgba(32,38,35,.94), rgba(17,21,20,.95) 46%, rgba(12,14,14,.97));
       overflow:hidden;
     }
 
@@ -491,21 +484,20 @@
       display:flex;
       align-items:center;
       gap:18px;
-      color:#e7ede9;
       font-size:14px;
+      color:#dde5e0;
       white-space:nowrap;
       overflow:auto;
       scrollbar-width:none;
     }
-
     .topbar-left::-webkit-scrollbar{display:none}
 
     .top-item{
+      position:relative;
       display:flex;
       align-items:center;
       gap:8px;
-      position:relative;
-      color:#d8e0db;
+      color:#d9e1dc;
     }
 
     .top-item:not(:last-child)::after{
@@ -530,8 +522,8 @@
       width:34px;
       height:34px;
       border-radius:50%;
-      background:transparent;
       border:none;
+      background:none;
       color:#fff;
       font-size:15px;
     }
@@ -547,14 +539,16 @@
     }
 
     .profile-pill .avatar{
-      width:34px;height:34px;font-size:12px
+      width:34px;
+      height:34px;
+      font-size:12px;
     }
 
     .content{
       grid-column:2;
       grid-row:2;
       overflow:auto;
-      padding:18px 18px 22px;
+      padding:18px;
       background:#0c100f;
     }
 
@@ -565,8 +559,8 @@
       margin-bottom:14px;
     }
 
-    .metric-card,
-    .panel{
+    .panel,
+    .metric-card{
       background:linear-gradient(180deg, rgba(23,29,27,.98), rgba(16,20,18,.98));
       border:1px solid rgba(255,255,255,.08);
       border-radius:14px;
@@ -575,10 +569,7 @@
 
     .metric-card{
       min-height:108px;
-      padding:18px 18px 14px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
+      padding:18px;
       position:relative;
       overflow:hidden;
     }
@@ -589,39 +580,31 @@
         linear-gradient(180deg, rgba(26,34,28,.98), rgba(17,21,19,.98));
     }
 
-    .metric-head{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-    }
-
     .metric-title{
-      font-weight:700;
       font-size:17px;
+      font-weight:800;
       margin-bottom:10px;
     }
 
     .metric-sub{
-      color:#bdd8bd;
-      font-size:13px;
       display:flex;
       align-items:center;
       gap:6px;
+      color:#bdd8bd;
+      font-size:13px;
     }
 
     .metric-value{
       position:absolute;
       right:18px;
-      bottom:16px;
-      font-size:52px;
+      bottom:14px;
+      font-size:56px;
       line-height:1;
-      color:#7ccd61;
       font-weight:300;
+      color:#7fd164;
     }
-
-    .metric-value.orange{color:#f0b04d}
-    .metric-value.red{color:#ef8e5f}
+    .metric-value.orange{color:#efb04d}
+    .metric-value.red{color:#ef8f5d}
 
     .weather-card{
       min-height:108px;
@@ -629,9 +612,11 @@
       overflow:hidden;
       position:relative;
       background:
-        linear-gradient(90deg, rgba(14,17,16,.68), rgba(14,17,16,.38)),
+        linear-gradient(90deg, rgba(14,17,16,.70), rgba(14,17,16,.40)),
         url("imagens/small_climate_crop.png") center center / cover no-repeat,
-        #141917;
+        #151917;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow);
     }
 
     .weather-card::before{
@@ -644,8 +629,8 @@
     .weather-inner{
       position:relative;
       z-index:1;
-      padding:16px 18px;
       height:100%;
+      padding:16px 18px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
@@ -653,7 +638,7 @@
 
     .weather-title{
       font-size:18px;
-      font-weight:700;
+      font-weight:800;
       margin-bottom:12px;
     }
 
@@ -664,13 +649,12 @@
     }
 
     .weather-ok{
-      margin-top:8px;
-      font-weight:800;
+      font-size:15px;
+      font-weight:900;
       color:#f3be58;
     }
-
     .weather-ok span{
-      color:#85db75;
+      color:#86dc76;
       margin-left:6px;
     }
 
@@ -680,9 +664,7 @@
       gap:14px;
     }
 
-    .left-col,
-    .mid-col,
-    .right-col{
+    .left-col,.mid-col,.right-col{
       display:flex;
       flex-direction:column;
       gap:14px;
@@ -691,7 +673,6 @@
 
     .panel{
       padding:14px 16px 16px;
-      min-width:0;
     }
 
     .panel-header{
@@ -707,11 +688,10 @@
       align-items:center;
       gap:10px;
       font-size:18px;
-      font-weight:800;
+      font-weight:900;
     }
 
-    .panel-title .ic{color:#7ecb6c}
-
+    .panel-title .ic{color:#7ecc69}
     .panel-meta{
       color:#8d9792;
       font-size:12px;
@@ -729,18 +709,17 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding-right:8px;
     }
 
     .market-name{
       font-size:19px;
-      color:#edf2ee;
+      color:#eff3f0;
     }
 
     .market-price{
       font-size:18px;
-      font-weight:800;
-      color:#ffffff;
+      font-weight:900;
+      color:#fff;
     }
 
     .market-price.small-green{
@@ -753,12 +732,12 @@
       width:16px;
       height:16px;
       border-radius:4px;
-      background:#53b95a;
+      background:#55bd5c;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      font-size:11px;
       color:#fff;
+      font-size:11px;
     }
 
     .climate-list{
@@ -785,17 +764,15 @@
 
     .climate-item .val{
       font-size:18px;
-      font-weight:800;
+      font-weight:900;
     }
 
     .table-wrap{overflow:auto}
-
     table{
       width:100%;
       border-collapse:collapse;
       min-width:520px;
     }
-
     th,td{
       padding:11px 10px;
       border-bottom:1px solid rgba(255,255,255,.06);
@@ -803,18 +780,14 @@
       font-size:15px;
       white-space:nowrap;
     }
-
     th{
-      color:#8d9792;
       font-size:13px;
-      font-weight:700;
+      font-weight:800;
+      color:#8d9792;
       background:rgba(255,255,255,.02);
     }
-
-    td strong{font-weight:800}
-    .orange-text{color:#df8a4f}
-    .yellow-text{color:#f0b04d}
-    .green-text{color:#83d56b}
+    td strong{font-weight:900}
+    .orange-text{color:#eb9a53}
 
     .chart{
       height:190px;
@@ -824,7 +797,6 @@
       padding:12px 8px 10px;
       border-top:1px solid rgba(255,255,255,.05);
       margin-top:6px;
-      position:relative;
       background:
         linear-gradient(180deg, transparent 24%, rgba(255,255,255,.04) 24%, rgba(255,255,255,.04) 25%, transparent 25%),
         linear-gradient(180deg, transparent 49%, rgba(255,255,255,.04) 49%, rgba(255,255,255,.04) 50%, transparent 50%),
@@ -832,25 +804,25 @@
     }
 
     .bar-wrap{
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
-      align-items:center;
-      gap:8px;
       width:38px;
       height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
     }
 
     .bar{
       width:28px;
       border-radius:4px 4px 0 0;
-      background:linear-gradient(180deg, #71c765, #418b3c);
+      background:linear-gradient(180deg,#72c866,#418d3d);
       box-shadow:0 8px 20px rgba(83,162,87,.20);
     }
 
     .bar-label{
       font-size:12px;
-      color:#99a39e;
+      color:#9aa39f;
     }
 
     .ai-list{
@@ -866,9 +838,9 @@
       display:flex;
       align-items:flex-start;
       gap:10px;
-      line-height:1.48;
-      color:#ecf2ee;
+      color:#edf2ef;
       font-size:16px;
+      line-height:1.5;
     }
 
     .check-green{
@@ -888,14 +860,14 @@
     }
 
     .crud-toolbar input{
+      min-width:260px;
       height:46px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      outline:none;
+      padding:0 14px;
       background:#121816;
       color:#fff;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:12px;
-      padding:0 14px;
-      min-width:260px;
-      outline:none;
     }
 
     .crud-btn{
@@ -906,11 +878,11 @@
       background:#1b2320;
       color:#fff;
       border:1px solid rgba(255,255,255,.10);
-      font-weight:700;
+      font-weight:800;
     }
 
     .crud-btn.primary{
-      background:linear-gradient(180deg, #57b85f, #419c49);
+      background:linear-gradient(180deg,#58b85e,#409848);
       border:none;
     }
 
@@ -920,60 +892,58 @@
       padding:6px 10px;
       border-radius:999px;
       font-size:12px;
-      font-weight:800;
+      font-weight:900;
       border:1px solid transparent;
     }
-
-    .status-green{background:rgba(73,155,81,.18);color:#dff4e0;border-color:rgba(97,194,106,.22)}
-    .status-yellow{background:rgba(196,140,62,.18);color:#fff0d4;border-color:rgba(215,162,77,.22)}
-    .status-red{background:rgba(176,68,68,.18);color:#ffdcdc;border-color:rgba(207,95,95,.22)}
+    .status-green{background:rgba(73,155,81,.18);color:#dff4e0;border-color:rgba(99,198,106,.22)}
+    .status-yellow{background:rgba(196,140,62,.18);color:#fff0d4;border-color:rgba(215,164,79,.22)}
+    .status-red{background:rgba(176,68,68,.18);color:#ffdcdc;border-color:rgba(216,106,95,.22)}
     .status-blue{background:rgba(75,127,190,.18);color:#deebff;border-color:rgba(110,154,217,.22)}
 
     .mini-action{
-      border:none;
       height:34px;
       padding:0 12px;
       border-radius:10px;
+      border:none;
       background:rgba(255,255,255,.05);
       color:#fff;
       border:1px solid rgba(255,255,255,.08);
-      font-weight:700;
+      font-weight:800;
     }
 
     .section-title-page{
-      font-size:28px;
-      font-weight:800;
       margin:0 0 6px;
+      font-size:28px;
+      font-weight:900;
     }
 
     .section-subtitle-page{
-      color:#9da7a2;
       margin:0 0 18px;
       font-size:15px;
+      color:#9da7a2;
     }
 
     .modal-backdrop{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,.55);
+      z-index:130;
       display:none;
       align-items:center;
       justify-content:center;
-      z-index:130;
       padding:20px;
+      background:rgba(0,0,0,.55);
     }
-
     .modal-backdrop.active{display:flex}
 
     .modal{
-      width:min(860px, 100%);
-      background:linear-gradient(180deg, #151b18, #101412);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:22px;
-      box-shadow:var(--shadow);
-      padding:20px;
+      width:min(860px,100%);
       max-height:90vh;
       overflow:auto;
+      padding:20px;
+      border-radius:22px;
+      background:linear-gradient(180deg,#151b18,#101412);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
     }
 
     .modal-header{
@@ -985,22 +955,22 @@
     }
 
     .modal-title{
-      font-size:22px;
-      font-weight:800;
       margin:0 0 6px;
+      font-size:22px;
+      font-weight:900;
     }
 
     .modal-subtitle{
-      color:#9da7a2;
       margin:0;
       font-size:14px;
+      color:#9da7a2;
     }
 
     .modal-close{
       width:40px;
       height:40px;
-      border-radius:12px;
       border:none;
+      border-radius:12px;
       background:rgba(255,255,255,.06);
       color:#fff;
       font-size:20px;
@@ -1019,10 +989,9 @@
     }
 
     .form-group-modal.full{grid-column:1/-1}
-
     .form-group-modal label{
       font-size:14px;
-      font-weight:700;
+      font-weight:800;
     }
 
     .form-group-modal input,
@@ -1030,12 +999,12 @@
     .form-group-modal textarea{
       width:100%;
       min-height:48px;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      outline:none;
       background:#131917;
       color:#fff;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:12px;
-      padding:12px 14px;
-      outline:none;
     }
 
     .form-group-modal textarea{
@@ -1050,55 +1019,45 @@
       margin-top:18px;
     }
 
-    @media (max-width: 1200px){
+    @media (max-width:1200px){
       .cards-row{grid-template-columns:1fr 1fr}
       .lower-grid{grid-template-columns:1fr}
     }
 
-    @media (max-width: 980px){
+    @media (max-width:980px){
       body{overflow:auto}
       .login-screen{
         padding:30px 18px;
-        justify-content:center;
         align-items:center;
-        background-position:center;
+        justify-content:center;
       }
-
       .login-logo-top{
-        left:18px;
         top:18px;
+        left:18px;
         font-size:30px;
       }
-
       .login-card{
-        margin-top:50px;
         width:min(430px,100%);
+        margin-top:50px;
       }
-
       .dashboard{
         grid-template-columns:1fr;
         grid-template-rows:auto auto 1fr;
         height:auto;
         min-height:100vh;
       }
-
       .sidebar{
         grid-row:1;
         grid-column:1;
-        width:100%;
-        min-height:auto;
       }
-
       .topbar{
         grid-row:2;
         grid-column:1;
       }
-
       .content{
         grid-row:3;
         grid-column:1;
       }
-
       .cards-row{grid-template-columns:1fr}
       .form-grid{grid-template-columns:1fr}
     }
@@ -1200,10 +1159,10 @@
         <div class="sidebar-user">
           <div class="user-card">
             <div class="user-left">
-              <div class="avatar" id="userAvatar">A</div>
+              <div class="avatar" id="userAvatar">D</div>
               <div class="user-text">
-                <div class="user-name" id="userName">Usuário</div>
-                <div class="user-email" id="userEmail">email@fazenda.com</div>
+                <div class="user-name" id="userName">dono</div>
+                <div class="user-email" id="userEmail">dono@agrocontrol.com</div>
               </div>
             </div>
             <button id="logoutBtn" class="logout-mini" title="Sair">›</button>
@@ -1213,8 +1172,8 @@
 
       <header class="topbar">
         <div class="topbar-left">
-          <div class="top-item">🏠 <span id="farmNameTop">Fazenda Santa Clara</span></div>
-          <div class="top-item"><span id="userNameTop">Gustavo</span></div>
+          <div class="top-item">🏠 <span id="farmNameTop">Granja Boijink</span></div>
+          <div class="top-item"><span id="userNameTop">dono</span></div>
           <div class="top-item">Vento 6 km/h</div>
           <div class="top-item">★ Soja R$ 128,50</div>
           <div class="top-item">▤ Milho R$ 58,20</div>
@@ -1225,8 +1184,8 @@
           <button class="top-icon-btn">🔔</button>
           <button class="top-icon-btn">⚙</button>
           <div class="profile-pill">
-            <div class="avatar" id="profileAvatar">A</div>
-            <div id="profileName">Usuário</div>
+            <div class="avatar" id="profileAvatar">D</div>
+            <div id="profileName">dono</div>
           </div>
         </div>
       </header>
@@ -1237,32 +1196,20 @@
         <section id="view-dashboard" class="view active">
           <div class="cards-row">
             <div class="metric-card greenish">
-              <div class="metric-head">
-                <div>
-                  <div class="metric-title">Tarefas em Andamento</div>
-                  <div class="metric-sub">📋 <span id="dashAndamentoText">4 keme</span></div>
-                </div>
-              </div>
+              <div class="metric-title">Tarefas em Andamento</div>
+              <div class="metric-sub">📋 <span id="dashAndamentoText">4 tarefas</span></div>
               <div class="metric-value" id="dashAndamento">6</div>
             </div>
 
             <div class="metric-card">
-              <div class="metric-head">
-                <div>
-                  <div class="metric-title">Tarefas Pendentes</div>
-                  <div class="metric-sub">📋 <span id="dashPendentesText">4 keme</span></div>
-                </div>
-              </div>
+              <div class="metric-title">Tarefas Pendentes</div>
+              <div class="metric-sub">📋 <span id="dashPendentesText">4 tarefas</span></div>
               <div class="metric-value orange" id="dashPendentes">4</div>
             </div>
 
             <div class="metric-card">
-              <div class="metric-head">
-                <div>
-                  <div class="metric-title">Máquinas Operando</div>
-                  <div class="metric-sub">🚜 <span id="dashMaquinasText">5 keme</span></div>
-                </div>
-              </div>
+              <div class="metric-title">Máquinas Operando</div>
+              <div class="metric-sub">🚜 <span id="dashMaquinasText">5 máquinas</span></div>
               <div class="metric-value red" id="dashMaquinas">5</div>
             </div>
 
@@ -1272,8 +1219,8 @@
                   <div class="weather-title">Clima para Aplicação</div>
                   <div class="weather-lines">
                     Vento: 6 km/h<br>
-                    Rajisto: 6 km/h<br>
-                    Umida: 98'2S<br>
+                    Rajada: 6 km/h<br>
+                    Umidade: 98%<br>
                     Temperatura: 29°C
                   </div>
                 </div>
@@ -1287,7 +1234,7 @@
               <div class="panel">
                 <div class="panel-header">
                   <div class="panel-title"><span class="ic">🌿</span>Mercado</div>
-                  <div class="panel-meta">Tempor editia</div>
+                  <div class="panel-meta">Atualização base</div>
                 </div>
 
                 <div class="market-grid">
@@ -1333,14 +1280,14 @@
                         <td><strong>Soja</strong></td>
                         <td>35 ha</td>
                         <td>59 sc/ha</td>
-                        <td class="orange-text">Dio hevea</td>
+                        <td class="orange-text">Atenção</td>
                       </tr>
                       <tr>
                         <td>Milho</td>
                         <td><strong>Milho</strong></td>
                         <td>36 ha</td>
                         <td>59 sc/ha</td>
-                        <td class="orange-text">Pooiato</td>
+                        <td class="orange-text">Monitorar</td>
                       </tr>
                     </tbody>
                   </table>
@@ -1352,17 +1299,17 @@
               <div class="panel">
                 <div class="panel-header">
                   <div class="panel-title"><span class="ic">🌦</span>Clima</div>
-                  <div class="panel-meta">Pretpo mrog</div>
+                  <div class="panel-meta">Resumo</div>
                 </div>
 
                 <div class="climate-list">
                   <div class="climate-item">
-                    <div class="left">🍃 Ventão fapingtôurit</div>
-                    <div class="val">R$ 725,800,00</div>
+                    <div class="left">🍃 Vento favorável</div>
+                    <div class="val">R$ 725.800,00</div>
                   </div>
                   <div class="climate-item">
-                    <div class="left">🟨 Gýciuc ãcgmefè</div>
-                    <div class="val">R$ 530,000,00</div>
+                    <div class="left">🟨 Janela de aplicação</div>
+                    <div class="val">R$ 530.000,00</div>
                   </div>
                 </div>
               </div>
@@ -1390,10 +1337,10 @@
                 </div>
 
                 <ul class="ai-list">
-                  <li><span class="check-green">✓</span><span>O ceisato de areia cobre spenes,razá: 12 dies.</span></li>
-                  <li><span class="check-green">✓</span><span>Faitam BO socis 26-463 ppib cósire orcsrio astul da Safca.</span></li>
-                  <li><span class="check-green">✓</span><span>O Talhou.4 tem 15% momos produtividade qje a madia.</span></li>
-                  <li><span class="check-green">✓</span><span>O lr vestimento em defenovora sabiou esto mès.</span></li>
+                  <li><span class="check-green">✓</span><span>O custo de areia cobre despesas para 12 dias.</span></li>
+                  <li><span class="check-green">✓</span><span>Faltam BOs sociais 26-463 para fechar o ciclo atual da safra.</span></li>
+                  <li><span class="check-green">✓</span><span>O Talhão 4 tem 15% menos produtividade que a média.</span></li>
+                  <li><span class="check-green">✓</span><span>O investimento em defensivos subiu neste mês.</span></li>
                 </ul>
               </div>
             </div>
@@ -1605,7 +1552,7 @@
           <div class="panel" style="max-width:700px">
             <div class="form-group-modal">
               <label for="farmNameInput">Nome da fazenda</label>
-              <input id="farmNameInput" type="text" placeholder="Ex.: Fazenda Santa Clara" />
+              <input id="farmNameInput" type="text" placeholder="Ex.: Granja Boijink" />
             </div>
             <div class="modal-actions" style="justify-content:flex-start">
               <button id="saveFarmNameBtn" class="crud-btn primary">Salvar nome</button>
@@ -1637,26 +1584,33 @@
   </div>
 
   <script>
-    const SUPABASE_URL = "https://xksllcfagvpccvuzwqmg.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy";
+    const CONFIG = {
+      appMode: "local",
+      supabaseUrl: "https://xksllcfagvpccvuzwqmg.supabase.co",
+      supabaseKey: "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy"
+    };
 
-    const REMEMBER_KEY = "agrocontrol_desktop_remember_email";
-    const FARM_KEY = "agrocontrol_desktop_farm_name";
+    const KEYS = {
+      remember: "agrocontrol_desktop_remember_email",
+      farmName: "agrocontrol_desktop_farm_name",
+      localSession: "agrocontrol_desktop_local_session",
+      employees: "agrocontrol_desktop_employees",
+      operations: "agrocontrol_desktop_operations",
+      finance: "agrocontrol_desktop_finance"
+    };
 
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabaseClient = window.supabase?.createClient
+      ? window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey)
+      : null;
 
     const state = {
       session: null,
-      farmName: localStorage.getItem(FARM_KEY) || "Granja Boijink",
+      farmName: localStorage.getItem(KEYS.farmName) || "Granja Boijink",
       currentView: "dashboard",
       employees: [],
       operations: [],
       finance: [],
-      modal: {
-        module: null,
-        mode: "create",
-        record: null
-      }
+      modal: { module: null, mode: "create", record: null }
     };
 
     const refs = {
@@ -1722,6 +1676,7 @@
 
     const schemas = {
       employees: {
+        storageKey: KEYS.employees,
         table: "employees",
         titleCreate: "Novo funcionário",
         titleEdit: "Editar funcionário",
@@ -1746,6 +1701,7 @@
         ]
       },
       operations: {
+        storageKey: KEYS.operations,
         table: "operations",
         titleCreate: "Nova operação",
         titleEdit: "Editar operação",
@@ -1771,6 +1727,7 @@
         ]
       },
       finance: {
+        storageKey: KEYS.finance,
         table: "financial_transactions",
         titleCreate: "Nova transação",
         titleEdit: "Editar transação",
@@ -1796,6 +1753,21 @@
           {name:"reference_id", label:"ID referência", type:"text"}
         ]
       }
+    };
+
+    const demoData = {
+      employees: [
+        { id: crypto.randomUUID(), name:"Carlos Souza", role:"Operador", sector:"Máquinas", salary:3200, harvest_participation_type:"percentual", harvest_participation_value:2, status:"ativo", phone:"(53) 99999-1111", notes:"Responsável pela colheitadeira.", created_at:new Date().toISOString() },
+        { id: crypto.randomUUID(), name:"Paulo Lima", role:"Capataz", sector:"Campo", salary:4200, harvest_participation_type:"valor_fixo", harvest_participation_value:1800, status:"ativo", phone:"(53) 99999-2222", notes:"Coordena operações de campo.", created_at:new Date().toISOString() }
+      ],
+      operations: [
+        { id: crypto.randomUUID(), title:"Pulverização Talhão 4", category:"Pulverização", farm_sector:"Lavoura Norte", field_name:"Talhão 4", machine_name:"Pulverizador", employee_name:"Paulo Lima", status:"em_andamento", planned_date:"2026-03-20", completed_date:null, estimated_cost:4500, actual_cost:null, notes:"Aplicação em janela climática favorável.", created_at:new Date().toISOString() },
+        { id: crypto.randomUUID(), title:"Colheita Soja Sul", category:"Colheita", farm_sector:"Lavoura Sul", field_name:"Talhão 2", machine_name:"Colheitadeira 01", employee_name:"Carlos Souza", status:"pendente", planned_date:"2026-03-22", completed_date:null, estimated_cost:7800, actual_cost:null, notes:"Aguardar sequência do clima.", created_at:new Date().toISOString() }
+      ],
+      finance: [
+        { id: crypto.randomUUID(), type:"receita", category:"Venda Soja", description:"Venda parcial safra soja", culture:"Soja", quantity:240, amount:30840, due_date:"2026-03-25", payment_date:null, status:"recebido", source_module:"mercado", reference_id:"SOJ-001", created_at:new Date().toISOString() },
+        { id: crypto.randomUUID(), type:"despesa", category:"Diesel", description:"Abastecimento da operação", culture:"", quantity:900, amount:5526, due_date:"2026-03-18", payment_date:null, status:"pago", source_module:"operações", reference_id:"DIE-001", created_at:new Date().toISOString() }
+      ]
     };
 
     function money(v){
@@ -1837,12 +1809,12 @@
     }
 
     function initials(email){
-      if(!email) return "A";
+      if(!email) return "D";
       return email.trim().charAt(0).toUpperCase();
     }
 
     function displayName(email){
-      if(!email) return "Usuário";
+      if(!email) return "dono";
       return email.split("@")[0];
     }
 
@@ -1852,7 +1824,7 @@
     }
 
     function applyUser(){
-      const email = state.session?.user?.email || "usuario@fazenda.com";
+      const email = state.session?.user?.email || state.session?.email || "dono@agrocontrol.com";
       const name = displayName(email);
       const ini = initials(email);
 
@@ -1880,19 +1852,20 @@
     }
 
     function hydrateRemembered(){
-      const saved = localStorage.getItem(REMEMBER_KEY) || "";
+      const saved = localStorage.getItem(KEYS.remember) || "";
       refs.loginEmail.value = saved;
       refs.recoverEmail.value = saved;
       refs.rememberLogin.checked = !!saved;
     }
 
     function renderContinueSession(){
-      if(state.session?.user?.email){
+      if(state.session?.user?.email || state.session?.email){
+        const email = state.session?.user?.email || state.session?.email;
         refs.continueBtn.classList.remove("hidden");
-        setLoginNotice(`Sessão encontrada para ${state.session.user.email}. A tela de login continua obrigatória.`, "success");
+        setLoginNotice(`Sessão encontrada para ${email}. A tela de login continua obrigatória.`, "success");
       } else {
         refs.continueBtn.classList.add("hidden");
-        if(localStorage.getItem(REMEMBER_KEY)){
+        if(localStorage.getItem(KEYS.remember)){
           setLoginNotice("Login salvo localmente. O e-mail já foi preenchido.", "success");
         } else {
           setLoginNotice("");
@@ -1900,63 +1873,64 @@
       }
     }
 
-    async function safeSelect(table){
-      const { data, error } = await supabaseClient.from(table).select("*").order("created_at", {ascending:false});
-      if(error) throw error;
-      return data || [];
-    }
-
-    async function safeInsert(table, payload){
-      const { data, error } = await supabaseClient.from(table).insert(payload).select().single();
-      if(error) throw error;
-      return data;
-    }
-
-    async function safeUpdate(table, id, payload){
-      const { data, error } = await supabaseClient.from(table).update(payload).eq("id", id).select().single();
-      if(error) throw error;
-      return data;
-    }
-
-    function normalizePayload(payload){
-      const out = {};
-      for(const [k,v] of Object.entries(payload)){
-        out[k] = v === "" ? null : v;
+    function localGet(key, fallback){
+      try{
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      }catch{
+        return fallback;
       }
-      return out;
     }
 
-    function friendlyError(error){
-      const msg = error?.message || "erro desconhecido";
-      if(msg.toLowerCase().includes("relation")) return "tabela ainda não foi criada no Supabase";
-      if(msg.toLowerCase().includes("invalid login credentials")) return "credenciais inválidas";
-      return msg;
+    function localSet(key, value){
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function ensureLocalSeed(){
+      if(!localStorage.getItem(KEYS.employees)) localSet(KEYS.employees, demoData.employees);
+      if(!localStorage.getItem(KEYS.operations)) localSet(KEYS.operations, demoData.operations);
+      if(!localStorage.getItem(KEYS.finance)) localSet(KEYS.finance, demoData.finance);
     }
 
     async function loadEmployees(){
+      if(CONFIG.appMode === "local"){
+        state.employees = localGet(KEYS.employees, []);
+        return;
+      }
       try{
-        state.employees = await safeSelect("employees");
-      }catch(error){
+        const { data, error } = await supabaseClient.from("employees").select("*").order("created_at",{ascending:false});
+        if(error) throw error;
+        state.employees = data || [];
+      }catch{
         state.employees = [];
-        setNotice(`Funcionários: ${friendlyError(error)}`, "warn");
       }
     }
 
     async function loadOperations(){
+      if(CONFIG.appMode === "local"){
+        state.operations = localGet(KEYS.operations, []);
+        return;
+      }
       try{
-        state.operations = await safeSelect("operations");
-      }catch(error){
+        const { data, error } = await supabaseClient.from("operations").select("*").order("created_at",{ascending:false});
+        if(error) throw error;
+        state.operations = data || [];
+      }catch{
         state.operations = [];
-        setNotice(`Operações: ${friendlyError(error)}`, "warn");
       }
     }
 
     async function loadFinance(){
+      if(CONFIG.appMode === "local"){
+        state.finance = localGet(KEYS.finance, []);
+        return;
+      }
       try{
-        state.finance = await safeSelect("financial_transactions");
-      }catch(error){
+        const { data, error } = await supabaseClient.from("financial_transactions").select("*").order("created_at",{ascending:false});
+        if(error) throw error;
+        state.finance = data || [];
+      }catch{
         state.finance = [];
-        setNotice(`Financeiro: ${friendlyError(error)}`, "warn");
       }
     }
 
@@ -1980,8 +1954,8 @@
       const pendentes = state.operations.filter(x => (x.status || "").toLowerCase() === "pendente").length;
       const maquinas = 5;
 
-      refs.dashAndamento.textContent = andamento || 6;
-      refs.dashPendentes.textContent = pendentes || 4;
+      refs.dashAndamento.textContent = andamento || 0;
+      refs.dashPendentes.textContent = pendentes || 0;
       refs.dashMaquinas.textContent = maquinas;
 
       const receitas = state.finance.filter(x => (x.type || "").toLowerCase() === "receita").reduce((a,b)=>a+Number(b.amount||0),0);
@@ -1996,7 +1970,7 @@
     }
 
     function renderEmployees(){
-      const term = (refs.employeesSearch?.value || "").trim().toLowerCase();
+      const term = (refs.employeesSearch.value || "").trim().toLowerCase();
       const rows = state.employees.filter(item =>
         [item.name, item.role, item.sector].some(v => String(v || "").toLowerCase().includes(term))
       );
@@ -2016,7 +1990,7 @@
     }
 
     function renderOperations(){
-      const term = (refs.operationsSearch?.value || "").trim().toLowerCase();
+      const term = (refs.operationsSearch.value || "").trim().toLowerCase();
       const rows = state.operations.filter(item =>
         [item.title, item.category, item.field_name, item.machine_name, item.status, item.employee_name].some(v => String(v || "").toLowerCase().includes(term))
       );
@@ -2037,7 +2011,7 @@
     }
 
     function renderFinance(){
-      const term = (refs.financeSearch?.value || "").trim().toLowerCase();
+      const term = (refs.financeSearch.value || "").trim().toLowerCase();
       const rows = state.finance.filter(item =>
         [item.type, item.category, item.description, item.culture].some(v => String(v || "").toLowerCase().includes(term))
       );
@@ -2070,7 +2044,6 @@
       state.currentView = view;
       document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
       document.getElementById(`view-${view}`)?.classList.add("active");
-
       document.querySelectorAll(".nav-btn").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.view === view);
       });
@@ -2086,10 +2059,9 @@
       wrap.appendChild(label);
 
       let input;
-
       if(field.type === "textarea"){
         input = document.createElement("textarea");
-      } else if(field.type === "select"){
+      }else if(field.type === "select"){
         input = document.createElement("select");
         (field.options || []).forEach(opt => {
           const option = document.createElement("option");
@@ -2097,7 +2069,7 @@
           option.textContent = opt.label;
           input.appendChild(option);
         });
-      } else {
+      }else{
         input = document.createElement("input");
         input.type = field.type || "text";
         if(field.step) input.step = field.step;
@@ -2119,12 +2091,8 @@
       return [];
     }
 
-    function getSchema(module){
-      return schemas[module];
-    }
-
     window.openEntityModal = function(module, mode="create", id=null){
-      const schema = getSchema(module);
+      const schema = schemas[module];
       if(!schema) return;
 
       const record = mode === "edit" ? getModuleData(module).find(x => String(x.id) === String(id)) : null;
@@ -2135,8 +2103,7 @@
       refs.entityFields.innerHTML = "";
 
       schema.fields.forEach(field => {
-        const defaultValue = record ? record[field.name] : "";
-        refs.entityFields.appendChild(buildField(field, defaultValue));
+        refs.entityFields.appendChild(buildField(field, record ? record[field.name] : ""));
       });
 
       refs.modalBackdrop.classList.add("active");
@@ -2148,36 +2115,51 @@
       state.modal = { module:null, mode:"create", record:null };
     }
 
+    async function saveModuleRecord(module, payload){
+      const schema = schemas[module];
+      if(CONFIG.appMode === "local"){
+        const list = localGet(schema.storageKey, []);
+        if(state.modal.mode === "edit" && state.modal.record?.id){
+          const next = list.map(item => item.id === state.modal.record.id ? { ...item, ...payload } : item);
+          localSet(schema.storageKey, next);
+        }else{
+          const next = [{ id: crypto.randomUUID(), created_at: new Date().toISOString(), ...payload }, ...list];
+          localSet(schema.storageKey, next);
+        }
+        return;
+      }
+
+      if(state.modal.mode === "edit" && state.modal.record?.id){
+        const { error } = await supabaseClient.from(schema.table).update(payload).eq("id", state.modal.record.id);
+        if(error) throw error;
+      }else{
+        const { error } = await supabaseClient.from(schema.table).insert(payload);
+        if(error) throw error;
+      }
+    }
+
     async function submitEntityForm(event){
       event.preventDefault();
       const module = state.modal.module;
       if(!module) return;
 
-      const schema = getSchema(module);
+      const schema = schemas[module];
       const formData = new FormData(refs.entityForm);
       const payload = {};
 
       schema.fields.forEach(field => {
         let value = formData.get(field.name);
         if(field.type === "number" && value !== "") value = Number(value);
-        payload[field.name] = value;
+        payload[field.name] = value === "" ? null : value;
       });
 
-      const clean = normalizePayload(payload);
-
       try{
-        if(state.modal.mode === "edit" && state.modal.record?.id){
-          await safeUpdate(schema.table, state.modal.record.id, clean);
-          setNotice("Registro atualizado com sucesso.", "success");
-        } else {
-          await safeInsert(schema.table, clean);
-          setNotice("Registro salvo com sucesso.", "success");
-        }
-
+        await saveModuleRecord(module, payload);
         closeModal();
         await loadData();
+        setNotice("Registro salvo com sucesso.", "success");
       }catch(error){
-        setNotice(`Falha ao salvar: ${friendlyError(error)}`, "error");
+        setNotice(`Falha ao salvar: ${error?.message || "erro desconhecido"}`, "error");
       }
     }
 
@@ -2185,7 +2167,7 @@
       event.preventDefault();
 
       const email = refs.loginEmail.value.trim();
-      const password = refs.loginPassword.value;
+      const password = refs.loginPassword.value.trim();
 
       if(!email || !password){
         setLoginNotice("Informe e-mail e senha.", "warn");
@@ -2193,43 +2175,52 @@
       }
 
       try{
-        setLoginNotice("Autenticando no Supabase...", "success");
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if(error) throw error;
-
-        state.session = data.session || null;
+        if(CONFIG.appMode === "local"){
+          state.session = { email };
+          localStorage.setItem(KEYS.localSession, JSON.stringify(state.session));
+        }else{
+          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+          if(error) throw error;
+          state.session = data.session || null;
+        }
 
         if(refs.rememberLogin.checked){
-          localStorage.setItem(REMEMBER_KEY, email);
-        } else {
-          localStorage.removeItem(REMEMBER_KEY);
+          localStorage.setItem(KEYS.remember, email);
+        }else{
+          localStorage.removeItem(KEYS.remember);
         }
 
         refs.loginPassword.value = "";
         await loadData();
         showApp();
       }catch(error){
-        setLoginNotice(`Erro no login: ${friendlyError(error)}`, "error");
+        setLoginNotice(`Erro no login: ${error?.message || "falha ao autenticar"}`, "error");
       }
     }
 
     async function continueSession(){
       try{
-        const { data, error } = await supabaseClient.auth.getSession();
-        if(error) throw error;
-
-        if(!data.session){
-          state.session = null;
-          renderContinueSession();
-          setLoginNotice("Nenhuma sessão válida encontrada.", "warn");
-          return;
+        if(CONFIG.appMode === "local"){
+          const raw = localStorage.getItem(KEYS.localSession);
+          if(!raw){
+            setLoginNotice("Nenhuma sessão válida encontrada.", "warn");
+            return;
+          }
+          state.session = JSON.parse(raw);
+        }else{
+          const { data, error } = await supabaseClient.auth.getSession();
+          if(error) throw error;
+          if(!data.session){
+            setLoginNotice("Nenhuma sessão válida encontrada.", "warn");
+            return;
+          }
+          state.session = data.session;
         }
 
-        state.session = data.session;
         await loadData();
         showApp();
       }catch(error){
-        setLoginNotice(`Falha ao continuar sessão: ${friendlyError(error)}`, "error");
+        setLoginNotice(`Falha ao continuar sessão: ${error?.message || "erro desconhecido"}`, "error");
       }
     }
 
@@ -2240,6 +2231,11 @@
         return;
       }
 
+      if(CONFIG.appMode === "local"){
+        setLoginNotice("Modo local ativo. A recuperação real será usada quando ligar o Supabase.", "warn");
+        return;
+      }
+
       try{
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
           redirectTo: window.location.href
@@ -2247,14 +2243,18 @@
         if(error) throw error;
         setLoginNotice("Se existir uma conta com esse e-mail, o link foi enviado.", "success");
       }catch(error){
-        setLoginNotice(`Falha ao recuperar senha: ${friendlyError(error)}`, "error");
+        setLoginNotice(`Falha ao recuperar senha: ${error?.message || "erro desconhecido"}`, "error");
       }
     }
 
     async function logout(){
       try{
-        await supabaseClient.auth.signOut();
-      }catch(e){}
+        if(CONFIG.appMode === "local"){
+          localStorage.removeItem(KEYS.localSession);
+        }else{
+          await supabaseClient.auth.signOut();
+        }
+      }catch{}
       state.session = null;
       refs.loginPassword.value = "";
       showLogin();
@@ -2293,49 +2293,44 @@
           return;
         }
         state.farmName = value;
-        localStorage.setItem(FARM_KEY, value);
+        localStorage.setItem(KEYS.farmName, value);
         applyFarmName();
         setNotice("Nome da fazenda atualizado com sucesso.", "success");
       });
 
-      refs.employeesSearch?.addEventListener("input", renderEmployees);
-      refs.operationsSearch?.addEventListener("input", renderOperations);
-      refs.financeSearch?.addEventListener("input", renderFinance);
+      refs.employeesSearch.addEventListener("input", renderEmployees);
+      refs.operationsSearch.addEventListener("input", renderOperations);
+      refs.financeSearch.addEventListener("input", renderFinance);
 
-      refs.employeesRefresh?.addEventListener("click", async () => {
+      refs.employeesRefresh.addEventListener("click", async () => {
         await loadEmployees();
         renderEmployees();
         setNotice("Funcionários atualizados.", "success");
       });
 
-      refs.operationsRefresh?.addEventListener("click", async () => {
+      refs.operationsRefresh.addEventListener("click", async () => {
         await loadOperations();
         renderOperations();
         setNotice("Operações atualizadas.", "success");
       });
 
-      refs.financeRefresh?.addEventListener("click", async () => {
+      refs.financeRefresh.addEventListener("click", async () => {
         await loadFinance();
         renderFinance();
         renderDashboard();
         setNotice("Financeiro atualizado.", "success");
       });
 
-      refs.employeesNew?.addEventListener("click", () => openEntityModal("employees"));
-      refs.operationsNew?.addEventListener("click", () => openEntityModal("operations"));
-      refs.financeNew?.addEventListener("click", () => openEntityModal("finance"));
+      refs.employeesNew.addEventListener("click", () => openEntityModal("employees"));
+      refs.operationsNew.addEventListener("click", () => openEntityModal("operations"));
+      refs.financeNew.addEventListener("click", () => openEntityModal("finance"));
 
       refs.closeModalBtn.addEventListener("click", closeModal);
       refs.cancelModalBtn.addEventListener("click", closeModal);
-      refs.modalBackdrop.addEventListener("click", (e) => {
+      refs.modalBackdrop.addEventListener("click", e => {
         if(e.target === refs.modalBackdrop) closeModal();
       });
       refs.entityForm.addEventListener("submit", submitEntityForm);
-
-      supabaseClient.auth.onAuthStateChange((_event, session) => {
-        state.session = session;
-        renderContinueSession();
-      });
     }
 
     async function bootstrap(){
@@ -2343,18 +2338,25 @@
       applyFarmName();
       hydrateRemembered();
 
-      try{
-        const { data, error } = await supabaseClient.auth.getSession();
-        if(error) throw error;
-        state.session = data.session || null;
-      }catch(error){
-        state.session = null;
+      if(CONFIG.appMode === "local"){
+        ensureLocalSeed();
+        const raw = localStorage.getItem(KEYS.localSession);
+        state.session = raw ? JSON.parse(raw) : null;
+      }else{
+        try{
+          const { data, error } = await supabaseClient.auth.getSession();
+          if(error) throw error;
+          state.session = data.session || null;
+        }catch{
+          state.session = null;
+        }
       }
 
       refs.app.classList.remove("active");
       refs.loginScreen.classList.remove("hidden");
       renderContinueSession();
       showLogin();
+      setNotice("");
     }
 
     bootstrap();
