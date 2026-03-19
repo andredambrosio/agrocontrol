@@ -1,2033 +1,2211 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgroControl</title>
-
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#111111">
-
+  <title>AgroControl Desktop v2.2</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root{
-      --bg:#f5f5f7;
-      --card:#ffffff;
-      --text:#111111;
-      --muted:#6e6e73;
-      --line:#e5e5ea;
-      --green:#22c55e;
-      --yellow:#f59e0b;
-      --red:#ef4444;
-      --blue:#3b82f6;
-      --shadow:0 12px 30px rgba(0,0,0,.06);
-      --radius:24px;
+    :root {
+      --bg: #07110c;
+      --panel: rgba(14, 28, 20, 0.82);
+      --panel-soft: rgba(19, 36, 27, 0.66);
+      --panel-strong: rgba(9, 18, 13, 0.9);
+      --line: rgba(139, 255, 184, 0.12);
+      --line-strong: rgba(139, 255, 184, 0.2);
+      --text: #f4fff8;
+      --muted: #9cb7a7;
+      --green: #38d27c;
+      --green-2: #1faa60;
+      --warn: #ffcf66;
+      --danger: #ff7373;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      --radius: 22px;
+      --radius-sm: 16px;
+      --sidebar-w: 280px;
     }
 
-    *{box-sizing:border-box}
-    html,body{
-      margin:0;
-      padding:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-      background:var(--bg);
-      color:var(--text)
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    body { overflow: hidden; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .hidden { display: none !important; }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      height: 100vh;
     }
 
-    button,input,select,textarea{font:inherit}
-    .hidden{display:none !important}
-    .muted{color:var(--muted)}
-
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:30;
-      backdrop-filter:blur(12px);
-      background:rgba(245,245,247,.84);
-      border-bottom:1px solid rgba(0,0,0,.06);
+    .glass {
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
     }
 
-    .topbar-inner{
-      max-width:1320px;
-      margin:0 auto;
-      padding:16px 20px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      flex-wrap:wrap
+    .soft-glass {
+      background: var(--panel-soft);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
     }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(56, 210, 124, 0.1);
+      border: 1px solid rgba(56, 210, 124, 0.2);
+      color: #dbffe8;
+      font-size: 13px;
+      font-weight: 600;
     }
 
-    .brand-badge{
-      width:42px;
-      height:42px;
-      border-radius:14px;
-      background:#111;
-      color:#fff;
-      display:grid;
-      place-items:center;
-      font-weight:700;
-      box-shadow:var(--shadow)
+    .muted { color: var(--muted); }
+    .accent { color: var(--green); }
+    .danger { color: var(--danger); }
+    .success { color: var(--green); }
+    .warn { color: var(--warn); }
+    .up { color: #68e79d; }
+    .down { color: #ff8b8b; }
+
+    /* LOGIN */
+    #loginView {
+      height: 100vh;
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(420px, 500px) 1fr;
+      background: #040806;
     }
 
-    .brand-text h1{
-      margin:0;
-      font-size:20px;
-      letter-spacing:-.03em
+    .login-panel {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 36px;
+      background:
+        linear-gradient(180deg, rgba(6,16,11,0.95), rgba(6,16,11,0.88)),
+        radial-gradient(circle at top left, rgba(56,210,124,0.16), transparent 32%);
     }
 
-    .brand-text p{
-      margin:3px 0 0;
-      font-size:12px;
-      color:var(--muted)
+    .login-card {
+      width: 100%;
+      max-width: 390px;
+      border-radius: 28px;
+      padding: 28px;
     }
 
-    .pill{
-      padding:9px 13px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid var(--line);
-      color:var(--muted);
-      font-size:13px
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
     }
 
-    .logout-btn,
-    .primary-btn,
-    .secondary-btn,
-    .small-btn{
-      border:none;
-      cursor:pointer;
-      transition:.18s ease;
+    .login-logo img,
+    .brand img {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
     }
 
-    .logout-btn{
-      background:#111;
-      color:#fff;
-      border-radius:999px;
-      padding:11px 15px
+    .login-title {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
     }
 
-    .primary-btn{
-      background:#111;
-      color:#fff;
-      border-radius:16px;
-      padding:14px 18px;
-      font-weight:600
+    .login-subtitle {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.55;
     }
 
-    .secondary-btn{
-      background:#fff;
-      color:#111;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:14px 18px
+    .form-grid { display: grid; gap: 14px; }
+
+    .field { display: grid; gap: 8px; }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #d7efe0;
     }
 
-    .small-btn{
-      padding:10px 12px;
-      border-radius:14px;
-      background:#111;
-      color:#fff;
-      font-size:13px
+    .input, .select, .textarea {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      background: rgba(7, 18, 12, 0.85);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 14px 16px;
+      outline: none;
+      transition: .2s ease;
     }
 
-    .small-btn.light{
-      background:#fff;
-      color:#111;
-      border:1px solid var(--line)
+    .input:focus, .select:focus, .textarea:focus {
+      border-color: rgba(56, 210, 124, 0.45);
+      box-shadow: 0 0 0 4px rgba(56, 210, 124, 0.08);
     }
 
-    .login-wrap{
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      padding:24px
+    .textarea {
+      min-height: 120px;
+      resize: vertical;
     }
 
-    .login-card{
-      width:100%;
-      max-width:460px;
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:32px;
-      box-shadow:var(--shadow);
-      padding:30px
+    .row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
     }
 
-    .login-card h2{
-      margin:0;
-      font-size:31px;
-      letter-spacing:-.04em
+    .check {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #d4eadb;
+      font-size: 14px;
     }
 
-    .login-card p{
-      margin:10px 0 22px;
-      color:var(--muted);
-      line-height:1.5
+    .link-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #9fe5bd;
+      font-weight: 700;
     }
 
-    .field{margin-bottom:14px}
-
-    .field label{
-      display:block;
-      margin-bottom:8px;
-      font-size:13px;
-      color:var(--muted)
+    .primary-btn, .secondary-btn, .ghost-btn, .danger-btn {
+      border: none;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-weight: 800;
+      transition: .2s ease;
     }
 
-    .field input,
-    .field select,
-    .field textarea{
-      width:100%;
-      background:#fafafa;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:14px 16px;
-      outline:none
+    .primary-btn {
+      background: linear-gradient(135deg, var(--green), var(--green-2));
+      color: #04110a;
     }
 
-    .field textarea{
-      min-height:92px;
-      resize:vertical
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
     }
 
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus{
-      background:#fff;
-      border-color:#c7c7cc
+    .secondary-btn {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid var(--line-strong);
     }
 
-    .login-error{
-      margin-bottom:14px;
-      padding:12px 14px;
-      border-radius:14px;
-      background:rgba(239,68,68,.08);
-      color:#b91c1c;
-      font-size:14px
+    .ghost-btn {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
     }
 
-    .container{
-      max-width:1320px;
-      margin:0 auto;
-      padding:24px 20px 40px
+    .danger-btn {
+      background: rgba(255, 115, 115, 0.12);
+      color: #ffd9d9;
+      border: 1px solid rgba(255,115,115,.22);
     }
 
-    .main-layout{
-      display:grid;
-      grid-template-columns:270px 1fr;
-      gap:22px
+    .login-background {
+      position: relative;
+      overflow: hidden;
+      background: url('imagens/login_bg.jpg') center center / cover no-repeat;
     }
 
-    .sidebar{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:28px;
-      padding:16px;
-      box-shadow:var(--shadow);
-      height:calc(100vh - 110px);
-      position:sticky;
-      top:88px
+    .login-background::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(4,8,6,0.52) 0%, rgba(4,8,6,0.2) 24%, rgba(4,8,6,0.42) 100%);
     }
 
-    .nav-group{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      margin-top:10px
+    /* APP */
+    .sidebar {
+      background:
+        linear-gradient(180deg, rgba(7,17,12,0.98), rgba(8,20,13,0.96)),
+        radial-gradient(circle at top left, rgba(56,210,124,0.12), transparent 30%);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-height: 100vh;
     }
 
-    .nav-btn{
-      border:none;
-      text-align:left;
-      background:#fafafa;
-      border:1px solid transparent;
-      color:#1d1d1f;
-      border-radius:18px;
-      padding:14px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:space-between
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px 18px;
+      border-bottom: 1px solid var(--line);
     }
 
-    .nav-btn.active{
-      background:#111;
-      color:#fff
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
     }
 
-    .mobile-nav{
-      display:none;
-      gap:10px;
-      overflow:auto;
-      padding-bottom:8px;
-      margin-bottom:12px
+    .brand small {
+      display: block;
+      color: var(--muted);
+      margin-top: 4px;
     }
 
-    .content{
-      display:flex;
-      flex-direction:column;
-      gap:20px
+    .nav {
+      display: grid;
+      gap: 8px;
+      overflow: auto;
+      padding-right: 4px;
     }
 
-    .page-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap:16px;
-      flex-wrap:wrap
+    .nav-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #deefe4;
+      padding: 14px 14px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
     }
 
-    .page-title h2{
-      margin:0;
-      font-size:36px;
-      letter-spacing:-.04em
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: rgba(56,210,124,0.1);
+      border-color: rgba(56,210,124,0.16);
     }
 
-    .page-title p{
-      margin:6px 0 0;
-      color:var(--muted)
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
     }
 
-    .grid{
-      display:grid;
-      gap:18px
+    .main-area {
+      height: 100vh;
+      overflow: auto;
+      background: linear-gradient(180deg, rgba(4,9,6,1), rgba(7,17,12,1));
     }
 
-    .cards-4{grid-template-columns:repeat(4,1fr)}
-    .cards-3{grid-template-columns:repeat(3,1fr)}
-    .cards-2{grid-template-columns:repeat(2,1fr)}
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:28px;
-      box-shadow:var(--shadow);
-      padding:20px
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 26px 14px;
+      background: linear-gradient(180deg, rgba(5,12,8,0.92), rgba(5,12,8,0.72), transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
-    .section-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:16px;
-      flex-wrap:wrap
+    .topbar-left h2 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.03em;
     }
 
-    .section-head h3{
-      margin:0;
-      font-size:20px;
-      letter-spacing:-.02em
+    .topbar-left p {
+      margin: 6px 0 0;
+      color: var(--muted);
     }
 
-    .section-head p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:13px
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
     }
 
-    .stat-card .label{
-      color:var(--muted);
-      font-size:13px
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(56,210,124,0.4), rgba(31,170,96,0.18));
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #f3fff8;
+      border: 1px solid rgba(56,210,124,0.3);
     }
 
-    .stat-card .value{
-      margin-top:10px;
-      font-size:30px;
-      font-weight:700;
-      letter-spacing:-.04em
+    .content {
+      padding: 6px 26px 26px;
+      display: grid;
+      gap: 18px;
     }
 
-    .stat-card .sub{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:13px
+    .farm-banner {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      min-height: 260px;
+      background: url('imagens/dashboard_bg.jpg') center center / cover no-repeat;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
     }
 
-    .status{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:600
+    .farm-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(5,12,8,0.78), rgba(7,14,10,0.45));
+      backdrop-filter: blur(1px);
     }
 
-    .status.green{background:rgba(34,197,94,.12);color:#15803d}
-    .status.yellow{background:rgba(245,158,11,.12);color:#b45309}
-    .status.red{background:rgba(239,68,68,.12);color:#b91c1c}
-    .status.blue{background:rgba(59,130,246,.12);color:#1d4ed8}
-    .status.gray{background:#f3f4f6;color:#4b5563}
-
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:12px
+    .farm-banner-content {
+      position: relative;
+      z-index: 1;
+      padding: 26px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 20px;
+      min-height: 260px;
     }
 
-    .list-item{
-      background:#fafafa;
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap
+    .banner-head h3 {
+      margin: 0;
+      font-size: 34px;
+      letter-spacing: -0.04em;
     }
 
-    .list-main h4{
-      margin:0;
-      font-size:16px
+    .banner-head p {
+      margin: 10px 0 0;
+      max-width: 760px;
+      color: #d4eadc;
     }
 
-    .list-main p{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.5
+    .banner-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      align-self: end;
     }
 
-    .action-row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap
+    .stat-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(8, 20, 13, 0.56);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
     }
 
-    .table{
-      width:100%;
-      border-collapse:collapse
+    .stat-card small {
+      color: #c8dfd1;
+      display: block;
+      margin-bottom: 8px;
     }
 
-    .table th,
-    .table td{
-      text-align:left;
-      padding:14px 12px;
-      border-bottom:1px solid var(--line);
-      font-size:14px;
-      vertical-align:top
+    .stat-card strong {
+      font-size: 26px;
     }
 
-    .table th{
-      color:var(--muted);
-      font-weight:600;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.04em
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.9fr);
+      gap: 18px;
     }
 
-    .alert-box{
-      padding:16px;
-      border-radius:20px;
-      margin-bottom:12px;
-      font-size:14px;
-      line-height:1.5
+    .left-stack, .right-stack {
+      display: grid;
+      gap: 18px;
     }
 
-    .alert-box.green{background:rgba(34,197,94,.10);color:#166534}
-    .alert-box.yellow{background:rgba(245,158,11,.12);color:#92400e}
-    .alert-box.red{background:rgba(239,68,68,.10);color:#991b1b}
-    .alert-box.blue{background:rgba(59,130,246,.10);color:#1d4ed8}
-
-    .metric-row{
-      display:flex;
-      justify-content:space-between;
-      padding:14px 0;
-      border-bottom:1px solid var(--line);
-      gap:10px;
-      font-size:14px
+    .card {
+      border-radius: 24px;
+      padding: 20px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
     }
 
-    .metric-row:last-child{border-bottom:none}
-
-    .footer-note{
-      color:var(--muted);
-      font-size:12px;
-      margin-top:14px
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 16px;
     }
 
-    .weather-panel{
-      display:grid;
-      grid-template-columns:1.15fr .85fr;
-      gap:18px
+    .card-head h3, .card-head h4 {
+      margin: 0;
     }
 
-    .weather-big{
-      font-size:34px;
-      font-weight:700;
-      letter-spacing:-.04em;
-      margin-top:10px
+    .card-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
     }
 
-    @media (max-width:1080px){
-      .cards-4{grid-template-columns:repeat(2,1fr)}
-      .cards-3{grid-template-columns:repeat(2,1fr)}
-      .weather-panel{grid-template-columns:1fr}
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
     }
 
-    @media (max-width:860px){
-      .main-layout{grid-template-columns:1fr}
-      .sidebar{display:none}
-      .mobile-nav{display:flex}
+    .mini-card {
+      border-radius: 20px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
     }
 
-    @media (max-width:640px){
-      .cards-4,.cards-3,.cards-2{grid-template-columns:1fr}
-      .page-title h2{font-size:28px}
-      .topbar-inner{padding:14px 16px}
-      .container{padding:18px 16px 28px}
-      .card{padding:18px}
+    .mini-card strong {
+      display: block;
+      font-size: 26px;
+      margin-top: 10px;
+    }
+
+    .task-list, .feed-list, .table-list, .setting-list, .employee-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .task-item, .feed-item, .table-row, .setting-item, .employee-row {
+      display: grid;
+      gap: 8px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .task-meta, .inline-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .task-top, .table-row, .employee-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .market-ticker {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .ticker-item {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+    }
+
+    .ticker-item strong {
+      display: block;
+      font-size: 22px;
+      margin: 8px 0;
+    }
+
+    .climate-card {
+      position: relative;
+      min-height: 320px;
+      overflow: hidden;
+      background: url('imagens/clima_bg.jpg') center center / cover no-repeat;
+    }
+
+    .climate-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(6,12,8,0.66), rgba(6,12,8,0.74));
+    }
+
+    .climate-body {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 16px;
+    }
+
+    .climate-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .climate-temp {
+      font-size: 54px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .climate-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .climate-grid .mini-card {
+      background: rgba(8,20,13,0.38);
+    }
+
+    .section-view { display: none; }
+    .section-view.active { display: block; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .tab-strip {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      padding: 10px 14px;
+      font-weight: 700;
+    }
+
+    .tab-btn.active {
+      background: rgba(56,210,124,0.12);
+      border-color: rgba(56,210,124,0.25);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .analysis-panel {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px dashed rgba(56,210,124,0.28);
+      background: rgba(56,210,124,0.06);
+    }
+
+    .simple-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 180px;
+      padding-top: 16px;
+    }
+
+    .simple-bar {
+      flex: 1;
+      border-radius: 12px 12px 4px 4px;
+      background: linear-gradient(180deg, rgba(56,210,124,0.95), rgba(31,170,96,0.45));
+      min-height: 18px;
+      position: relative;
+    }
+
+    .simple-bar span {
+      position: absolute;
+      bottom: -26px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .status-andamento {
+      background: rgba(56,210,124,0.1);
+      color: #dfffee;
+      border-color: rgba(56,210,124,0.22);
+    }
+
+    .status-pendente {
+      background: rgba(255,207,102,0.1);
+      color: #fff1c8;
+      border-color: rgba(255,207,102,0.2);
+    }
+
+    .status-concluida {
+      background: rgba(121,181,255,0.1);
+      color: #dbe8ff;
+      border-color: rgba(121,181,255,0.2);
+    }
+
+    .status-bloqueada {
+      background: rgba(255,115,115,0.1);
+      color: #ffdede;
+      border-color: rgba(255,115,115,0.22);
+    }
+
+    .auth-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,207,102,0.08);
+      border: 1px solid rgba(255,207,102,0.18);
+      color: #faecc3;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .toast-wrap {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 999;
+      display: grid;
+      gap: 10px;
+    }
+
+    .toast {
+      min-width: 260px;
+      max-width: 360px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(7,17,12,0.92);
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 1280px) {
+      .dashboard-grid, .two-col, .farm-banner-content {
+        grid-template-columns: 1fr;
+      }
+      .market-ticker, .mini-grid, .three-col, .climate-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px) {
+      body { overflow: auto; }
+      .app-shell {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .sidebar { min-height: auto; }
+      .main-area { height: auto; }
+      #loginView { grid-template-columns: 1fr; }
+      .login-background { min-height: 34vh; }
+    }
+
+    @media (max-width: 720px) {
+      .market-ticker, .mini-grid, .three-col, .climate-grid, .banner-stats {
+        grid-template-columns: 1fr;
+      }
+      .content, .topbar {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .login-panel { padding: 18px; }
+      .login-card { padding: 22px; }
     }
   </style>
 </head>
 <body>
-  <div id="loginScreen" class="login-wrap">
-    <div class="login-card">
-      <div class="brand" style="margin-bottom:18px;">
-        <div class="brand-badge">A</div>
-        <div class="brand-text">
-          <h1>AgroControl</h1>
-          <p>Farm System</p>
+  <div id="loginView">
+    <div class="login-panel">
+      <div class="login-card glass">
+        <div class="login-logo">
+          <img src="imagens/logo.png" alt="AgroControl" onerror="this.style.display='none'" />
+          <div>
+            <div style="font-weight:900;font-size:22px;letter-spacing:-0.03em;">AgroControl</div>
+            <div class="muted" style="font-size:13px;">Centro de comando da fazenda</div>
+          </div>
+        </div>
+
+        <h1 class="login-title">Acesse sua operação</h1>
+        <p class="login-subtitle">Gestão rural com visual premium, operação centralizada e controle total da fazenda.</p>
+
+        <form id="loginForm" class="form-grid">
+          <div class="field">
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" class="input" type="email" placeholder="seuemail@fazenda.com" required />
+          </div>
+
+          <div class="field">
+            <label for="loginPassword">Senha</label>
+            <input id="loginPassword" class="input" type="password" placeholder="Digite sua senha" required />
+          </div>
+
+          <div class="row-between">
+            <label class="check"><input type="checkbox" id="rememberLogin" /> Lembrar login</label>
+            <button type="button" class="link-btn" id="forgotPasswordBtn">Recuperar senha</button>
+          </div>
+
+          <label class="check"><input type="checkbox" id="continueSession" checked /> Continuar sessão</label>
+
+          <button type="submit" class="primary-btn">Entrar no AgroControl</button>
+          <button type="button" class="secondary-btn" id="testConnectionBtn">Testar conexão</button>
+        </form>
+
+        <div class="auth-note">
+          O login e a sessão já funcionam com Supabase. A criação de novos usuários com senha pelo Dono exige um backend seguro com chave de serviço ou Edge Function. Nesta versão, a interface e o cadastro interno ficam prontos, sem expor credenciais sensíveis no navegador.
         </div>
       </div>
-
-      <h2>Entrar no sistema</h2>
-      <p>Login real com Supabase.</p>
-
-      <div id="loginError" class="login-error hidden"></div>
-
-      <div class="field">
-        <label>Email</label>
-        <input id="loginEmail" type="email" placeholder="dono@agrocontrol.com">
-      </div>
-
-      <div class="field">
-        <label>Senha</label>
-        <input id="loginPassword" type="password" placeholder="Digite sua senha">
-      </div>
-
-      <button class="primary-btn" onclick="login()">Entrar</button>
     </div>
+
+    <div class="login-background"></div>
   </div>
 
-  <div id="appScreen" class="hidden">
-    <div class="topbar">
-      <div class="topbar-inner">
-        <div class="brand">
-          <div class="brand-badge">A</div>
-          <div class="brand-text">
-            <h1>AgroControl</h1>
-            <p>Sistema operacional da fazenda</p>
-          </div>
-        </div>
-
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <button id="installAppBtn" class="secondary-btn hidden" type="button">Instalar app</button>
-          <div class="pill" id="currentUser"></div>
-          <button class="logout-btn" onclick="logout()">Sair</button>
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="imagens/logo.png" alt="AgroControl" onerror="this.style.display='none'" />
+        <div>
+          <h1>AgroControl</h1>
+          <small>Desktop v2.2</small>
         </div>
       </div>
-    </div>
 
-    <div class="container">
-      <div class="mobile-nav" id="mobileNav"></div>
+      <nav class="nav" id="mainNav">
+        <button class="nav-btn active" data-section="dashboard">Central de Comando <span>▸</span></button>
+        <button class="nav-btn" data-section="operations">Operações <span>▸</span></button>
+        <button class="nav-btn" data-section="employees">Funcionários <span>▸</span></button>
+        <button class="nav-btn" data-section="financial">Financeiro <span>▸</span></button>
+        <button class="nav-btn" data-section="market">Mercado <span>▸</span></button>
+        <button class="nav-btn" data-section="climate">Clima <span>▸</span></button>
+        <button class="nav-btn" data-section="plots">Talhões <span>▸</span></button>
+        <button class="nav-btn" data-section="inventory">Estoque <span>▸</span></button>
+        <button class="nav-btn" data-section="ai">IA da Fazenda <span>▸</span></button>
+        <button class="nav-btn" data-section="settings">Configurações <span>▸</span></button>
+      </nav>
 
-      <div class="main-layout">
-        <aside class="sidebar">
-          <div class="section-head" style="margin-bottom:10px;">
-            <div>
-              <h3>Navegação</h3>
-              <p id="sidebarProfile"></p>
+      <div class="sidebar-footer glass">
+        <div class="muted" style="font-size:12px;margin-bottom:8px;">Sessão ativa</div>
+        <div style="font-weight:800;" id="sidebarUserName">—</div>
+        <div class="muted" id="sidebarUserRole">—</div>
+        <div style="margin-top:14px; display:grid; gap:10px;">
+          <button class="secondary-btn" id="refreshAllBtn">Atualizar dados</button>
+          <button class="danger-btn" id="logoutBtn">Sair</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <div class="topbar">
+        <div class="topbar-left">
+          <h2 id="pageTitle">Central de Comando</h2>
+          <p id="pageSubtitle">Visão geral da operação, clima, mercado e desempenho.</p>
+        </div>
+
+        <div class="user-pill">
+          <div class="avatar" id="userInitials">AG</div>
+          <div>
+            <div style="font-weight:800;" id="topUserName">Usuário</div>
+            <div class="muted" id="topUserMeta">Dono · Fazenda</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <section id="dashboard" class="section-view active">
+          <div class="farm-banner">
+            <div class="farm-banner-content">
+              <div class="banner-head">
+                <span class="chip">Central de Comando</span>
+                <h3 id="farmNameBanner">Fazenda AgroControl</h3>
+                <p id="farmTagline">Operação rural centralizada, clima monitorado, mercado em leitura contínua e decisões em um painel premium.</p>
+              </div>
+
+              <div class="banner-stats">
+                <div class="stat-card">
+                  <small>Funcionários</small>
+                  <strong id="bannerEmployeesCount">0</strong>
+                </div>
+                <div class="stat-card">
+                  <small>Operações</small>
+                  <strong id="bannerOperationsCount">0</strong>
+                </div>
+                <div class="stat-card">
+                  <small>Lançamentos</small>
+                  <strong id="bannerTransactionsCount">0</strong>
+                </div>
+                <div class="stat-card">
+                  <small>Função</small>
+                  <strong id="bannerRole">Dono</strong>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="nav-group" id="sidebarNav"></div>
-        </aside>
 
-        <main class="content">
-          <section id="page-dashboard" class="page">
-            <div class="page-title">
-              <div>
-                <h2>Dashboard</h2>
-                <p>Resumo atual do sistema.</p>
-              </div>
-              <span class="status blue">V1 funcional</span>
-            </div>
-
-            <div class="grid cards-4">
-              <div class="card stat-card">
-                <div class="label">Total de tarefas</div>
-                <div class="value" id="dashTotalTasks">0</div>
-                <div class="sub">Criadas no sistema</div>
-              </div>
-              <div class="card stat-card">
-                <div class="label">Em andamento</div>
-                <div class="value" id="dashInProgress">0</div>
-                <div class="sub">Operações em execução</div>
-              </div>
-              <div class="card stat-card">
-                <div class="label">Itens em estoque</div>
-                <div class="value" id="dashStockCount">0</div>
-                <div class="sub">Produtos cadastrados</div>
-              </div>
-              <div class="card stat-card">
-                <div class="label">Funcionários</div>
-                <div class="value" id="dashEmployeeCount">0</div>
-                <div class="sub">Equipe cadastrada</div>
-              </div>
-            </div>
-
-            <div class="grid cards-2">
+          <div class="dashboard-grid">
+            <div class="left-stack">
               <div class="card">
-                <div class="section-head">
+                <div class="card-head">
                   <div>
-                    <h3>Centro de decisão</h3>
-                    <p>Alertas simples e objetivos.</p>
-                  </div>
-                </div>
-                <div id="decisionArea"></div>
-              </div>
-
-              <div class="card">
-                <div class="section-head">
-                  <div>
-                    <h3>Últimas tarefas</h3>
-                    <p>O que entrou ou mudou por último.</p>
-                  </div>
-                </div>
-                <div class="list" id="latestTasks"></div>
-              </div>
-            </div>
-          </section>
-
-          <section id="page-tarefas" class="page hidden">
-            <div class="page-title">
-              <div>
-                <h2>Tarefas</h2>
-                <p id="taskPageSubtitle">Criação e execução de tarefas.</p>
-              </div>
-            </div>
-
-            <div class="grid cards-2" id="taskGrid">
-              <div class="card" id="newTaskCard">
-                <div class="section-head">
-                  <div>
-                    <h3>Nova tarefa</h3>
-                    <p>Cadastro simples da operação.</p>
+                    <h3>Visão operacional</h3>
+                    <p>Tarefas, produtividade, máquinas e andamento da fazenda.</p>
                   </div>
                 </div>
 
-                <div class="field">
-                  <label>Operação</label>
-                  <input id="taskOperacao" placeholder="Ex.: Pulverização">
-                </div>
-
-                <div class="field">
-                  <label>Talhão</label>
-                  <input id="taskTalhao" placeholder="Ex.: Talhão 3">
-                </div>
-
-                <div class="field">
-                  <label>Funcionário</label>
-                  <select id="taskFuncionarioSelect"></select>
-                </div>
-
-                <div class="field">
-                  <label>Detalhes</label>
-                  <textarea id="taskDetalhes" placeholder="Produto, dose, área, observações..."></textarea>
-                </div>
-
-                <button class="primary-btn" onclick="addTask()">Salvar tarefa</button>
-              </div>
-
-              <div class="card" id="taskListCard">
-                <div class="section-head">
-                  <div>
-                    <h3 id="taskListTitle">Lista de tarefas</h3>
-                    <p id="taskListSub">Visualização por perfil.</p>
+                <div class="mini-grid">
+                  <div class="mini-card">
+                    <div class="muted">Tarefas em andamento</div>
+                    <strong id="kpiInProgress">0</strong>
                   </div>
-                </div>
-                <div class="list" id="taskList"></div>
-              </div>
-            </div>
-          </section>
-
-          <section id="page-estoque" class="page hidden">
-            <div class="page-title">
-              <div>
-                <h2>Estoque</h2>
-                <p>Cadastro de produtos, quantidade e custo.</p>
-              </div>
-            </div>
-
-            <div class="grid cards-2">
-              <div class="card" id="newStockCard">
-                <div class="section-head">
-                  <div>
-                    <h3>Novo item</h3>
-                    <p>Controle simples e funcional.</p>
+                  <div class="mini-card">
+                    <div class="muted">Tarefas pendentes</div>
+                    <strong id="kpiPending">0</strong>
                   </div>
-                </div>
-
-                <div class="field">
-                  <label>Produto</label>
-                  <input id="stockNome" placeholder="Ex.: Herbicida X">
-                </div>
-                <div class="field">
-                  <label>Quantidade</label>
-                  <input id="stockQtd" type="number" placeholder="Ex.: 60">
-                </div>
-                <div class="field">
-                  <label>Unidade</label>
-                  <input id="stockUnidade" placeholder="Ex.: L, bags, sacas">
-                </div>
-                <div class="field">
-                  <label>Custo unitário</label>
-                  <input id="stockCusto" type="number" step="0.01" placeholder="Ex.: 48">
-                </div>
-
-                <button class="primary-btn" onclick="addStock()">Salvar item</button>
-              </div>
-
-              <div class="card">
-                <div class="section-head">
-                  <div>
-                    <h3>Itens cadastrados</h3>
-                    <p>Soma automática no dashboard.</p>
+                  <div class="mini-card">
+                    <div class="muted">Máquinas operando</div>
+                    <strong id="kpiMachines">4</strong>
                   </div>
-                </div>
-                <div id="stockTableWrap"></div>
-              </div>
-            </div>
-          </section>
-
-          <section id="page-clima" class="page hidden">
-            <div class="page-title">
-              <div>
-                <h2>Clima para aplicação</h2>
-                <p>Consulta online por cidade ou localização atual.</p>
-              </div>
-              <span id="weatherHeaderStatus" class="status gray">Sem consulta</span>
-            </div>
-
-            <div class="weather-panel">
-              <div class="card">
-                <div class="section-head">
-                  <div>
-                    <h3>Buscar clima</h3>
-                    <p>Pesquisa online em tempo real.</p>
-                  </div>
-                </div>
-
-                <div class="field">
-                  <label>Cidade</label>
-                  <input id="weatherCity" placeholder="Ex.: Dom Pedrito, RS">
-                </div>
-
-                <div class="action-row" style="margin-bottom:14px;">
-                  <button class="small-btn" onclick="searchWeatherByCity()">Buscar cidade</button>
-                  <button class="small-btn light" onclick="searchWeatherByLocation()">Usar minha localização</button>
-                </div>
-
-                <div id="weatherSearchFeedback" class="footer-note">
-                  Digita uma cidade ou usa tua localização.
-                </div>
-
-                <div class="weather-big" id="weatherMainText">Aguardando consulta</div>
-                <div class="muted" id="weatherLocationText" style="margin-top:8px;">Sem local carregado</div>
-
-                <div class="metric-row">
-                  <span>Temperatura</span>
-                  <strong id="weatherTemp">—</strong>
-                </div>
-                <div class="metric-row">
-                  <span>Umidade</span>
-                  <strong id="weatherHumidity">—</strong>
-                </div>
-                <div class="metric-row">
-                  <span>Vento</span>
-                  <strong id="weatherWind">—</strong>
-                </div>
-                <div class="metric-row">
-                  <span>Rajadas</span>
-                  <strong id="weatherGust">—</strong>
-                </div>
-                <div class="metric-row">
-                  <span>Chance de chuva</span>
-                  <strong id="weatherRain">—</strong>
                 </div>
               </div>
 
               <div class="card">
-                <div class="section-head">
+                <div class="card-head">
                   <div>
-                    <h3>Leitura para aplicação</h3>
-                    <p>Regra simples para operação.</p>
+                    <h3>Operações em andamento</h3>
+                    <p>As frentes mais importantes da fazenda neste momento.</p>
                   </div>
                 </div>
+                <div class="task-list" id="dashboardOperationsList"></div>
+              </div>
 
-                <div id="weatherRecommendation">
-                  <div class="alert-box blue">
-                    Faz a consulta para o sistema avaliar vento, umidade e chance de chuva.
+              <div class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Mercado</h3>
+                    <p>Resumo rápido dos itens monitorados.</p>
+                  </div>
+                  <button class="secondary-btn" data-open-section="market">Abrir mercado</button>
+                </div>
+                <div class="market-ticker" id="dashboardMarketTicker"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Produtividade e talhões</h3>
+                    <p>Visão resumida do desempenho por área.</p>
                   </div>
                 </div>
-
-                <div class="footer-note">
-                  Regra usada nesta V1: vento moderado, umidade razoável e baixa chance de chuva favorecem aplicação.
-                </div>
+                <div class="three-col" id="plotSummaryCards"></div>
               </div>
             </div>
-          </section>
 
-          <section id="page-funcionarios" class="page hidden">
-            <div class="page-title">
+            <div class="right-stack">
+              <div class="card climate-card">
+                <div class="climate-body">
+                  <div class="card-head">
+                    <div>
+                      <h3>Clima</h3>
+                      <p id="climateLocationLabel">Dom Pedrito, RS</p>
+                    </div>
+                    <button class="secondary-btn" data-open-section="climate">Abrir clima</button>
+                  </div>
+
+                  <div class="climate-main">
+                    <div>
+                      <div class="climate-temp" id="climateTemp">24°</div>
+                      <div class="muted" id="climateCondition">Tempo estável</div>
+                    </div>
+                    <span class="chip" id="applyStatusChip">Pode aplicar</span>
+                  </div>
+
+                  <div class="climate-grid">
+                    <div class="mini-card">
+                      <div class="muted">Vento</div>
+                      <strong id="climateWind">12 km/h</strong>
+                    </div>
+                    <div class="mini-card">
+                      <div class="muted">Umidade</div>
+                      <strong id="climateHumidity">64%</strong>
+                    </div>
+                    <div class="mini-card">
+                      <div class="muted">Atualização</div>
+                      <strong id="climateUpdatedAt">Manual</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>IA da Fazenda</h3>
+                    <p>Leituras rápidas para apoiar decisão.</p>
+                  </div>
+                </div>
+                <div class="feed-list" id="aiInsightsList"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="operations" class="section-view">
+          <div class="card">
+            <div class="card-head">
               <div>
-                <h2>Funcionários</h2>
-                <p>Cadastro, edição e exclusão da equipe.</p>
+                <h3>Operações</h3>
+                <p>Cadastro, acompanhamento e status operacional.</p>
               </div>
+              <button class="primary-btn" id="seedOperationsBtn">Gerar exemplo</button>
+            </div>
+            <div class="task-list" id="operationsFullList"></div>
+          </div>
+        </section>
+
+        <section id="employees" class="section-view">
+          <div class="two-col">
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Funcionários</h3>
+                  <p>Gestão interna de usuários e equipe.</p>
+                </div>
+              </div>
+              <div class="employee-list" id="employeesList"></div>
             </div>
 
-            <div class="grid cards-2">
-              <div class="card" id="employeeFormCard">
-                <div class="section-head">
-                  <div>
-                    <h3 id="employeeFormTitle">Novo funcionário</h3>
-                    <p>Cria ou edita um cadastro.</p>
-                  </div>
+            <div class="card" id="employeeFormCard">
+              <div class="card-head">
+                <div>
+                  <h3>Novo funcionário</h3>
+                  <p>O Dono define o acesso e o sistema gera o email interno.</p>
                 </div>
+              </div>
 
-                <input type="hidden" id="employeeEditId">
+              <form id="employeeForm" class="form-grid">
+                <div class="field">
+                  <label>Usuário</label>
+                  <input class="input" id="employeeUsername" placeholder="beto" />
+                </div>
 
                 <div class="field">
-                  <label>Nome</label>
-                  <input id="employeeNome" placeholder="Ex.: João">
+                  <label>Nome completo</label>
+                  <input class="input" id="employeeFullName" placeholder="Beto Ferreira" />
                 </div>
 
                 <div class="field">
                   <label>Função</label>
-                  <input id="employeeFuncao" placeholder="Ex.: Pulverizador">
-                </div>
-
-                <div class="field">
-                  <label>Status</label>
-                  <select id="employeeStatus">
-                    <option value="ativo">Ativo</option>
-                    <option value="pausado">Pausado</option>
-                    <option value="pendente">Pendente</option>
+                  <select class="select" id="employeeRole">
+                    <option>Dono</option>
+                    <option>Gerente</option>
+                    <option>Funcionário</option>
                   </select>
                 </div>
 
-                <div class="action-row">
-                  <button class="primary-btn" onclick="saveEmployee()" style="width:auto;">Salvar funcionário</button>
-                  <button class="secondary-btn hidden" id="cancelEmployeeEditBtn" onclick="cancelEmployeeEdit()">Cancelar edição</button>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="section-head">
-                  <div>
-                    <h3>Equipe cadastrada</h3>
-                    <p>Usada também na criação de tarefas.</p>
-                  </div>
-                </div>
-                <div class="list" id="employeeList"></div>
-              </div>
-            </div>
-          </section>
-
-          <section id="page-maquinas" class="page hidden">
-            <div class="page-title">
-              <div>
-                <h2>Máquinas</h2>
-                <p>Cadastro e edição de máquinas da propriedade.</p>
-              </div>
-            </div>
-
-            <div class="grid cards-2">
-              <div class="card" id="machineFormCard">
-                <div class="section-head">
-                  <div>
-                    <h3 id="machineFormTitle">Nova máquina</h3>
-                    <p>Cria ou edita um cadastro.</p>
-                  </div>
-                </div>
-
-                <input type="hidden" id="machineEditId">
-
                 <div class="field">
-                  <label>Nome</label>
-                  <input id="machineNome" placeholder="Ex.: JD 6110">
+                  <label>Senha inicial</label>
+                  <input class="input" id="employeeTempPassword" type="password" placeholder="Defina uma senha inicial" />
+                </div>
+
+                <button type="submit" class="primary-btn">Cadastrar internamente</button>
+              </form>
+
+              <div class="auth-note">
+                O cadastro abaixo grava o funcionário e a intenção de acesso no banco interno. Para criar o login real do Supabase com senha definida pelo Dono, ligue esta tela a uma Edge Function segura. O navegador sozinho não deve criar usuários administrativos.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="financial" class="section-view">
+          <div class="two-col">
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Financeiro</h3>
+                  <p>Entradas, saídas e saldo consolidado.</p>
+                </div>
+                <button class="secondary-btn analysis-toggle" data-target="financialAnalysis">Ver análise</button>
+              </div>
+
+              <div class="mini-grid">
+                <div class="mini-card"><div class="muted">Entradas</div><strong id="financeIncome">R$ 0,00</strong></div>
+                <div class="mini-card"><div class="muted">Saídas</div><strong id="financeExpense">R$ 0,00</strong></div>
+                <div class="mini-card"><div class="muted">Saldo</div><strong id="financeBalance">R$ 0,00</strong></div>
+              </div>
+
+              <div class="table-list" id="financeList" style="margin-top:16px;"></div>
+              <div id="financialAnalysis" class="analysis-panel hidden"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Novo lançamento</h3>
+                  <p>Cadastre entradas e saídas da operação.</p>
+                </div>
+              </div>
+
+              <form id="financeForm" class="form-grid">
+                <div class="field">
+                  <label>Descrição</label>
+                  <input class="input" id="financeDescription" placeholder="Diesel, venda de soja, manutenção..." />
                 </div>
 
                 <div class="field">
                   <label>Tipo</label>
-                  <input id="machineTipo" placeholder="Ex.: Trator">
-                </div>
-
-                <div class="field">
-                  <label>Horímetro</label>
-                  <input id="machineHoras" type="number" placeholder="Ex.: 2392">
-                </div>
-
-                <div class="field">
-                  <label>Status</label>
-                  <select id="machineStatus">
-                    <option value="ok">Ok</option>
-                    <option value="operando">Operando</option>
-                    <option value="atencao">Atenção</option>
+                  <select class="select" id="financeType">
+                    <option value="income">Entrada</option>
+                    <option value="expense">Saída</option>
                   </select>
                 </div>
 
-                <div class="action-row">
-                  <button class="primary-btn" onclick="saveMachine()" style="width:auto;">Salvar máquina</button>
-                  <button class="secondary-btn hidden" id="cancelMachineEditBtn" onclick="cancelMachineEdit()">Cancelar edição</button>
+                <div class="field">
+                  <label>Valor</label>
+                  <input class="input" id="financeAmount" type="number" step="0.01" placeholder="0.00" />
                 </div>
-              </div>
 
-              <div class="card">
-                <div class="section-head">
-                  <div>
-                    <h3>Máquinas cadastradas</h3>
-                    <p>Lista editável.</p>
-                  </div>
-                </div>
-                <div class="list" id="machineList"></div>
-              </div>
+                <button type="submit" class="primary-btn">Salvar lançamento</button>
+              </form>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section id="page-operacao" class="page hidden">
-            <div class="page-title">
+        <section id="market" class="section-view">
+          <div class="card">
+            <div class="card-head">
               <div>
-                <h2>Minha operação</h2>
-                <p>Tela simples para o funcionário executar.</p>
+                <h3>Mercado</h3>
+                <p>Leitura tipo bolsa com valor, unidade e direção do movimento.</p>
               </div>
-              <span class="status green">Execução</span>
+              <button class="secondary-btn analysis-toggle" data-target="marketAnalysis">Ver análise</button>
             </div>
 
-            <div class="grid cards-2">
-              <div class="card">
-                <div class="section-head">
-                  <div>
-                    <h3>Minhas tarefas</h3>
-                    <p>Só aparecem tarefas do usuário logado.</p>
-                  </div>
-                </div>
-                <div class="list" id="operationTaskList"></div>
-              </div>
+            <div class="table-list" id="marketList"></div>
+            <div id="marketAnalysis" class="analysis-panel hidden"></div>
+          </div>
+        </section>
 
-              <div class="card">
-                <div class="section-head">
+        <section id="climate" class="section-view">
+          <div class="two-col">
+            <div class="card climate-card">
+              <div class="climate-body">
+                <div class="card-head">
                   <div>
-                    <h3>Ações rápidas</h3>
-                    <p>Base da futura operação real.</p>
+                    <h3>Clima detalhado</h3>
+                    <p>Resumo principal e leitura operacional.</p>
                   </div>
                 </div>
 
-                <div class="action-row">
-                  <button class="small-btn light">Foto inicial</button>
-                  <button class="small-btn light">Foto final</button>
-                  <button class="small-btn light">Áudio</button>
-                  <button class="small-btn light">Abastecimento</button>
+                <div class="climate-main">
+                  <div>
+                    <div class="climate-temp" id="climateTempLarge">24°</div>
+                    <div class="muted" id="climateConditionLarge">Tempo estável</div>
+                  </div>
+                  <span class="chip" id="applyStatusChipLarge">Pode aplicar</span>
                 </div>
 
-                <div class="footer-note">
-                  Nesta fase, a parte funcional principal está em tarefas, estoque, funcionários, máquinas e clima online.
+                <div class="climate-grid">
+                  <div class="mini-card"><div class="muted">Vento</div><strong id="climateWindLarge">12 km/h</strong></div>
+                  <div class="mini-card"><div class="muted">Umidade</div><strong id="climateHumidityLarge">64%</strong></div>
+                  <div class="mini-card"><div class="muted">Origem</div><strong id="climateSourceLarge">Manual</strong></div>
                 </div>
               </div>
             </div>
-          </section>
-        </main>
+
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Regras de aplicação</h3>
+                  <p>Como o sistema define se pode aplicar.</p>
+                </div>
+              </div>
+              <div class="setting-list" id="climateRulesList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="plots" class="section-view">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Talhões</h3>
+                <p>Visão rápida de área, cultura e produtividade esperada.</p>
+              </div>
+            </div>
+            <div class="three-col" id="plotsGrid"></div>
+          </div>
+        </section>
+
+        <section id="inventory" class="section-view">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Estoque</h3>
+                <p>Resumo operacional de insumos e materiais.</p>
+              </div>
+              <button class="secondary-btn analysis-toggle" data-target="inventoryAnalysis">Ver análise</button>
+            </div>
+
+            <div class="table-list" id="inventoryList"></div>
+            <div id="inventoryAnalysis" class="analysis-panel hidden"></div>
+          </div>
+        </section>
+
+        <section id="ai" class="section-view">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>IA da Fazenda</h3>
+                <p>Assistente de leitura operacional com base nos dados carregados.</p>
+              </div>
+            </div>
+            <div class="feed-list" id="aiFullList"></div>
+          </div>
+        </section>
+
+        <section id="settings" class="section-view">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Configurações</h3>
+                <p>Perfil, fazenda, mercado e clima em uma área separada.</p>
+              </div>
+            </div>
+
+            <div class="tab-strip" id="settingsTabs">
+              <button class="tab-btn active" data-tab="settings-profile">Perfil</button>
+              <button class="tab-btn" data-tab="settings-farm">Fazenda</button>
+              <button class="tab-btn" data-tab="settings-market">Mercado</button>
+              <button class="tab-btn" data-tab="settings-climate">Clima</button>
+            </div>
+
+            <div id="settings-profile" class="tab-content active">
+              <div class="two-col">
+                <div class="card soft-glass">
+                  <div class="field"><label>Nome</label><input class="input" id="profileNameInput" /></div>
+                  <div class="field"><label>Email</label><input class="input" id="profileEmailInput" disabled /></div>
+                  <div class="field"><label>Função</label><input class="input" id="profileRoleInput" disabled /></div>
+                  <button class="primary-btn" id="saveProfileBtn">Salvar perfil local</button>
+                </div>
+
+                <div class="card soft-glass">
+                  <div class="field"><label>Nova senha</label><input class="input" id="newPasswordInput" type="password" placeholder="Atualizar senha da conta" /></div>
+                  <button class="secondary-btn" id="changePasswordBtn">Atualizar senha</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="settings-farm" class="tab-content">
+              <div class="two-col">
+                <div class="card soft-glass">
+                  <form id="farmSettingsForm" class="form-grid">
+                    <div class="field"><label>Nome da fazenda</label><input class="input" id="farmNameInput" /></div>
+                    <div class="field"><label>Descrição</label><textarea class="textarea" id="farmDescInput"></textarea></div>
+                    <div class="field"><label>Banner da fazenda</label><input class="input" id="farmBannerInput" value="imagens/dashboard_bg.jpg" /></div>
+                    <button class="primary-btn" type="submit">Salvar fazenda</button>
+                  </form>
+                </div>
+
+                <div class="card soft-glass">
+                  <div class="field"><label>Preview do banner</label><input class="input" disabled value="imagens/dashboard_bg.jpg" /></div>
+                  <div class="auth-note">Nesta versão, o caminho do banner é configurável. Se quiser upload real de imagem com persistência, conecte esta área ao Supabase Storage.</div>
+                </div>
+              </div>
+            </div>
+
+            <div id="settings-market" class="tab-content">
+              <div class="two-col">
+                <div class="card soft-glass">
+                  <div class="card-head">
+                    <div>
+                      <h4>Itens do mercado</h4>
+                      <p>Controle total do que aparece na tela inicial e na aba Mercado.</p>
+                    </div>
+                  </div>
+                  <div class="table-list" id="marketSettingsList"></div>
+                </div>
+
+                <div class="card soft-glass">
+                  <form id="marketForm" class="form-grid">
+                    <div class="field"><label>Nome do item</label><input class="input" id="marketNameInput" placeholder="Soja" /></div>
+                    <div class="field"><label>Valor</label><input class="input" id="marketValueInput" type="number" step="0.01" /></div>
+                    <div class="field"><label>Unidade</label><input class="input" id="marketUnitInput" placeholder="R$/saca" /></div>
+                    <div class="field"><label>Variação (%)</label><input class="input" id="marketChangeInput" type="number" step="0.01" /></div>
+                    <div class="field">
+                      <label>Modo</label>
+                      <select class="select" id="marketModeInput">
+                        <option value="manual">Manual</option>
+                        <option value="auto">Automático</option>
+                        <option value="hybrid">Automático com ajuste manual</option>
+                      </select>
+                    </div>
+                    <button class="primary-btn" type="submit">Adicionar item</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div id="settings-climate" class="tab-content">
+              <div class="two-col">
+                <div class="card soft-glass">
+                  <form id="climateSettingsForm" class="form-grid">
+                    <div class="field"><label>Cidade</label><input class="input" id="climateCityInput" placeholder="Dom Pedrito, RS" /></div>
+                    <div class="field"><label>Latitude</label><input class="input" id="climateLatInput" placeholder="-30.98" /></div>
+                    <div class="field"><label>Longitude</label><input class="input" id="climateLonInput" placeholder="-54.67" /></div>
+                    <div class="field">
+                      <label>Modo</label>
+                      <select class="select" id="climateModeInput">
+                        <option value="manual">Manual</option>
+                        <option value="online">Online</option>
+                        <option value="hybrid">Online com fallback manual</option>
+                      </select>
+                    </div>
+                    <button class="primary-btn" type="submit">Salvar clima</button>
+                  </form>
+                </div>
+
+                <div class="card soft-glass">
+                  <div class="field"><label>Limite máximo de vento</label><input class="input" id="climateWindRuleInput" type="number" step="1" /></div>
+                  <div class="field"><label>Limite mínimo de umidade</label><input class="input" id="climateHumidityRuleInput" type="number" step="1" /></div>
+                  <div class="field"><label>Status manual</label><input class="input" id="climateStatusRuleInput" /></div>
+                  <button class="secondary-btn" id="saveClimateRulesBtn">Salvar regras</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <div class="toast-wrap" id="toastWrap"></div>
 
   <script>
-    const SUPABASE_URL = "https://xksllcfagvpccvuzwqmg.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SUPABASE_URL = 'https://xksllcfagvpccvuzwqmg.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_5O1ZECSV-NpB8Hrl7RQtHg_7af8cgXy';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true }
+    });
 
-    const STORAGE_KEY = "agrocontrol_v2_data";
-    let deferredPrompt = null;
-
-    function makeId(){
-      return Math.random().toString(36).slice(2) + Date.now().toString(36);
-    }
-
-    function nowBr(){
-      return new Date().toLocaleString("pt-BR");
-    }
-
-    const defaultData = {
-      tasks: [
-        {
-          id: makeId(),
-          operacao: "Pulverização",
-          talhao: "Talhão 3",
-          funcionario: "João",
-          detalhes: "Herbicida X • Dose 2 L/ha • Área 18 ha",
-          status: "em_andamento",
-          createdAt: nowBr()
-        },
-        {
-          id: makeId(),
-          operacao: "Adubação",
-          talhao: "Talhão 6",
-          funcionario: "Pedro",
-          detalhes: "Ureia • Área 25 ha",
-          status: "pendente",
-          createdAt: nowBr()
-        }
-      ],
-      stock: [
-        { id: makeId(), nome: "Herbicida X", qtd: 60, unidade: "L", custo: 48 },
-        { id: makeId(), nome: "Soja variedade Y", qtd: 40, unidade: "bags", custo: 280 }
-      ],
-      employees: [
-        { id: makeId(), nome: "João", funcao: "Pulverizador", status: "ativo" },
-        { id: makeId(), nome: "Pedro", funcao: "Adubação", status: "pendente" },
-        { id: makeId(), nome: "Carlos", funcao: "Plantio", status: "pausado" }
-      ],
-      machines: [
-        { id: makeId(), nome: "JD 6110", tipo: "Trator", horas: 2392, status: "operando" },
-        { id: makeId(), nome: "Pulverizador Jacto", tipo: "Pulverização", horas: 981, status: "atencao" }
-      ],
-      weather: null
+    const STORAGE_KEYS = {
+      app: 'agrocontrol-desktop-v22',
+      rememberedEmail: 'agrocontrol-remembered-email'
     };
 
-    function deepClone(obj){
-      return JSON.parse(JSON.stringify(obj));
-    }
+    const ROLE_LABEL_MAP = {
+      dono: 'Dono',
+      owner: 'Dono',
+      admin: 'Dono',
+      gerente: 'Gerente',
+      manager: 'Gerente',
+      funcionario: 'Funcionário',
+      employee: 'Funcionário'
+    };
 
-    function loadData(){
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw){
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
-        return deepClone(defaultData);
-      }
-      try{
-        const parsed = JSON.parse(raw);
-        return {
-          tasks: parsed.tasks || [],
-          stock: parsed.stock || [],
-          employees: parsed.employees || [],
-          machines: parsed.machines || [],
-          weather: parsed.weather || null
-        };
-      }catch{
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
-        return deepClone(defaultData);
-      }
-    }
+    const PAGE_META = {
+      dashboard: ['Central de Comando', 'Visão geral da operação, clima, mercado e desempenho.'],
+      operations: ['Operações', 'Cadastro, status e andamento operacional.'],
+      employees: ['Funcionários', 'Equipe, acesso e estrutura interna.'],
+      financial: ['Financeiro', 'Entradas, saídas, saldo e leitura do caixa.'],
+      market: ['Mercado', 'Preço, direção e leitura tipo bolsa.'],
+      climate: ['Clima', 'Leitura operacional do clima da fazenda.'],
+      plots: ['Talhões', 'Áreas, cultura e produtividade.'],
+      inventory: ['Estoque', 'Insumos e leitura operacional do estoque.'],
+      ai: ['IA da Fazenda', 'Leituras e alertas da operação.'],
+      settings: ['Configurações', 'Perfil, fazenda, clima e mercado.']
+    };
 
     const state = {
-      userName: "",
-      role: "",
-      page: "dashboard",
-      data: loadData()
+      user: null,
+      profile: null,
+      settings: loadLocalState(),
+      operations: [],
+      employees: [],
+      financial: [],
+      market: [],
+      climate: {},
+      inventory: [],
+      plots: [],
+      aiInsights: []
     };
 
-    const roleConfig = {
-      dono: {
-        label: "Dono",
-        pages: [
-          ["dashboard","Dashboard"],
-          ["tarefas","Tarefas"],
-          ["estoque","Estoque"],
-          ["clima","Clima"],
-          ["funcionarios","Funcionários"],
-          ["maquinas","Máquinas"]
+    function loadLocalState() {
+      const saved = localStorage.getItem(STORAGE_KEYS.app);
+      const defaults = {
+        farm: {
+          name: 'Fazenda AgroControl',
+          description: 'Operação rural centralizada com visão premium de mercado, clima, finanças e execução.',
+          banner: 'imagens/dashboard_bg.jpg'
+        },
+        market: [
+          { id: crypto.randomUUID(), name: 'Soja', value: 135, unit: 'R$/saca', change: 1.8, mode: 'manual', visible: true },
+          { id: crypto.randomUUID(), name: 'Milho', value: 62, unit: 'R$/saca', change: -0.9, mode: 'manual', visible: true },
+          { id: crypto.randomUUID(), name: 'Arroz', value: 98, unit: 'R$/saca', change: 0.6, mode: 'manual', visible: true },
+          { id: crypto.randomUUID(), name: 'Diesel', value: 6.29, unit: 'R$/litro', change: 0.3, mode: 'manual', visible: true }
+        ],
+        climate: {
+          city: 'Dom Pedrito, RS',
+          lat: '',
+          lon: '',
+          mode: 'manual',
+          source: 'Manual',
+          temp: 24,
+          wind: 12,
+          humidity: 64,
+          condition: 'Tempo estável',
+          status: 'Pode aplicar',
+          windRule: 18,
+          humidityRule: 55,
+          updatedAt: 'Manual'
+        },
+        inventory: [
+          { id: crypto.randomUUID(), name: 'Herbicida', qty: 28, unit: 'bombonas', status: 'Bom' },
+          { id: crypto.randomUUID(), name: 'Semente soja', qty: 86, unit: 'sacas', status: 'Bom' },
+          { id: crypto.randomUUID(), name: 'Diesel interno', qty: 2200, unit: 'litros', status: 'Atenção' }
+        ],
+        plots: [
+          { id: crypto.randomUUID(), name: 'Talhão Norte', area: 185, crop: 'Soja', productivity: '64 sc/ha' },
+          { id: crypto.randomUUID(), name: 'Talhão Sede', area: 92, crop: 'Milho', productivity: '152 sc/ha' },
+          { id: crypto.randomUUID(), name: 'Talhão Baixada', area: 71, crop: 'Arroz', productivity: '175 sc/ha' }
+        ],
+        aiInsights: [
+          'A combinação de vento e umidade segue favorável para aplicação no período atual.',
+          'O arroz apresenta leve recuperação de preço e melhora a leitura comercial do dia.',
+          'Há concentração de tarefas em andamento na frente norte. Reforço operacional pode equilibrar o ritmo.'
         ]
-      },
-      gerente: {
-        label: "Gerente",
-        pages: [
-          ["dashboard","Dashboard"],
-          ["tarefas","Tarefas"],
-          ["estoque","Estoque"],
-          ["clima","Clima"],
-          ["funcionarios","Funcionários"],
-          ["maquinas","Máquinas"]
-        ]
-      },
-      funcionario: {
-        label: "Funcionário",
-        pages: [
-          ["operacao","Minha operação"],
-          ["tarefas","Tarefas"],
-          ["clima","Clima"]
-        ]
+      };
+
+      if (!saved) return defaults;
+
+      try {
+        return { ...defaults, ...JSON.parse(saved) };
+      } catch {
+        return defaults;
       }
-    };
-
-    function saveData(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
     }
 
-    function escapeHtml(text){
-      return String(text ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    function saveLocalState() {
+      localStorage.setItem(STORAGE_KEYS.app, JSON.stringify(state.settings));
     }
 
-    function showLoginError(message){
-      const box = document.getElementById("loginError");
-      box.textContent = message;
-      box.classList.remove("hidden");
+    const el = (id) => document.getElementById(id);
+    const currency = (v) => Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const initials = (name = 'Agro') => name.split(' ').filter(Boolean).slice(0, 2).map(p => p[0]).join('').toUpperCase();
+    const roleLabel = (role) => ROLE_LABEL_MAP[String(role || '').toLowerCase()] || 'Funcionário';
+
+    function canManageUsers() {
+      return roleLabel(state.profile?.role) === 'Dono';
     }
 
-    function hideLoginError(){
-      document.getElementById("loginError").classList.add("hidden");
-      document.getElementById("loginError").textContent = "";
+    function escapeHtml(s = '') {
+      return String(s).replace(/[&<>\"']/g, c => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      }[c]));
     }
 
-    async function login(){
-      hideLoginError();
+    function toast(message, type = 'info') {
+      const wrap = el('toastWrap');
+      const item = document.createElement('div');
+      item.className = 'toast';
+      item.innerHTML = `
+        <div style="font-weight:800;margin-bottom:4px;">${type === 'error' ? 'Aviso' : 'AgroControl'}</div>
+        <div class="muted">${escapeHtml(message)}</div>
+      `;
+      wrap.appendChild(item);
+      setTimeout(() => item.remove(), 3800);
+    }
 
-      const email = document.getElementById("loginEmail").value.trim();
-      const password = document.getElementById("loginPassword").value;
+    function showSection(section) {
+      document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.section === section));
 
-      if(!email || !password){
-        showLoginError("Preenche email e senha.");
-        return;
+      const target = document.getElementById(section);
+      if (target) target.classList.add('active');
+
+      const meta = PAGE_META[section] || PAGE_META.dashboard;
+      el('pageTitle').textContent = meta[0];
+      el('pageSubtitle').textContent = meta[1];
+    }
+
+    function renderUserShell() {
+      const displayName = state.profile?.full_name || state.user?.email || 'Usuário';
+      const farmName = state.settings.farm.name;
+      const role = roleLabel(state.profile?.role);
+
+      el('sidebarUserName').textContent = displayName;
+      el('sidebarUserRole').textContent = role;
+      el('topUserName').textContent = displayName;
+      el('topUserMeta').textContent = `${role} · ${farmName}`;
+      el('userInitials').textContent = initials(displayName);
+      el('bannerRole').textContent = role;
+      el('farmNameBanner').textContent = farmName;
+      el('farmTagline').textContent = state.settings.farm.description;
+      el('profileNameInput').value = state.profile?.full_name || '';
+      el('profileEmailInput').value = state.user?.email || '';
+      el('profileRoleInput').value = role;
+
+      const employeeCard = el('employeeFormCard');
+      employeeCard.classList.toggle('hidden', !canManageUsers());
+    }
+
+    function statusClass(status) {
+      const s = String(status || '').toLowerCase();
+      if (s.includes('and')) return 'status-andamento';
+      if (s.includes('pend')) return 'status-pendente';
+      if (s.includes('conc')) return 'status-concluida';
+      return 'status-bloqueada';
+    }
+
+    function buildSimpleChart(title, values, labels) {
+      const max = Math.max(...values, 100);
+      return `
+        <div style="font-weight:800; margin-bottom:6px;">${escapeHtml(title)}</div>
+        <div class="muted">Leitura visual rápida liberada apenas ao clicar em Ver análise.</div>
+        <div class="simple-chart">
+          ${values.map((v, i) => `
+            <div class="simple-bar" style="height:${Math.max(12, (Number(v) / max) * 100)}%;">
+              <span>${escapeHtml(labels[i] || '')}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderOperations() {
+      const dashboard = el('dashboardOperationsList');
+      const full = el('operationsFullList');
+
+      const list = state.operations.length ? state.operations : [
+        { id: 'temp-1', title: 'Pulverização talhão norte', status: 'Em andamento', owner: 'Equipe 1', date: 'Hoje', notes: 'Aplicação com clima favorável.' },
+        { id: 'temp-2', title: 'Revisão da plantadeira', status: 'Pendente', owner: 'Oficina', date: 'Amanhã', notes: 'Aguardando janela mecânica.' },
+        { id: 'temp-3', title: 'Fechamento de carga arroz', status: 'Concluída', owner: 'Expedição', date: 'Hoje', notes: 'Documentação pronta.' }
+      ];
+
+      el('kpiInProgress').textContent = list.filter(i => String(i.status).toLowerCase().includes('and')).length;
+      el('kpiPending').textContent = list.filter(i => String(i.status).toLowerCase().includes('pend')).length;
+      el('bannerOperationsCount').textContent = list.length;
+
+      const cardHtml = list.slice(0, 4).map(item => `
+        <div class="task-item">
+          <div class="task-top">
+            <strong>${escapeHtml(item.title || item.name || 'Operação')}</strong>
+            <span class="status-pill ${statusClass(item.status)}">${escapeHtml(item.status || 'Pendente')}</span>
+          </div>
+          <div class="task-meta">
+            <span class="chip">Responsável: ${escapeHtml(item.owner || item.responsavel || 'Equipe')}</span>
+            <span class="chip">Prazo: ${escapeHtml(item.date || '—')}</span>
+          </div>
+          <div class="muted">${escapeHtml(item.notes || 'Sem observações.')}</div>
+        </div>
+      `).join('');
+
+      dashboard.innerHTML = cardHtml;
+
+      full.innerHTML = list.map(item => `
+        <div class="task-item">
+          <div class="task-top">
+            <strong>${escapeHtml(item.title || item.name || 'Operação')}</strong>
+            <span class="status-pill ${statusClass(item.status)}">${escapeHtml(item.status || 'Pendente')}</span>
+          </div>
+          <div class="inline-meta muted">Responsável: ${escapeHtml(item.owner || item.responsavel || 'Equipe')} · Data: ${escapeHtml(item.date || '—')}</div>
+          <div>${escapeHtml(item.notes || 'Sem observações.')}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderEmployees() {
+      const container = el('employeesList');
+
+      const list = state.employees.length ? state.employees : [
+        { id: 'e1', username: 'beto', full_name: 'Beto Ferreira', internal_email: 'beto@agrocontrol', role: 'Gerente', active: true },
+        { id: 'e2', username: 'lucas', full_name: 'Lucas Martins', internal_email: 'lucas@agrocontrol', role: 'Funcionário', active: true }
+      ];
+
+      el('bannerEmployeesCount').textContent = list.length;
+
+      container.innerHTML = list.map(item => `
+        <div class="employee-row">
+          <div class="employee-top">
+            <div>
+              <strong>${escapeHtml(item.full_name || item.name || item.username || 'Funcionário')}</strong>
+              <div class="muted">${escapeHtml(item.internal_email || item.email || `${item.username}@agrocontrol`)}</div>
+            </div>
+            <span class="status-pill ${item.active === false ? 'status-bloqueada' : 'status-andamento'}">
+              ${item.active === false ? 'Inativo' : roleLabel(item.role)}
+            </span>
+          </div>
+          <div class="muted">Usuário: ${escapeHtml(item.username || '—')}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderFinancial() {
+      const list = state.financial;
+
+      el('bannerTransactionsCount').textContent = list.length;
+
+      const income = list.filter(i => String(i.type).toLowerCase() === 'income').reduce((a, b) => a + Number(b.amount || 0), 0);
+      const expense = list.filter(i => String(i.type).toLowerCase() === 'expense').reduce((a, b) => a + Number(b.amount || 0), 0);
+      const balance = income - expense;
+
+      el('financeIncome').textContent = currency(income);
+      el('financeExpense').textContent = currency(expense);
+      el('financeBalance').textContent = currency(balance);
+
+      el('financeList').innerHTML = (list.length ? list : [
+        { description: 'Venda de soja', type: 'income', amount: 18200 },
+        { description: 'Compra de diesel', type: 'expense', amount: 4300 }
+      ]).map(item => `
+        <div class="table-row">
+          <div>
+            <strong>${escapeHtml(item.description || 'Lançamento')}</strong>
+            <div class="muted">${String(item.type) === 'income' ? 'Entrada' : 'Saída'}</div>
+          </div>
+          <div class="${String(item.type) === 'income' ? 'success' : 'danger'}" style="font-weight:900;">
+            ${currency(item.amount)}
+          </div>
+        </div>
+      `).join('');
+
+      el('financialAnalysis').innerHTML = buildSimpleChart('Fluxo recente', [42, 68, 58, 74, 65, 82], ['Jan','Fev','Mar','Abr','Mai','Jun']);
+    }
+
+    function renderMarket() {
+      state.market = state.settings.market;
+      const visible = state.market.filter(i => i.visible !== false);
+
+      el('dashboardMarketTicker').innerHTML = visible.slice(0, 3).map(item => `
+        <div class="ticker-item">
+          <div class="muted">${escapeHtml(item.name)}</div>
+          <strong>${currency(item.value)}</strong>
+          <div class="inline-meta">
+            <span class="muted">${escapeHtml(item.unit)}</span>
+            <span class="${Number(item.change) >= 0 ? 'up' : 'down'}" style="font-weight:800;">
+              ${Number(item.change) >= 0 ? '↑' : '↓'} ${Math.abs(Number(item.change || 0)).toFixed(2)}%
+            </span>
+          </div>
+        </div>
+      `).join('');
+
+      el('marketList').innerHTML = visible.map(item => `
+        <div class="table-row">
+          <div>
+            <strong>${escapeHtml(item.name)}</strong>
+            <div class="muted">
+              ${escapeHtml(item.unit)} · ${item.mode === 'manual' ? 'Manual' : item.mode === 'auto' ? 'Automático' : 'Híbrido'}
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-weight:900;">${currency(item.value)}</div>
+            <div class="${Number(item.change) >= 0 ? 'up' : 'down'}">
+              ${Number(item.change) >= 0 ? '↑' : '↓'} ${Math.abs(Number(item.change || 0)).toFixed(2)}%
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      el('marketSettingsList').innerHTML = state.market.map(item => `
+        <div class="table-row">
+          <div>
+            <strong>${escapeHtml(item.name)}</strong>
+            <div class="muted">${escapeHtml(item.unit)} · modo ${escapeHtml(item.mode)}</div>
+          </div>
+          <div class="inline-meta">
+            <button class="ghost-btn" onclick="toggleMarketVisibility('${item.id}')">${item.visible === false ? 'Mostrar' : 'Ocultar'}</button>
+            <button class="danger-btn" onclick="removeMarketItem('${item.id}')">Remover</button>
+          </div>
+        </div>
+      `).join('');
+
+      el('marketAnalysis').innerHTML = buildSimpleChart(
+        'Variação monitorada',
+        visible.slice(0, 6).map(i => Math.max(12, 45 + Number(i.change) * 10)),
+        visible.slice(0, 6).map(i => i.name)
+      );
+    }
+        function renderClimate() {
+      state.climate = state.settings.climate;
+      const c = state.climate;
+
+      const windOk = Number(c.wind || 0) <= Number(c.windRule || 18);
+      const humidityOk = Number(c.humidity || 0) >= Number(c.humidityRule || 55);
+
+      if (c.mode !== 'manual') {
+        c.status = windOk && humidityOk ? 'Pode aplicar' : 'Aplicação com atenção';
       }
 
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-      });
+      el('climateLocationLabel').textContent = c.city || 'Fazenda';
+      el('climateTemp').textContent = `${c.temp}°`;
+      el('climateCondition').textContent = c.condition;
+      el('climateWind').textContent = `${c.wind} km/h`;
+      el('climateHumidity').textContent = `${c.humidity}%`;
+      el('climateUpdatedAt').textContent = c.updatedAt || c.source || 'Manual';
+      el('applyStatusChip').textContent = c.status;
 
-      if(error){
-        showLoginError("Erro no login: " + error.message);
-        return;
-      }
+      el('climateTempLarge').textContent = `${c.temp}°`;
+      el('climateConditionLarge').textContent = c.condition;
+      el('climateWindLarge').textContent = `${c.wind} km/h`;
+      el('climateHumidityLarge').textContent = `${c.humidity}%`;
+      el('climateSourceLarge').textContent = c.source;
+      el('applyStatusChipLarge').textContent = c.status;
 
-      const user = data.user;
-      if(!user){
-        showLoginError("Usuário não encontrado.");
-        return;
-      }
-
-      const { data: perfil, error: perfilError } = await supabaseClient
-        .from("perfis")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if(perfilError || !perfil){
-        showLoginError("Erro ao buscar perfil.");
-        return;
-      }
-
-      state.userName = perfil.nome;
-      state.role = perfil.perfil;
-      state.page = perfil.perfil === "funcionario" ? "operacao" : "dashboard";
-
-      document.getElementById("loginScreen").classList.add("hidden");
-      document.getElementById("appScreen").classList.remove("hidden");
-
-      renderUI();
+      el('climateRulesList').innerHTML = `
+        <div class="setting-item"><strong>Local</strong><div class="muted">${escapeHtml(c.city || 'Não definido')}</div></div>
+        <div class="setting-item"><strong>Modo</strong><div class="muted">${escapeHtml(c.mode)}</div></div>
+        <div class="setting-item"><strong>Regra de vento</strong><div class="muted">Até ${escapeHtml(String(c.windRule))} km/h</div></div>
+        <div class="setting-item"><strong>Regra de umidade</strong><div class="muted">A partir de ${escapeHtml(String(c.humidityRule))}%</div></div>
+        <div class="setting-item"><strong>Status atual</strong><div class="muted">${escapeHtml(c.status)}</div></div>
+      `;
     }
 
-    async function logout(){
-      await supabaseClient.auth.signOut();
-      document.getElementById("appScreen").classList.add("hidden");
-      document.getElementById("loginScreen").classList.remove("hidden");
-      document.getElementById("loginEmail").value = "";
-      document.getElementById("loginPassword").value = "";
-      hideLoginError();
+    function renderPlots() {
+      const plots = state.settings.plots;
+
+      const html = plots.map(p => `
+        <div class="mini-card">
+          <div class="muted">${escapeHtml(p.crop)}</div>
+          <strong>${escapeHtml(p.name)}</strong>
+          <div class="muted">Área: ${escapeHtml(String(p.area))} ha</div>
+          <div class="muted">Produtividade: ${escapeHtml(p.productivity)}</div>
+        </div>
+      `).join('');
+
+      el('plotsGrid').innerHTML = html;
+      el('plotSummaryCards').innerHTML = html;
     }
 
-    function goToPage(key){
-      state.page = key;
-      renderUI();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    function renderInventory() {
+      const list = state.settings.inventory;
+
+      el('inventoryList').innerHTML = list.map(item => `
+        <div class="table-row">
+          <div>
+            <strong>${escapeHtml(item.name)}</strong>
+            <div class="muted">${escapeHtml(item.status)}</div>
+          </div>
+          <div style="font-weight:900;">${escapeHtml(String(item.qty))} ${escapeHtml(item.unit)}</div>
+        </div>
+      `).join('');
+
+      el('inventoryAnalysis').innerHTML = buildSimpleChart(
+        'Nível de estoque',
+        list.map(i => Math.max(18, Number(i.qty) > 100 ? 88 : Number(i.qty))),
+        list.map(i => i.name.split(' ')[0])
+      );
     }
 
-    function isManager(){
-      return state.role === "dono" || state.role === "gerente";
+    function renderAI() {
+      const items = state.settings.aiInsights;
+      const html = items.map(text => `<div class="feed-item">${escapeHtml(text)}</div>`).join('');
+      el('aiInsightsList').innerHTML = html;
+      el('aiFullList').innerHTML = html;
     }
 
-    function statusLabel(status){
-      if(status === "pendente") return ["Pendente","gray"];
-      if(status === "em_andamento") return ["Em andamento","green"];
-      if(status === "pausada") return ["Pausada","yellow"];
-      if(status === "concluida") return ["Concluída","blue"];
-      return ["Pendente","gray"];
+    function renderSettings() {
+      el('farmNameInput').value = state.settings.farm.name;
+      el('farmDescInput').value = state.settings.farm.description;
+      el('farmBannerInput').value = state.settings.farm.banner;
+
+      el('climateCityInput').value = state.settings.climate.city || '';
+      el('climateLatInput').value = state.settings.climate.lat || '';
+      el('climateLonInput').value = state.settings.climate.lon || '';
+      el('climateModeInput').value = state.settings.climate.mode || 'manual';
+      el('climateWindRuleInput').value = state.settings.climate.windRule || 18;
+      el('climateHumidityRuleInput').value = state.settings.climate.humidityRule || 55;
+      el('climateStatusRuleInput').value = state.settings.climate.status || 'Pode aplicar';
     }
 
-    function employeeStatusLabel(status){
-      if(status === "ativo") return ["Ativo","green"];
-      if(status === "pausado") return ["Pausado","yellow"];
-      return ["Pendente","gray"];
-    }
-
-    function machineStatusLabel(status){
-      if(status === "ok") return ["Ok","green"];
-      if(status === "operando") return ["Operando","blue"];
-      return ["Atenção","yellow"];
-    }
-
-    function renderUI(){
-      document.getElementById("currentUser").textContent =
-        state.userName + " • " + roleConfig[state.role].label;
-
-      document.getElementById("sidebarProfile").textContent =
-        "Perfil ativo: " + roleConfig[state.role].label;
-
-      const nav = roleConfig[state.role].pages;
-      const sidebarNav = document.getElementById("sidebarNav");
-      const mobileNav = document.getElementById("mobileNav");
-      sidebarNav.innerHTML = "";
-      mobileNav.innerHTML = "";
-
-      nav.forEach(([key,label]) => {
-        const btn = document.createElement("button");
-        btn.className = "nav-btn" + (state.page === key ? " active" : "");
-        btn.innerHTML = "<span>" + label + "</span>";
-        btn.onclick = () => goToPage(key);
-        sidebarNav.appendChild(btn);
-
-        const mobileBtn = document.createElement("button");
-        mobileBtn.className = "nav-btn" + (state.page === key ? " active" : "");
-        mobileBtn.innerHTML = "<span>" + label + "</span>";
-        mobileBtn.onclick = () => goToPage(key);
-        mobileNav.appendChild(mobileBtn);
-      });
-
-      document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-      const current = document.getElementById("page-" + state.page);
-      if(current) current.classList.remove("hidden");
-
-      const newTaskCard = document.getElementById("newTaskCard");
-      if(newTaskCard){
-        newTaskCard.classList.toggle("hidden", !isManager());
-      }
-
-      const newStockCard = document.getElementById("newStockCard");
-      if(newStockCard){
-        newStockCard.classList.toggle("hidden", !isManager());
-      }
-
-      const employeeFormCard = document.getElementById("employeeFormCard");
-      if(employeeFormCard){
-        employeeFormCard.classList.toggle("hidden", !isManager());
-      }
-
-      const machineFormCard = document.getElementById("machineFormCard");
-      if(machineFormCard){
-        machineFormCard.classList.toggle("hidden", !isManager());
-      }
-
-      document.getElementById("taskPageSubtitle").textContent =
-        isManager()
-          ? "Criação e execução de tarefas."
-          : "Tu vê somente as tuas tarefas.";
-
-      document.getElementById("taskListTitle").textContent =
-        isManager() ? "Lista de tarefas" : "Minhas tarefas";
-
-      document.getElementById("taskListSub").textContent =
-        isManager()
-          ? "Visualização por perfil."
-          : "Somente tarefas vinculadas ao teu nome.";
-
-      populateEmployeeSelect();
-      renderTasks();
-      renderStock();
+    function syncAllViews() {
+      renderUserShell();
+      renderOperations();
       renderEmployees();
-      renderMachines();
-      renderOperationTasks();
-      renderDashboard();
-      renderWeather();
+      renderFinancial();
+      renderMarket();
+      renderClimate();
+      renderPlots();
+      renderInventory();
+      renderAI();
+      renderSettings();
+
+      document.querySelector('.farm-banner').style.backgroundImage =
+        `url('${state.settings.farm.banner || 'imagens/dashboard_bg.jpg'}')`;
     }
 
-    function populateEmployeeSelect(){
-      const select = document.getElementById("taskFuncionarioSelect");
-      if(!select) return;
+    async function loadSupabaseData() {
+      const userId = state.user?.id;
+      if (!userId) return;
 
-      select.innerHTML = "";
-      const employees = state.data.employees.slice().sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"));
+      const profileRes = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
 
-      if(!employees.length){
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "Nenhum funcionário cadastrado";
-        select.appendChild(opt);
-        return;
-      }
-
-      employees.forEach(emp => {
-        const opt = document.createElement("option");
-        opt.value = emp.nome;
-        opt.textContent = emp.nome + " • " + emp.funcao;
-        select.appendChild(opt);
-      });
-    }
-
-    function getVisibleTasks(){
-      if(isManager()) return state.data.tasks;
-      return state.data.tasks.filter(t =>
-        t.funcionario.trim().toLowerCase() === state.userName.trim().toLowerCase()
-      );
-    }
-
-    function addTask(){
-      if(!isManager()) return;
-
-      const operacao = document.getElementById("taskOperacao").value.trim();
-      const talhao = document.getElementById("taskTalhao").value.trim();
-      const funcionario = document.getElementById("taskFuncionarioSelect").value.trim();
-      const detalhes = document.getElementById("taskDetalhes").value.trim();
-
-      if(!operacao || !talhao || !funcionario){
-        alert("Preenche operação, talhão e funcionário.");
-        return;
-      }
-
-      state.data.tasks.unshift({
-        id: makeId(),
-        operacao,
-        talhao,
-        funcionario,
-        detalhes,
-        status: "pendente",
-        createdAt: nowBr()
-      });
-
-      saveData();
-
-      document.getElementById("taskOperacao").value = "";
-      document.getElementById("taskTalhao").value = "";
-      document.getElementById("taskDetalhes").value = "";
-
-      renderUI();
-    }
-
-    function setTaskStatus(id, status){
-      const task = state.data.tasks.find(t => t.id === id);
-      if(!task) return;
-
-      if(!isManager()){
-        const mine = task.funcionario.trim().toLowerCase() === state.userName.trim().toLowerCase();
-        if(!mine) return;
-        if(status === "pendente") return;
-      }
-
-      task.status = status;
-      saveData();
-      renderUI();
-    }
-
-    function deleteTask(id){
-      if(!isManager()) return;
-      if(!confirm("Excluir essa tarefa?")) return;
-      state.data.tasks = state.data.tasks.filter(t => t.id !== id);
-      saveData();
-      renderUI();
-    }
-
-    function renderTasks(){
-      const list = document.getElementById("taskList");
-      list.innerHTML = "";
-      const tasksToShow = getVisibleTasks();
-
-      if(!tasksToShow.length){
-        list.innerHTML = '<div class="alert-box yellow">Nenhuma tarefa cadastrada para este usuário.</div>';
-        return;
-      }
-
-      tasksToShow.forEach(task => {
-        const [label, css] = statusLabel(task.status);
-        const item = document.createElement("div");
-        item.className = "list-item";
-
-        if(isManager()){
-          item.innerHTML = `
-            <div class="list-main">
-              <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
-              <p>Funcionário: ${escapeHtml(task.funcionario)}<br>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
-            </div>
-            <div class="action-row">
-              <span class="status ${css}">${label}</span>
-              <button class="small-btn light" onclick="setTaskStatus('${task.id}','pendente')">Pendente</button>
-              <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
-              <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
-              <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
-              <button class="small-btn light" onclick="deleteTask('${task.id}')">Excluir</button>
-            </div>
-          `;
-        } else {
-          item.innerHTML = `
-            <div class="list-main">
-              <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
-              <p>${escapeHtml(task.detalhes || "Sem detalhes")}<br>Criada em: ${escapeHtml(task.createdAt)}</p>
-            </div>
-            <div class="action-row">
-              <span class="status ${css}">${label}</span>
-              <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
-              <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
-              <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
-            </div>
-          `;
-        }
-
-        list.appendChild(item);
-      });
-    }
-
-    function addStock(){
-      if(!isManager()) return;
-
-      const nome = document.getElementById("stockNome").value.trim();
-      const qtd = Number(document.getElementById("stockQtd").value);
-      const unidade = document.getElementById("stockUnidade").value.trim();
-      const custo = Number(document.getElementById("stockCusto").value);
-
-      if(!nome || !unidade || isNaN(qtd)){
-        alert("Preenche produto, quantidade e unidade.");
-        return;
-      }
-
-      state.data.stock.unshift({
-        id: makeId(),
-        nome,
-        qtd,
-        unidade,
-        custo: isNaN(custo) ? 0 : custo
-      });
-
-      saveData();
-
-      document.getElementById("stockNome").value = "";
-      document.getElementById("stockQtd").value = "";
-      document.getElementById("stockUnidade").value = "";
-      document.getElementById("stockCusto").value = "";
-
-      renderUI();
-    }
-
-    function updateStock(id, delta){
-      if(!isManager()) return;
-      const item = state.data.stock.find(s => s.id === id);
-      if(!item) return;
-      item.qtd = Math.max(0, Number(item.qtd) + delta);
-      saveData();
-      renderUI();
-    }
-
-    function deleteStock(id){
-      if(!isManager()) return;
-      if(!confirm("Excluir esse item do estoque?")) return;
-      state.data.stock = state.data.stock.filter(s => s.id !== id);
-      saveData();
-      renderUI();
-    }
-
-    function renderStock(){
-      const wrap = document.getElementById("stockTableWrap");
-
-      if(!state.data.stock.length){
-        wrap.innerHTML = '<div class="alert-box yellow">Nenhum item cadastrado no estoque.</div>';
-        return;
-      }
-
-      const rows = state.data.stock.map(item => {
-        const status =
-          Number(item.qtd) <= 10 ? ["Crítico","red"] :
-          Number(item.qtd) <= 25 ? ["Atenção","yellow"] :
-          ["Normal","green"];
-
-        return `
-          <tr>
-            <td>${escapeHtml(item.nome)}</td>
-            <td>${Number(item.qtd)} ${escapeHtml(item.unidade)}</td>
-            <td>R$ ${Number(item.custo).toFixed(2)}</td>
-            <td><span class="status ${status[1]}">${status[0]}</span></td>
-            <td>
-              ${
-                isManager()
-                  ? `
-                  <div class="action-row">
-                    <button class="small-btn light" onclick="updateStock('${item.id}',1)">+1</button>
-                    <button class="small-btn light" onclick="updateStock('${item.id}',-1)">-1</button>
-                    <button class="small-btn light" onclick="deleteStock('${item.id}')">Excluir</button>
-                  </div>
-                  `
-                  : '<span class="muted">Somente leitura</span>'
-              }
-            </td>
-          </tr>
-        `;
-      }).join("");
-
-      wrap.innerHTML = `
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Produto</th>
-              <th>Quantidade</th>
-              <th>Custo</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      `;
-    }
-
-    function saveEmployee(){
-      if(!isManager()) return;
-
-      const editId = document.getElementById("employeeEditId").value;
-      const nome = document.getElementById("employeeNome").value.trim();
-      const funcao = document.getElementById("employeeFuncao").value.trim();
-      const status = document.getElementById("employeeStatus").value;
-
-      if(!nome || !funcao){
-        alert("Preenche nome e função.");
-        return;
-      }
-
-      const duplicated = state.data.employees.some(emp =>
-        emp.nome.trim().toLowerCase() === nome.trim().toLowerCase() && emp.id !== editId
-      );
-
-      if(duplicated){
-        alert("Já existe funcionário com esse nome.");
-        return;
-      }
-
-      if(editId){
-        const emp = state.data.employees.find(e => e.id === editId);
-        if(emp){
-          emp.nome = nome;
-          emp.funcao = funcao;
-          emp.status = status;
-        }
+      if (!profileRes.error && profileRes.data) {
+        state.profile = profileRes.data;
       } else {
-        state.data.employees.unshift({
-          id: makeId(),
-          nome,
-          funcao,
-          status
-        });
+        state.profile = {
+          id: userId,
+          full_name: state.user.user_metadata?.full_name || state.user.email?.split('@')[0] || 'Usuário',
+          role: 'dono'
+        };
       }
 
-      saveData();
-      cancelEmployeeEdit();
-      renderUI();
-    }
+      const opsRes = await supabase
+        .from('operations')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
 
-    function editEmployee(id){
-      if(!isManager()) return;
-      const emp = state.data.employees.find(e => e.id === id);
-      if(!emp) return;
-
-      document.getElementById("employeeEditId").value = emp.id;
-      document.getElementById("employeeNome").value = emp.nome;
-      document.getElementById("employeeFuncao").value = emp.funcao;
-      document.getElementById("employeeStatus").value = emp.status;
-      document.getElementById("employeeFormTitle").textContent = "Editar funcionário";
-      document.getElementById("cancelEmployeeEditBtn").classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function cancelEmployeeEdit(){
-      document.getElementById("employeeEditId").value = "";
-      document.getElementById("employeeNome").value = "";
-      document.getElementById("employeeFuncao").value = "";
-      document.getElementById("employeeStatus").value = "ativo";
-      document.getElementById("employeeFormTitle").textContent = "Novo funcionário";
-      document.getElementById("cancelEmployeeEditBtn").classList.add("hidden");
-    }
-
-    function deleteEmployee(id){
-      if(!isManager()) return;
-      const emp = state.data.employees.find(e => e.id === id);
-      if(!emp) return;
-      const hasTask = state.data.tasks.some(t => t.funcionario.trim().toLowerCase() === emp.nome.trim().toLowerCase());
-      if(hasTask){
-        alert("Esse funcionário ainda tem tarefa vinculada. Exclui ou altera as tarefas antes.");
-        return;
-      }
-      if(!confirm("Excluir esse funcionário?")) return;
-      state.data.employees = state.data.employees.filter(e => e.id !== id);
-      saveData();
-      renderUI();
-    }
-
-    function renderEmployees(){
-      const list = document.getElementById("employeeList");
-      list.innerHTML = "";
-
-      if(!state.data.employees.length){
-        list.innerHTML = '<div class="alert-box yellow">Nenhum funcionário cadastrado.</div>';
-        return;
+      if (!opsRes.error && Array.isArray(opsRes.data)) {
+        state.operations = opsRes.data.map(r => ({
+          id: r.id,
+          title: r.title || r.name || 'Operação',
+          status: r.status || 'Pendente',
+          owner: r.owner || r.responsible || 'Equipe',
+          date: r.operation_date || r.date || '—',
+          notes: r.notes || r.description || ''
+        }));
       }
 
-      state.data.employees
-        .slice()
-        .sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"))
-        .forEach(emp => {
-          const [label, css] = employeeStatusLabel(emp.status);
-          const item = document.createElement("div");
-          item.className = "list-item";
-          item.innerHTML = `
-            <div class="list-main">
-              <h4>${escapeHtml(emp.nome)}</h4>
-              <p>${escapeHtml(emp.funcao)}</p>
-            </div>
-            <div class="action-row">
-              <span class="status ${css}">${label}</span>
-              ${
-                isManager()
-                  ? `
-                  <button class="small-btn light" onclick="editEmployee('${emp.id}')">Editar</button>
-                  <button class="small-btn light" onclick="deleteEmployee('${emp.id}')">Excluir</button>
-                  `
-                  : ''
-              }
-            </div>
-          `;
-          list.appendChild(item);
-        });
-    }
+      const empRes = await supabase
+        .from('employees')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(30);
 
-    function saveMachine(){
-      if(!isManager()) return;
-
-      const editId = document.getElementById("machineEditId").value;
-      const nome = document.getElementById("machineNome").value.trim();
-      const tipo = document.getElementById("machineTipo").value.trim();
-      const horas = Number(document.getElementById("machineHoras").value);
-      const status = document.getElementById("machineStatus").value;
-
-      if(!nome || !tipo){
-        alert("Preenche nome e tipo.");
-        return;
+      if (!empRes.error && Array.isArray(empRes.data)) {
+        state.employees = empRes.data.map(r => ({
+          id: r.id,
+          username: r.username || r.user_name || r.name?.toLowerCase().replace(/\s+/g, '.') || 'usuario',
+          full_name: r.full_name || r.name || 'Funcionário',
+          internal_email: r.internal_email || r.email || '',
+          role: r.role || 'Funcionário',
+          active: r.active !== false
+        }));
       }
 
-      if(editId){
-        const machine = state.data.machines.find(m => m.id === editId);
-        if(machine){
-          machine.nome = nome;
-          machine.tipo = tipo;
-          machine.horas = isNaN(horas) ? 0 : horas;
-          machine.status = status;
-        }
+      const finRes = await supabase
+        .from('financial_transactions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (!finRes.error && Array.isArray(finRes.data)) {
+        state.financial = finRes.data.map(r => ({
+          id: r.id,
+          description: r.description || r.title || 'Lançamento',
+          type:
+            String(r.type || r.transaction_type || 'expense').toLowerCase().includes('in') ||
+            String(r.type || r.transaction_type || '').toLowerCase().includes('entrada')
+              ? 'income'
+              : 'expense',
+          amount: Number(r.amount || 0)
+        }));
+      }
+    }
+
+    async function signIn(email, password) {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      return data;
+    }
+
+    async function signOut() {
+      await supabase.auth.signOut();
+    }
+
+    async function restoreSession() {
+      const { data } = await supabase.auth.getSession();
+
+      if (data?.session?.user) {
+        state.user = data.session.user;
+        await loadSupabaseData();
+        showApp();
       } else {
-        state.data.machines.unshift({
-          id: makeId(),
-          nome,
-          tipo,
-          horas: isNaN(horas) ? 0 : horas,
-          status
+        showLogin();
+      }
+    }
+
+    function showApp() {
+      el('loginView').classList.add('hidden');
+      el('appView').classList.remove('hidden');
+      syncAllViews();
+    }
+
+    function showLogin() {
+      el('appView').classList.add('hidden');
+      el('loginView').classList.remove('hidden');
+    }
+
+    async function tryFetchWeather() {
+      const c = state.settings.climate;
+      let url = '';
+
+      if (c.lat && c.lon) {
+        url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(c.lat)}&longitude=${encodeURIComponent(c.lon)}&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto`;
+      }
+
+      if (!url) {
+        c.updatedAt = 'Manual';
+        return;
+      }
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data?.current) {
+          c.temp = Math.round(Number(data.current.temperature_2m || c.temp));
+          c.humidity = Math.round(Number(data.current.relative_humidity_2m || c.humidity));
+          c.wind = Math.round(Number(data.current.wind_speed_10m || c.wind));
+          c.condition = 'Leitura online';
+          c.updatedAt = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          c.source = c.mode === 'hybrid' ? 'Online + fallback manual' : 'Online';
+        }
+      } catch (error) {
+        c.source = 'Fallback manual';
+        c.updatedAt = 'Manual';
+        toast('Não foi possível atualizar o clima online. Mantendo leitura manual.', 'error');
+      }
+    }
+
+    function toggleMarketVisibility(id) {
+      const item = state.settings.market.find(i => i.id === id);
+      if (!item) return;
+      item.visible = item.visible === false ? true : false;
+      saveLocalState();
+      renderMarket();
+      toast(`Item ${item.visible ? 'mostrado' : 'ocultado'} no dashboard.`);
+    }
+
+    function removeMarketItem(id) {
+      state.settings.market = state.settings.market.filter(i => i.id !== id);
+      saveLocalState();
+      renderMarket();
+      toast('Item removido do mercado.');
+    }
+
+    window.toggleMarketVisibility = toggleMarketVisibility;
+    window.removeMarketItem = removeMarketItem;
+
+    function bindEvents() {
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => showSection(btn.dataset.section));
+      });
+
+      document.querySelectorAll('[data-open-section]').forEach(btn => {
+        btn.addEventListener('click', () => showSection(btn.dataset.openSection));
+      });
+
+      document.querySelectorAll('.analysis-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          target.classList.toggle('hidden');
         });
-      }
-
-      saveData();
-      cancelMachineEdit();
-      renderUI();
-    }
-
-    function editMachine(id){
-      if(!isManager()) return;
-      const machine = state.data.machines.find(m => m.id === id);
-      if(!machine) return;
-
-      document.getElementById("machineEditId").value = machine.id;
-      document.getElementById("machineNome").value = machine.nome;
-      document.getElementById("machineTipo").value = machine.tipo;
-      document.getElementById("machineHoras").value = machine.horas;
-      document.getElementById("machineStatus").value = machine.status;
-      document.getElementById("machineFormTitle").textContent = "Editar máquina";
-      document.getElementById("cancelMachineEditBtn").classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function cancelMachineEdit(){
-      document.getElementById("machineEditId").value = "";
-      document.getElementById("machineNome").value = "";
-      document.getElementById("machineTipo").value = "";
-      document.getElementById("machineHoras").value = "";
-      document.getElementById("machineStatus").value = "ok";
-      document.getElementById("machineFormTitle").textContent = "Nova máquina";
-      document.getElementById("cancelMachineEditBtn").classList.add("hidden");
-    }
-
-    function deleteMachine(id){
-      if(!isManager()) return;
-      if(!confirm("Excluir essa máquina?")) return;
-      state.data.machines = state.data.machines.filter(m => m.id !== id);
-      saveData();
-      renderUI();
-    }
-
-    function renderMachines(){
-      const list = document.getElementById("machineList");
-      list.innerHTML = "";
-
-      if(!state.data.machines.length){
-        list.innerHTML = '<div class="alert-box yellow">Nenhuma máquina cadastrada.</div>';
-        return;
-      }
-
-      state.data.machines.forEach(machine => {
-        const [label, css] = machineStatusLabel(machine.status);
-        const item = document.createElement("div");
-        item.className = "list-item";
-        item.innerHTML = `
-          <div class="list-main">
-            <h4>${escapeHtml(machine.nome)}</h4>
-            <p>${escapeHtml(machine.tipo)} • Horímetro: ${Number(machine.horas)}</p>
-          </div>
-          <div class="action-row">
-            <span class="status ${css}">${label}</span>
-            ${
-              isManager()
-                ? `
-                <button class="small-btn light" onclick="editMachine('${machine.id}')">Editar</button>
-                <button class="small-btn light" onclick="deleteMachine('${machine.id}')">Excluir</button>
-                `
-                : ''
-            }
-          </div>
-        `;
-        list.appendChild(item);
       });
-    }
 
-    function renderOperationTasks(){
-      const wrap = document.getElementById("operationTaskList");
-      wrap.innerHTML = "";
-      const tasks = state.data.tasks.filter(t =>
-        t.funcionario.trim().toLowerCase() === state.userName.trim().toLowerCase()
-      );
+      el('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-      if(!tasks.length){
-        wrap.innerHTML = '<div class="alert-box yellow">Nenhuma tarefa atribuída a ti.</div>';
-        return;
-      }
+        const email = el('loginEmail').value.trim();
+        const password = el('loginPassword').value;
 
-      tasks.forEach(task => {
-        const [label, css] = statusLabel(task.status);
-        const item = document.createElement("div");
-        item.className = "list-item";
-        item.innerHTML = `
-          <div class="list-main">
-            <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
-            <p>${escapeHtml(task.detalhes || "Sem detalhes")}</p>
-          </div>
-          <div class="action-row">
-            <span class="status ${css}">${label}</span>
-            <button class="small-btn light" onclick="setTaskStatus('${task.id}','em_andamento')">Iniciar</button>
-            <button class="small-btn light" onclick="setTaskStatus('${task.id}','pausada')">Pausar</button>
-            <button class="small-btn light" onclick="setTaskStatus('${task.id}','concluida')">Concluir</button>
-          </div>
-        `;
-        wrap.appendChild(item);
+        try {
+          await signIn(email, password);
+
+          if (el('rememberLogin').checked) {
+            localStorage.setItem(STORAGE_KEYS.rememberedEmail, email);
+          }
+
+          state.user = (await supabase.auth.getUser()).data.user;
+          await loadSupabaseData();
+          toast('Sessão iniciada com sucesso.');
+          showApp();
+        } catch (err) {
+          toast(err.message || 'Não foi possível entrar.', 'error');
+        }
       });
-    }
 
-    function renderDashboard(){
-      const tasks = state.data.tasks;
-      const stock = state.data.stock;
-      const employees = state.data.employees;
-
-      document.getElementById("dashTotalTasks").textContent = tasks.length;
-      document.getElementById("dashInProgress").textContent = tasks.filter(t => t.status === "em_andamento").length;
-      document.getElementById("dashStockCount").textContent = stock.length;
-      document.getElementById("dashEmployeeCount").textContent = employees.length;
-
-      const lowItems = stock.filter(s => Number(s.qtd) <= 10);
-      const paused = tasks.filter(t => t.status === "pausada").length;
-      const inProgress = tasks.filter(t => t.status === "em_andamento").length;
-
-      let html = "";
-      html += lowItems.length
-        ? `<div class="alert-box red"><strong>Estoque crítico:</strong><br>${lowItems.map(i => escapeHtml(i.nome)).join(", ")}</div>`
-        : `<div class="alert-box green"><strong>Estoque sem itens críticos.</strong><br>Nenhum produto em zona vermelha.</div>`;
-
-      html += inProgress
-        ? `<div class="alert-box green"><strong>${inProgress} tarefa(s) em andamento.</strong><br>Operação ativa no campo.</div>`
-        : `<div class="alert-box yellow"><strong>Nenhuma tarefa em andamento.</strong><br>Verificar programação do dia.</div>`;
-
-      if(paused){
-        html += `<div class="alert-box yellow"><strong>${paused} tarefa(s) pausada(s).</strong><br>Vale revisar e decidir retomada.</div>`;
-      }
-
-      if(state.data.weather && state.data.weather.recommendation){
-        html += `<div class="alert-box blue"><strong>Clima:</strong><br>${escapeHtml(state.data.weather.recommendation.summary)}</div>`;
-      }
-
-      document.getElementById("decisionArea").innerHTML = html;
-
-      const latest = document.getElementById("latestTasks");
-      latest.innerHTML = "";
-
-      if(!tasks.length){
-        latest.innerHTML = '<div class="alert-box yellow">Sem tarefas cadastradas.</div>';
-        return;
-      }
-
-      tasks.slice(0,4).forEach(task => {
-        const [label, css] = statusLabel(task.status);
-        const item = document.createElement("div");
-        item.className = "list-item";
-        item.innerHTML = `
-          <div class="list-main">
-            <h4>${escapeHtml(task.operacao)} • ${escapeHtml(task.talhao)}</h4>
-            <p>${escapeHtml(task.funcionario)} • ${escapeHtml(task.createdAt)}</p>
-          </div>
-          <span class="status ${css}">${label}</span>
-        `;
-        latest.appendChild(item);
+      el('testConnectionBtn').addEventListener('click', async () => {
+        const test = await supabase.from('profiles').select('id').limit(1);
+        toast(
+          test.error
+            ? `Conexão respondeu com aviso: ${test.error.message}`
+            : 'Conexão com Supabase respondendo.'
+        );
       });
-    }
 
-    function renderWeather(){
-      const weather = state.data.weather;
+      el('forgotPasswordBtn').addEventListener('click', async () => {
+        const email = el('loginEmail').value.trim();
+        if (!email) return toast('Digite seu email para recuperar a senha.', 'error');
 
-      if(!weather){
-        document.getElementById("weatherMainText").textContent = "Aguardando consulta";
-        document.getElementById("weatherLocationText").textContent = "Sem local carregado";
-        document.getElementById("weatherTemp").textContent = "—";
-        document.getElementById("weatherHumidity").textContent = "—";
-        document.getElementById("weatherWind").textContent = "—";
-        document.getElementById("weatherGust").textContent = "—";
-        document.getElementById("weatherRain").textContent = "—";
-        document.getElementById("weatherRecommendation").innerHTML =
-          '<div class="alert-box blue">Faz a consulta para o sistema avaliar vento, umidade e chuva.</div>';
-        document.getElementById("weatherHeaderStatus").className = "status gray";
-        document.getElementById("weatherHeaderStatus").textContent = "Sem consulta";
-        return;
-      }
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.href
+        });
 
-      document.getElementById("weatherMainText").textContent = weather.recommendation.title;
-      document.getElementById("weatherLocationText").textContent = weather.locationLabel;
-      document.getElementById("weatherTemp").textContent = weather.current.temperature + " °C";
-      document.getElementById("weatherHumidity").textContent = weather.current.humidity + " %";
-      document.getElementById("weatherWind").textContent = weather.current.wind + " km/h";
-      document.getElementById("weatherGust").textContent = weather.current.gust + " km/h";
-      document.getElementById("weatherRain").textContent = weather.current.rainChance + " %";
+        toast(error ? error.message : 'Email de recuperação enviado, se a conta existir.');
+      });
 
-      document.getElementById("weatherHeaderStatus").className =
-        "status " + weather.recommendation.css;
-      document.getElementById("weatherHeaderStatus").textContent =
-        weather.recommendation.title;
+      el('logoutBtn').addEventListener('click', async () => {
+        await signOut();
+        state.user = null;
+        state.profile = null;
+        toast('Sessão encerrada.');
+        showLogin();
+      });
 
-      document.getElementById("weatherRecommendation").innerHTML = `
-        <div class="alert-box ${weather.recommendation.css}">
-          <strong>${escapeHtml(weather.recommendation.title)}</strong><br>
-          ${escapeHtml(weather.recommendation.summary)}
-        </div>
-        <div class="alert-box blue">
-          <strong>Janela avaliada:</strong><br>
-          Dados atuais carregados online para ${escapeHtml(weather.locationLabel)}.
-        </div>
-      `;
-    }
+      el('refreshAllBtn').addEventListener('click', async () => {
+        await loadSupabaseData();
+        syncAllViews();
+        toast('Dados atualizados.');
+      });
 
-    function evaluateWeather(current){
-      const wind = Number(current.wind);
-      const humidity = Number(current.humidity);
-      const rainChance = Number(current.rainChance);
+      el('seedOperationsBtn').addEventListener('click', async () => {
+        if (!state.user) return;
 
-      if(rainChance >= 50 || wind > 20 || humidity < 40){
-        return {
-          title: "Não aplicar",
-          css: "red",
-          summary: "Risco alto por chuva provável, vento elevado ou umidade inadequada."
-        };
-      }
+        const samples = [
+          {
+            title: 'Adubação cobertura',
+            status: 'Em andamento',
+            notes: 'Frente leste.',
+            owner: 'Equipe 2'
+          },
+          {
+            title: 'Checklist colheitadeira',
+            status: 'Pendente',
+            notes: 'Aguardando oficina.',
+            owner: 'Mecânica'
+          }
+        ];
 
-      if(rainChance >= 25 || wind > 12 || humidity < 50){
-        return {
-          title: "Atenção",
-          css: "yellow",
-          summary: "Condição intermediária. Avaliar rajadas, borda sensível e estabilidade antes de aplicar."
-        };
-      }
-
-      return {
-        title: "Pode aplicar",
-        css: "green",
-        summary: "Condição favorável para aplicação, com vento e umidade dentro de faixa mais confortável."
-        };
-    }
-
-    async function searchWeatherByCity(){
-      const city = document.getElementById("weatherCity").value.trim();
-      if(!city){
-        alert("Digita uma cidade.");
-        return;
-      }
-
-      setWeatherFeedback("Buscando cidade...");
-      try{
-        const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=pt&format=json`;
-        const geoResp = await fetch(geoUrl);
-        const geoData = await geoResp.json();
-
-        if(!geoData.results || !geoData.results.length){
-          setWeatherFeedback("Cidade não encontrada.");
-          return;
+        for (const sample of samples) {
+          await supabase.from('operations').insert(sample);
         }
 
-        const place = geoData.results[0];
-        const label = [place.name, place.admin1, place.country].filter(Boolean).join(", ");
-        await loadWeather(place.latitude, place.longitude, label);
-      }catch(err){
-        console.error(err);
-        setWeatherFeedback("Erro ao buscar cidade.");
-      }
-    }
+        await loadSupabaseData();
+        syncAllViews();
+        toast('Operações de exemplo enviadas.');
+      });
 
-    function searchWeatherByLocation(){
-      if(!navigator.geolocation){
-        setWeatherFeedback("Geolocalização não disponível neste navegador.");
-        return;
-      }
+      el('financeForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-      setWeatherFeedback("Buscando tua localização...");
-
-      navigator.geolocation.getCurrentPosition(
-        async position => {
-          const { latitude, longitude } = position.coords;
-          await loadWeather(latitude, longitude, "Minha localização");
-        },
-        error => {
-          console.error(error);
-          setWeatherFeedback("Não foi possível obter tua localização.");
-        },
-        { enableHighAccuracy:true, timeout:10000, maximumAge:0 }
-      );
-    }
-
-    async function loadWeather(lat, lon, label){
-      try{
-        setWeatherFeedback("Carregando previsão online...");
-
-        const url =
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-          `&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_gusts_10m` +
-          `&hourly=precipitation_probability` +
-          `&forecast_days=1&timezone=auto&wind_speed_unit=kmh`;
-
-        const resp = await fetch(url);
-        const data = await resp.json();
-
-        const rainChance = Array.isArray(data.hourly?.precipitation_probability)
-          ? Number(data.hourly.precipitation_probability[0] ?? 0)
-          : 0;
-
-        const current = {
-          temperature: Math.round(Number(data.current?.temperature_2m ?? 0)),
-          humidity: Math.round(Number(data.current?.relative_humidity_2m ?? 0)),
-          wind: Math.round(Number(data.current?.wind_speed_10m ?? 0)),
-          gust: Math.round(Number(data.current?.wind_gusts_10m ?? 0)),
-          rainChance: Math.round(rainChance)
+        const payload = {
+          description: el('financeDescription').value.trim(),
+          amount: Number(el('financeAmount').value || 0),
+          type: el('financeType').value,
+          transaction_type: el('financeType').value
         };
 
-        const recommendation = evaluateWeather(current);
+        const { error } = await supabase.from('financial_transactions').insert(payload);
 
-        state.data.weather = {
-          locationLabel: label,
-          latitude: lat,
-          longitude: lon,
-          current,
-          recommendation,
-          updatedAt: nowBr()
+        if (error) return toast(error.message, 'error');
+
+        e.target.reset();
+        await loadSupabaseData();
+        syncAllViews();
+        toast('Lançamento salvo.');
+      });
+
+      el('employeeForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!canManageUsers()) {
+          return toast('Somente o Dono pode cadastrar usuários.', 'error');
+        }
+
+        const username = el('employeeUsername').value.trim().toLowerCase();
+        const fullName = el('employeeFullName').value.trim();
+        const selectedRole = el('employeeRole').value;
+        const internalEmail = `${username}@agrocontrol`;
+
+        const payload = {
+          username,
+          full_name: fullName,
+          name: fullName,
+          internal_email: internalEmail,
+          role: selectedRole,
+          active: true,
+          temp_password_defined: Boolean(el('employeeTempPassword').value)
         };
 
-        saveData();
-        renderUI();
-        setWeatherFeedback("Clima atualizado com sucesso.");
-      }catch(err){
-        console.error(err);
-        setWeatherFeedback("Erro ao carregar previsão.");
-      }
-    }
+        const { error } = await supabase.from('employees').insert(payload);
 
-    function setWeatherFeedback(text){
-      document.getElementById("weatherSearchFeedback").textContent = text;
-    }
+        if (error) return toast(error.message, 'error');
 
-    async function checkSession(){
-      const { data, error } = await supabaseClient.auth.getSession();
+        e.target.reset();
+        await loadSupabaseData();
+        syncAllViews();
+        toast(`Funcionário interno cadastrado: ${internalEmail}`);
+      });
 
-      if(error || !data.session){
-        return;
-      }
+      el('saveProfileBtn').addEventListener('click', async () => {
+        if (!state.user) return;
 
-      const user = data.session.user;
+        const full_name = el('profileNameInput').value.trim();
+        const payload = { id: state.user.id, full_name };
 
-      const { data: perfil, error: perfilError } = await supabaseClient
-        .from("perfis")
-        .select("*")
-        .eq("id", user.id)
-        .single();
+        const currentRole = state.profile?.role;
+        if (currentRole !== undefined) payload.role = currentRole;
 
-      if(perfilError || !perfil){
-        return;
-      }
+        const { error } = await supabase.from('profiles').upsert(payload);
 
-      state.userName = perfil.nome;
-      state.role = perfil.perfil;
-      state.page = perfil.perfil === "funcionario" ? "operacao" : "dashboard";
+        if (error) return toast(error.message, 'error');
 
-      document.getElementById("loginScreen").classList.add("hidden");
-      document.getElementById("appScreen").classList.remove("hidden");
+        if (state.profile) state.profile.full_name = full_name;
+        syncAllViews();
+        toast('Perfil atualizado.');
+      });
 
-      renderUI();
-    }
+      el('changePasswordBtn').addEventListener('click', async () => {
+        const password = el('newPasswordInput').value;
 
-    supabaseClient.auth.onAuthStateChange((_event, session) => {
-      if(!session){
-        document.getElementById("appScreen").classList.add("hidden");
-        document.getElementById("loginScreen").classList.remove("hidden");
-      }
-    });
+        if (!password || password.length < 6) {
+          return toast('Use uma senha com pelo menos 6 caracteres.', 'error');
+        }
 
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById("installAppBtn").classList.remove("hidden");
-    });
+        const { error } = await supabase.auth.updateUser({ password });
 
-    document.getElementById("installAppBtn").addEventListener("click", async () => {
-      if(!deferredPrompt) return;
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      document.getElementById("installAppBtn").classList.add("hidden");
-    });
+        if (error) return toast(error.message, 'error');
 
-    checkSession();
-    renderUI();
-  </script>
+        el('newPasswordInput').value = '';
+        toast('Senha atualizada.');
+      });
 
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/service-worker.js")
-          .then(() => console.log("Service Worker registrado"))
-          .catch(err => console.log("Erro no Service Worker", err));
+      el('farmSettingsForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        state.settings.farm.name = el('farmNameInput').value.trim() || 'Fazenda AgroControl';
+        state.settings.farm.description = el('farmDescInput').value.trim();
+        state.settings.farm.banner = el('farmBannerInput').value.trim() || 'imagens/dashboard_bg.jpg';
+
+        saveLocalState();
+        syncAllViews();
+        toast('Configurações da fazenda salvas localmente.');
+      });
+
+      el('marketForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        state.settings.market.push({
+          id: crypto.randomUUID(),
+          name: el('marketNameInput').value.trim(),
+          value: Number(el('marketValueInput').value || 0),
+          unit: el('marketUnitInput').value.trim() || 'R$/un',
+          change: Number(el('marketChangeInput').value || 0),
+          mode: el('marketModeInput').value,
+          visible: true
+        });
+
+        saveLocalState();
+        e.target.reset();
+        renderMarket();
+        toast('Item de mercado adicionado.');
+      });
+
+      el('climateSettingsForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        state.settings.climate.city = el('climateCityInput').value.trim();
+        state.settings.climate.lat = el('climateLatInput').value.trim();
+        state.settings.climate.lon = el('climateLonInput').value.trim();
+        state.settings.climate.mode = el('climateModeInput').value;
+        state.settings.climate.source =
+          el('climateModeInput').value === 'manual' ? 'Manual' : 'Online';
+
+        if (state.settings.climate.mode !== 'manual') {
+          await tryFetchWeather();
+        }
+
+        saveLocalState();
+        renderClimate();
+        toast('Configurações de clima salvas.');
+      });
+
+      el('saveClimateRulesBtn').addEventListener('click', () => {
+        state.settings.climate.windRule = Number(el('climateWindRuleInput').value || 18);
+        state.settings.climate.humidityRule = Number(el('climateHumidityRuleInput').value || 55);
+        state.settings.climate.status =
+          el('climateStatusRuleInput').value.trim() || 'Pode aplicar';
+
+        saveLocalState();
+        renderClimate();
+        toast('Regras do clima salvas.');
+      });
+
+      document.querySelectorAll('#settingsTabs .tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#settingsTabs .tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+          btn.classList.add('active');
+          el(btn.dataset.tab).classList.add('active');
+        });
+      });
+
+      supabase.auth.onAuthStateChange(async (_event, session) => {
+        if (session?.user) {
+          state.user = session.user;
+          await loadSupabaseData();
+          showApp();
+        }
       });
     }
+
+    function preloadRememberedEmail() {
+      const remembered = localStorage.getItem(STORAGE_KEYS.rememberedEmail);
+      if (remembered) {
+        el('loginEmail').value = remembered;
+        el('rememberLogin').checked = true;
+      }
+    }
+
+    async function init() {
+      preloadRememberedEmail();
+      bindEvents();
+      await restoreSession();
+      syncAllViews();
+    }
+
+    init();
   </script>
 </body>
 </html>
